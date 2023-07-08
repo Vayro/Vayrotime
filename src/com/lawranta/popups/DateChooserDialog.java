@@ -1,5 +1,5 @@
 package com.lawranta.popups;
-
+import javafx.application.Application;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -15,11 +15,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import com.toedter.calendar.JDateChooser;
-import com.toedter.calendar.JTextFieldDateEditor;
-
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 
 public class DateChooserDialog extends JDialog {
@@ -54,15 +49,6 @@ public class DateChooserDialog extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		
 
-		JDateChooser firstDate = new JDateChooser();
-		firstDate.setDateFormatString("dd/MM/yyyy");
-		JTextFieldDateEditor dateEditor = (JTextFieldDateEditor)firstDate.getComponent(1);
-		dateEditor.setHorizontalAlignment(JTextField.RIGHT);
-		firstDate.setSize(new Dimension(50, 0));
-		contentPanel.add(firstDate);
-		
-		
-		
 
 		
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
