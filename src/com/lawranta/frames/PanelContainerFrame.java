@@ -12,6 +12,7 @@ import javax.swing.border.EmptyBorder;
 import com.lawranta.frames.*;
 import com.lawranta.panels.PinPanel;
 
+
 public class PanelContainerFrame extends JFrame {
 
 	public JPanel contentPane;
@@ -51,6 +52,8 @@ public class PanelContainerFrame extends JFrame {
 		JPanel panel=new PinPanel(this);
 		
 		PanelChange(panel);
+		
+	
 		
 		
 	}
