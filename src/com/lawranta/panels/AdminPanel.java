@@ -50,6 +50,7 @@ public class AdminPanel extends JPanel {
 	public JPanel employeeContent;
 	public JPanel contents;
 	public PanelContainerFrame frame;
+	public String[] fromToDates;
 	/**
 	 * Create the frame.
 	 */
@@ -161,7 +162,7 @@ public class AdminPanel extends JPanel {
 
 	protected void openDateChooserDialog() {
 		// TODO Auto-generated method stub
-		JDialog dateChooser = new JDialog(new DateChooserDialog());
+		JDialog dateChooser = new DateChooserDialog(owner);
 		dateChooser.setModalityType(ModalityType.APPLICATION_MODAL);
 		dateChooser.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		dateChooser.setVisible(true);

@@ -3,6 +3,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 
 import javax.swing.JButton;
@@ -15,6 +16,11 @@ import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.TimePicker;
 import com.github.lgooddatepicker.components.TimePickerSettings;
 import com.github.lgooddatepicker.optionalusertools.PickerUtilities;
+import com.lawranta.SubPanels.AdminSubPanel;
+import com.lawranta.containersObjects.employeeContainer;
+import com.lawranta.panels.AdminPanel;
+import com.lawranta.sqllite.connectDB;
+
 import java.awt.GridLayout;
 import javax.swing.BoxLayout;
 import java.awt.CardLayout;
@@ -22,6 +28,10 @@ import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Date;
+
 import javax.swing.JLabel;
 
 
@@ -34,10 +44,13 @@ public class DateChooserDialog extends JDialog {
 	 */
 	private static final long serialVersionUID = 490719954257157168L;
 	private final JPanel contentPanel = new JPanel();
+	private AdminPanel owner;
+	 DatePicker fromDate;
+	 DatePicker toDate;
 
 	/**
 	 * Launch the application.
-	 */
+	 
 	public static void main(String[] args) {
 		try {
 			DateChooserDialog dialog = new DateChooserDialog();
@@ -50,9 +63,11 @@ public class DateChooserDialog extends JDialog {
 
 	/**
 	 * Create the dialog.
+	 * @param owner 
+	 * @param owner 
 	 */
-	public DateChooserDialog() {
-	
+	public DateChooserDialog(AdminPanel owner) {
+	this.owner = owner;
 		setBounds(0, 0, 350, 150);
 		setPreferredSize(new Dimension(350, 150));
 		setMinimumSize(new Dimension(350, 150));
@@ -90,7 +105,7 @@ public class DateChooserDialog extends JDialog {
 		    
 		    
 		    
-		    DatePicker fromDate = new DatePicker();
+		    fromDate = new DatePicker();
 		    
 		    		    
 		    		    
@@ -106,7 +121,13 @@ public class DateChooserDialog extends JDialog {
 		
 		
 		
-		
+		    		ActionListener actionListener = new ActionListener() {
+		    			public void actionPerformed(ActionEvent event) {
+		    				String str = event.getActionCommand();
+		    				System.out.println("Clicked = " + str);
+		    				action(str);
+		    			}
+		    		};
 
 		
 		getContentPane().add(contentPanel, BorderLayout.NORTH);
@@ -118,7 +139,9 @@ public class DateChooserDialog extends JDialog {
 			gbc_lblTo.gridy = 1;
 			contentPanel.add(lblTo, gbc_lblTo);
 		}
-		DatePicker toDate = new DatePicker();
+		toDate = new DatePicker();
+		
+		
 		GridBagConstraints gbc_toDate = new GridBagConstraints();
 		gbc_toDate.fill = GridBagConstraints.BOTH;
 		gbc_toDate.gridx = 1;
@@ -131,35 +154,119 @@ public class DateChooserDialog extends JDialog {
 			{
 				JButton okButton = new JButton("OK");
 				okButton.setActionCommand("OK");
+				okButton.addActionListener(actionListener);
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
 				cancelButton.setActionCommand("Cancel");
+				cancelButton.addActionListener(actionListener);
 				buttonPane.add(cancelButton);
 			}
 		}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	}	
+	
+	
+	
+	private void action(String str) {
+	
+
+		switch (str) {
+		case "OK": {
+			boolean b = validCheck();
+			if (b == false) {
+				System.out.println("dates invalid");
+				break;
+			} else {
+
+				System.out.println("dates valid");
+				
+				dispose();
+			}
+		}
+			break;
+
+		case "Cancel": {
+
+			dispose();
+
+			break;
+		}
+		}
 	}
-	public class DateLabelFormatter extends AbstractFormatter {
-
-	    private String datePattern = "yyyy-MM-dd";
-	    private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
-
-	    @Override
-	    public Object stringToValue(String text) throws ParseException {
-	        return dateFormatter.parseObject(text);
-	    }
-
-	    @Override
-	    public String valueToString(Object value) throws ParseException {
-	        if (value != null) {
-	            Calendar cal = (Calendar) value;
-	            return dateFormatter.format(cal.getTime());
-	        }
-
-	        return "";
-	    }
-
+	
+	private boolean validCheck() {
+		
+		
+		
+		String fd = fromDate.getDateStringOrEmptyString();
+		String td = toDate.getDateStringOrEmptyString();
+		
+		 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+         try {
+			java.util.Date ValidfromDate =  sdf.parse(fd);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+         try {
+        	 java.util.Date ValidtoDate =  sdf.parse(td);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	return false;	
 	}
+	
+
+
 }
