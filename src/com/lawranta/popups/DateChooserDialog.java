@@ -4,7 +4,9 @@ import java.awt.FlowLayout;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.Locale;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -230,29 +232,46 @@ public class DateChooserDialog extends JDialog {
 	}
 	
 	private boolean validCheck() {
+	
+		String fd = fromDate.getText();
+		String td = toDate.getText();
+		
+		LocalDate validFromDate = null;
+		LocalDate validToDate = null;
+		
+		if(!fd.isBlank() && !td.isBlank() ){		
+			
+		
+			
+		    DateTimeFormatter sdf = DateTimeFormatter.ofPattern("MMMM d, u", Locale.ENGLISH);
+     
+			validFromDate = LocalDate.parse((CharSequence) fd, sdf);
+
+			 validToDate = LocalDate.parse((CharSequence) td, sdf);
+	
+			
+			//check if date 2 is larger than date 1
+			if(validFromDate.compareTo(validToDate) < 0) {
+		         System.out.println("Date 1 occurs before Date 2");
+		         System.out.println("Date 1: " + validFromDate + " Date 2: " + validToDate);
+		         //return true and send valid dates over
+		         owner.fromToDates[0]=validFromDate;
+		         owner.fromToDates[1]=validToDate;
+		         return true;
+			}
+			
+			else
+			{
+				
+				return false;
+			}
+        	
+
 		
 		
+			
 		
-		String fd = fromDate.getDateStringOrEmptyString();
-		String td = toDate.getDateStringOrEmptyString();
-		
-		 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-         try {
-			java.util.Date ValidfromDate =  sdf.parse(fd);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
-         try {
-        	 java.util.Date ValidtoDate =  sdf.parse(td);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-		
-		
 		
 		
 		

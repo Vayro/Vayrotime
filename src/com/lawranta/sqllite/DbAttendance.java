@@ -9,9 +9,12 @@ import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import com.lawranta.Globals.*;
@@ -235,6 +238,8 @@ public class DbAttendance {
 
 	public ArrayList<attendanceContainer> pullTimeData(int employeeID, String firstDate, String secondDate) {
 
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		
 		String sql = "";
 
 		if (employeeID != 0 && firstDate == null && secondDate == null) {
@@ -244,8 +249,19 @@ public class DbAttendance {
 			System.out.println("Getting all employee logs");
 			sql = "SELECT * FROM Attendance";
 		} else if (employeeID == 0 && firstDate != null && secondDate != null) {
-			System.out.println("Getting all employee logs between " + firstDate + "and " + secondDate);
-			sql = "SELECT * FROM Attendance WHERE date BETWEEN '" + firstDate + "' AND '" + secondDate + "'";
+			LocalDate fDate;
+			LocalDate tDate;
+			fDate =  LocalDate.parse(firstDate, dtf);
+			tDate =   LocalDate.parse(secondDate, dtf);
+			java.sql.Date sqlStartDate =  new java.sql.Date(fDate.getLong(null));  
+			java.sql.Date sqlEndDate =  new java.sql.Date(tDate.getLong(null));  
+
+			
+			
+			
+			
+			System.out.println("Getting all employee logs between " + sqlStartDate  + " and " + sqlEndDate);
+			sql = "SELECT * FROM Attendance WHERE date BETWEEN '" + sqlStartDate  + "' AND '" + sqlEndDate + "'";
 		}
 
 		ArrayList<attendanceContainer> timeInfoList = new ArrayList<>();

@@ -36,7 +36,10 @@ import java.awt.Component;
 import java.awt.Dialog.ModalityType;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class AdminPanel extends JPanel {
 
@@ -50,7 +53,8 @@ public class AdminPanel extends JPanel {
 	public JPanel employeeContent;
 	public JPanel contents;
 	public PanelContainerFrame frame;
-	public String[] fromToDates;
+	public LocalDate [] fromToDates = new LocalDate[2];
+	public int logID=0;
 	/**
 	 * Create the frame.
 	 */
@@ -167,6 +171,8 @@ public class AdminPanel extends JPanel {
 		dateChooser.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		dateChooser.setVisible(true);
 		
+		relistLogs(logID, fromToDates[0].toString(), fromToDates[1].toString());
+		
 	}
 
 
@@ -203,10 +209,11 @@ public class AdminPanel extends JPanel {
 	
 	
 	public void relistLogs(int id, String firstDate, String secondDate) {
+		logID=id;
 		if (contents!=null) {contents.removeAll();}
 		JPanel asp=(AdminSubPanel) new AdminSubPanel(frame).employeeList(owner);
 		System.out.println("Trying to refresh employee list...");
-		
+		System.out.println("ID: " + id + " firstDate: " + firstDate + " secondDate: " + secondDate);
 		
 		
 		ArrayList<attendanceContainer> logList = new DbAttendance().pullTimeData(id, firstDate, secondDate);
