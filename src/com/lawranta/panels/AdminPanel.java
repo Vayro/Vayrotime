@@ -53,7 +53,7 @@ public class AdminPanel extends JPanel {
 	public JPanel employeeContent;
 	public JPanel contents;
 	public PanelContainerFrame frame;
-	public LocalDate [] fromToDates = new LocalDate[2];
+	public String [] fromToDates = new String[2];
 	public int logID=0;
 	/**
 	 * Create the frame.
@@ -64,7 +64,7 @@ public class AdminPanel extends JPanel {
 		
 		
 		setVisible(true);
-
+		setBounds(400, 400, 550, 800);
 		setBackground(new Color(0, 0, 0));
 		setLayout(null);
 
@@ -121,14 +121,14 @@ public class AdminPanel extends JPanel {
 			});
 		add(btnTimeLogs);
 
-		JButton btnSort = new JButton("Sort");
-		btnSort.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnSort.addActionListener(new ActionListener() {
+		JButton btnClear = new JButton("Clear Dates");
+		btnClear.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnSort.setBounds(10, 281, 119, 23);
-		add(btnSort);
+		btnClear.setBounds(139, 280, 119, 23);
+		add(btnClear);
 
 		JButton btnNewEmployee = new JButton("New Employee");
 		btnNewEmployee.addActionListener(new ActionListener() {

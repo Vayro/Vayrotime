@@ -4,6 +4,7 @@ import java.awt.FlowLayout;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Locale;
@@ -255,8 +256,13 @@ public class DateChooserDialog extends JDialog {
 		         System.out.println("Date 1 occurs before Date 2");
 		         System.out.println("Date 1: " + validFromDate + " Date 2: " + validToDate);
 		         //return true and send valid dates over
-		         owner.fromToDates[0]=validFromDate;
-		         owner.fromToDates[1]=validToDate;
+		 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+
+		 		LocalDate vfD = validFromDate;
+		 		LocalDate vtD = validToDate;
+		         
+		         owner.fromToDates[0]=dtf.format(vfD);
+		         owner.fromToDates[1]=dtf.format(vtD);
 		         return true;
 			}
 			

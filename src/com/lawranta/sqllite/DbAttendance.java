@@ -238,9 +238,9 @@ public class DbAttendance {
 
 	public ArrayList<attendanceContainer> pullTimeData(int employeeID, String firstDate, String secondDate) {
 
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
 		
-		String sql = "";
+		String sql = new String();
 
 		if (employeeID != 0 && firstDate == null && secondDate == null) {
 			System.out.println("Employee ID is: " + employeeID);
@@ -249,20 +249,20 @@ public class DbAttendance {
 			System.out.println("Getting all employee logs");
 			sql = "SELECT * FROM Attendance";
 		} else if (employeeID == 0 && firstDate != null && secondDate != null) {
-			LocalDate fDate;
-			LocalDate tDate;
-			fDate =  LocalDate.parse(firstDate, dtf);
-			tDate =   LocalDate.parse(secondDate, dtf);
-			java.sql.Date sqlStartDate =  new java.sql.Date(fDate.getLong(null));  
-			java.sql.Date sqlEndDate =  new java.sql.Date(tDate.getLong(null));  
-
 			
 			
 			
+			System.out.println("Getting all employee logs between " + firstDate  + " and " + secondDate);
+			sql = "SELECT * FROM Attendance WHERE date BETWEEN '" + firstDate  + "' AND '" + secondDate + "'";
+		}else if (employeeID != 0 && firstDate != null && secondDate != null) {
 			
-			System.out.println("Getting all employee logs between " + sqlStartDate  + " and " + sqlEndDate);
-			sql = "SELECT * FROM Attendance WHERE date BETWEEN '" + sqlStartDate  + "' AND '" + sqlEndDate + "'";
+			System.out.println("Getting employee logs for employee id: " + employeeID +" between " + firstDate  + " and " + secondDate);
+			sql = "SELECT * FROM Attendance WHERE employeeID= " + employeeID + " AND date BETWEEN '" + firstDate  + "' AND '" + secondDate + "'";
 		}
+		
+		
+		
+		
 
 		ArrayList<attendanceContainer> timeInfoList = new ArrayList<>();
 		System.out.println("Trying to pull attendance data");
