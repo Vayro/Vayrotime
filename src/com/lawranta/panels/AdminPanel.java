@@ -125,10 +125,15 @@ public class AdminPanel extends JPanel {
 		btnClear.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				fromToDates[0]=null;
+				fromToDates[1]=null;
+				relistLogs(logID, fromToDates[0], 	fromToDates[1]);
+				
 			}
 		});
 		btnClear.setBounds(139, 280, 119, 23);
-		add(btnClear);
+		
 
 		JButton btnNewEmployee = new JButton("New Employee");
 		btnNewEmployee.addActionListener(new ActionListener() {
@@ -147,6 +152,9 @@ public class AdminPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 
 				openDateChooserDialog();
+				btnClear.setVisible(true);
+				add(btnClear);
+				
 			}
 		});
 		add(btnDates);
