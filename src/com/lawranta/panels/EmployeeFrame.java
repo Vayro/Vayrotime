@@ -24,8 +24,8 @@ import javax.swing.border.MatteBorder;
 
 import com.lawranta.SubPanels.currentSessionPanel;
 import com.lawranta.frames.PanelContainerFrame;
-import com.lawranta.sqllite.DbAttendance;
-import com.lawranta.sqllite.connectDB;
+import com.lawranta.sqllite.AttendanceDAO;
+import com.lawranta.sqllite.EmployeeDAO;
 
 import java.awt.Color;
 import javax.swing.JTextArea;
@@ -37,7 +37,7 @@ public class EmployeeFrame extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 	boolean clocked = false;
-	private static connectDB cDB;
+	private static EmployeeDAO cDB;
 	private static PinPanel INITIALIZE;
 	boolean sort=false;
 	private PanelContainerFrame frame;
@@ -47,7 +47,7 @@ public class EmployeeFrame extends JPanel {
 	/**
 	 * Create the frame.
 	 */
-	public EmployeeFrame(connectDB passedDB, PanelContainerFrame frame)
+	public EmployeeFrame(EmployeeDAO passedDB, PanelContainerFrame frame)
 
 	{
 	    super();
@@ -217,7 +217,7 @@ add(employeeContent);
 
 		cDB.setStatus("in");
 		cDB.dbUpdateEmployeeStatus("in");
-		DbAttendance dBA = new DbAttendance(cDB, dtf.format(now));
+		AttendanceDAO dBA = new AttendanceDAO(cDB, dtf.format(now));
 		dBA.clockIn(currentTime());
 
 	}
@@ -228,7 +228,7 @@ add(employeeContent);
 
 		cDB.setStatus("out");
 		cDB.dbUpdateEmployeeStatus("out");
-		DbAttendance dBA = new DbAttendance(cDB, dtf.format(now));
+		AttendanceDAO dBA = new AttendanceDAO(cDB, dtf.format(now));
 
 		dBA.setEmployeeID(cDB.getId());
 		dBA.setDate(dtf.format(now));

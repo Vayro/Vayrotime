@@ -22,7 +22,7 @@ import com.github.lgooddatepicker.optionalusertools.PickerUtilities;
 import com.lawranta.SubPanels.AdminSubPanel;
 import com.lawranta.containersObjects.employeeContainer;
 import com.lawranta.panels.AdminPanel;
-import com.lawranta.sqllite.connectDB;
+import com.lawranta.sqllite.EmployeeDAO;
 
 import java.awt.GridLayout;
 import javax.swing.BoxLayout;

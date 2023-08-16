@@ -31,7 +31,7 @@ public class confirmDeleteDialog extends JDialog {
 	 */
 	private static final long serialVersionUID = -7009067707150189635L;
 	private final JPanel contentPanel = new JPanel();
-	connectDB e = new connectDB();
+	EmployeeDAO e = new EmployeeDAO();
 	boolean confirm = false;
 
 
@@ -146,7 +146,7 @@ public class confirmDeleteDialog extends JDialog {
 		case "Delete": {
 	
 			e.deleteEmployee();
-			DbAttendance a = new DbAttendance(e);
+			AttendanceDAO a = new AttendanceDAO(e);
 			a.deleteLogs();
 			
 			confirm=true;

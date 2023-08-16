@@ -11,84 +11,26 @@ import com.lawranta.Globals.*;
 import com.lawranta.containersObjects.attendanceContainer;
 import com.lawranta.containersObjects.employeeContainer;
 
-public class connectDB {
+public class EmployeeDAO {
 
-	String PIN;
-	String name;
-	int id;
-	String status="out";
-
-	public connectDB(String enteredPin) {
-		// TODO Auto-generated constructor stub
-		PIN = enteredPin;
-	}
-	
-	public connectDB() {
-		
-	}
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * @return the id
-	 */
-	public int getId() {
-		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	/**
-	 * @return the status
-	 */
-	public String getStatus() {
-		return status;
-	}
-
-	/**
-	 * @param status the status to set
-	 */
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
+-
 	/**
 	 * Connect to the test.db database
 	 * 
 	 * @return the Connection object
 	 */
 	private Connection connect() {
-		// SQLite connection string
-		String url = "jdbc:sqlite:" + Global.dbPath;
-		Connection conn = null;
-		try {
-			conn = DriverManager.getConnection(url);
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
+
+		Connection conn = DataConn.getConnection();
+
 		return conn;
 
 	}
 
-	public boolean checkPIN() {
-		String checksql = "SELECT EXISTS(\n" + "SELECT 1 FROM Employees WHERE pinCode = '" + PIN + "'" + ")\n";
+	public boolean checkPIN(String pin) {
+		
+
+		String checksql = "SELECT EXISTS(\n" + "SELECT 1 FROM Employees WHERE pinCode = '" + pin + "'" + ")\n";
 
 		// check pin exists
 

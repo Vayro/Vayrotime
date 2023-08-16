@@ -21,7 +21,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.lawranta.containersObjects.employeeContainer;
 import com.lawranta.panels.AdminPanel;
-import com.lawranta.sqllite.connectDB;
+import com.lawranta.sqllite.EmployeeDAO;
 
 public class TimeLogPopupMenu extends JPopupMenu {
 
@@ -118,7 +118,7 @@ public class TimeLogPopupMenu extends JPopupMenu {
 	public JPopupMenu FilterByEmployee() {
 		
 		JPopupMenu m = new JPopupMenu();
-		connectDB cDb = new connectDB();
+		EmployeeDAO cDb = new EmployeeDAO();
 		ArrayList<employeeContainer> employeeList = cDb.getEmployees();
 		System.out.print("Employees:" + employeeList.size() + "\n");
 		m.setLabel("Employee Filter");

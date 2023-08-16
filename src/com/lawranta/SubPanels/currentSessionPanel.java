@@ -16,8 +16,8 @@ import javax.swing.JTable;
 import javax.swing.table.*;
 
 import com.lawranta.containersObjects.attendanceContainer;
-import com.lawranta.sqllite.DbAttendance;
-import com.lawranta.sqllite.connectDB;
+import com.lawranta.sqllite.AttendanceDAO;
+import com.lawranta.sqllite.EmployeeDAO;
 
 public class currentSessionPanel extends JPanel {
 
@@ -30,7 +30,7 @@ public class currentSessionPanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public currentSessionPanel(connectDB cDB, boolean sort) {
+	public currentSessionPanel(EmployeeDAO cDB, boolean sort) {
 		setBackground(new Color(255, 217, 217));
 		setLayout(null);
 
@@ -42,7 +42,7 @@ public class currentSessionPanel extends JPanel {
 		 */
 
 		// set text content
-		DbAttendance dBA = new DbAttendance(cDB);
+		AttendanceDAO dBA = new AttendanceDAO(cDB);
 		ArrayList<attendanceContainer> timeInfoList = dBA.pullTimeData(cDB.getId(),null,null);
 		System.out.print("time info list contains:" + timeInfoList.size() + "\n");
 

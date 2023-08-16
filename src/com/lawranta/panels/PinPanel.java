@@ -17,7 +17,8 @@ import javax.swing.text.PlainDocument;
 import com.lawranta.Globals.Global;
 import com.lawranta.frames.*;
 import com.lawranta.panels.*;
-import com.lawranta.sqllite.connectDB;
+import com.lawranta.services.EmployeeService;
+import com.lawranta.sqllite.EmployeeDAO;
 
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -47,7 +48,7 @@ public class PinPanel extends JPanel {
 	private JPasswordField passwordField;
 	protected AdminPanel INITIALIZE;
 	private PanelContainerFrame frame;
-
+	EmployeeService eSer = new EmployeeService(); 
 
 	/**
 	 * Create the frame.
@@ -330,10 +331,10 @@ add(lblTime);
 		String strPin = new String(charpin);
 		System.out.println("Checking if pin is valid. (" + strPin + ")");
 
-		if (databaseCompare(strPin)) {
+		if (eSer.databaseCompare(strPin)) {
 			// if YES, move to employee screen
 			System.out.println("Pin Valid");
-			connectDB cDB = new connectDB(strPin);
+			EmployeeDAO cDB = new EmployeeDAO(strPin);
 			frame.PanelChange(new EmployeeFrame(cDB,frame));
 			setVisible(false);
 			System.out.println("Launching private employee frame");
@@ -349,11 +350,5 @@ add(lblTime);
 
 	}
 
-	private boolean databaseCompare(String enteredPin) {
 
-		connectDB cDB = new connectDB(enteredPin);
-
-		return cDB.checkPIN();
-
-	}
 }

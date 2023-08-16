@@ -14,7 +14,7 @@ import com.lawranta.frames.*;
 import com.lawranta.popups.DateChooserDialog;
 import com.lawranta.popups.TimeLogPopupMenu;
 import com.lawranta.popups.newEmployeeDialog;
-import com.lawranta.sqllite.DbAttendance;
+import com.lawranta.sqllite.AttendanceDAO;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -224,7 +224,7 @@ public class AdminPanel extends JPanel {
 		System.out.println("ID: " + id + " firstDate: " + firstDate + " secondDate: " + secondDate);
 		
 		
-		ArrayList<attendanceContainer> logList = new DbAttendance().pullTimeData(id, firstDate, secondDate);
+		ArrayList<attendanceContainer> logList = new AttendanceDAO().pullTimeData(id, firstDate, secondDate);
 		asp= new AdminSubPanel(frame).logList(this, logList);
 		subPanelChange(asp);
 		

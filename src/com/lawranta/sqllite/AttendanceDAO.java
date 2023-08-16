@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 import com.lawranta.Globals.*;
 import com.lawranta.containersObjects.attendanceContainer;
 
-public class DbAttendance {
+public class AttendanceDAO {
 
 	/*
 	 * id integer PRIMARY KEY,\n" + " date text NOT NULL,\n" +
@@ -53,7 +53,7 @@ public class DbAttendance {
 		this.primaryKey = primaryKey;
 	}
 
-	connectDB cDB;
+	EmployeeDAO cDB;
 
 	public String getDate() {
 		return date;
@@ -103,20 +103,20 @@ public class DbAttendance {
 		this.name = name;
 	}
 
-	public DbAttendance(connectDB passedDB, String today) {
+	public AttendanceDAO(EmployeeDAO passedDB, String today) {
 		cDB = passedDB;
 		setDate(today);
 		setEmployeeID(cDB.getId());
 
 	}
 
-	public DbAttendance(connectDB passedDB) {
+	public AttendanceDAO(EmployeeDAO passedDB) {
 		cDB = passedDB;
 		setEmployeeID(cDB.getId());
 
 	}
 
-	public DbAttendance() {
+	public AttendanceDAO() {
 		// TODO Auto-generated constructor stub
 		//nothing
 	}
@@ -124,13 +124,9 @@ public class DbAttendance {
 	// connect db
 	private Connection connect() {
 		// SQLite connection string
-		String url = "jdbc:sqlite:" + Global.dbPath;
-		Connection conn = null;
-		try {
-			conn = DriverManager.getConnection(url);
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
+
+		Connection conn = DataConn.getConnection();
+
 		return conn;
 
 	}

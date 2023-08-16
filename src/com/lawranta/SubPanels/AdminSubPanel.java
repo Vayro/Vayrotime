@@ -30,7 +30,7 @@ import com.lawranta.modifiers.*;
 import com.lawranta.panels.AdminPanel;
 import com.lawranta.panels.PinPanel;
 import com.lawranta.popups.*;
-import com.lawranta.sqllite.connectDB;
+import com.lawranta.sqllite.EmployeeDAO;
 
 import java.awt.FlowLayout;
 
@@ -48,7 +48,7 @@ public class AdminSubPanel extends JPanel {
 	 */
 	private static final long serialVersionUID = -5215442045267403248L;
 	JTable table;
-	connectDB cDb = new connectDB();
+	EmployeeDAO cDb = new EmployeeDAO();
 	private AdminPanel parentPanel;
 
 	/**

@@ -29,7 +29,7 @@ import com.lawranta.SubPanels.AdminSubPanel;
 import com.lawranta.containersObjects.*;
 import com.lawranta.frames.PanelContainerFrame;
 import com.lawranta.panels.AdminPanel;
-import com.lawranta.sqllite.connectDB;
+import com.lawranta.sqllite.EmployeeDAO;
 
 import javax.swing.table.DefaultTableModel;
 import java.awt.GridLayout;
@@ -145,7 +145,7 @@ public class newEmployeeDialog extends JDialog {
 						table.getValueAt(0, workGroup).toString(), "out", table.getValueAt(0, pinCode).toString()
 
 				);
-				connectDB eC = new connectDB();
+				EmployeeDAO eC = new EmployeeDAO();
 				eC.addNewEmployee(x);
 				adminPanel.subPanelChange(new AdminSubPanel(frame));
 				dispose();
