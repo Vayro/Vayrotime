@@ -8,8 +8,11 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.lawranta.DatabaseModels.EmployeeModel;
 import com.lawranta.SubPanels.AdminSubPanel;
 import com.lawranta.containersObjects.employeeContainer;
+import com.lawranta.services.AttendanceService;
+import com.lawranta.services.EmployeeService;
 import com.lawranta.sqllite.*;
 
 import javax.swing.JLabel;
@@ -31,7 +34,7 @@ public class confirmDeleteDialog extends JDialog {
 	 */
 	private static final long serialVersionUID = -7009067707150189635L;
 	private final JPanel contentPanel = new JPanel();
-	EmployeeDAO e = new EmployeeDAO();
+	EmployeeModel e = new EmployeeModel();
 	boolean confirm = false;
 
 
@@ -88,7 +91,7 @@ public class confirmDeleteDialog extends JDialog {
 			contentPanel.add(lblName, gbc_lblName);
 			String employee;
 
-			e.setEmployeeByID(id);
+			e=EmployeeService.setEmployeeByID(id);
 			employee=e.getName();
 			lblName.setText(employee);
 			
@@ -145,9 +148,11 @@ public class confirmDeleteDialog extends JDialog {
 		switch (action) {
 		case "Delete": {
 	
-			e.deleteEmployee();
-			AttendanceDAO a = new AttendanceDAO(e);
-			a.deleteLogs();
+			EmployeeService.deleteEmployee(e);
+			AttendanceService.deleteLogs(e);
+			
+			
+
 			
 			confirm=true;
 			

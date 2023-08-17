@@ -15,7 +15,10 @@ import java.util.Comparator;
 import javax.swing.JTable;
 import javax.swing.table.*;
 
+import com.lawranta.DatabaseModels.EmployeeModel;
+import com.lawranta.DatabaseModels.AttendanceModel;
 import com.lawranta.containersObjects.attendanceContainer;
+import com.lawranta.services.AttendanceService;
 import com.lawranta.sqllite.AttendanceDAO;
 import com.lawranta.sqllite.EmployeeDAO;
 
@@ -26,11 +29,11 @@ public class currentSessionPanel extends JPanel {
 	 */
 	private static final long serialVersionUID = -8531913155956205564L;
 	private JTable table;
-
+	static AttendanceService aSer=new AttendanceService();
 	/**
 	 * Create the panel.
 	 */
-	public currentSessionPanel(EmployeeDAO cDB, boolean sort) {
+	public currentSessionPanel(EmployeeModel em, boolean sort) {
 		setBackground(new Color(255, 217, 217));
 		setLayout(null);
 
@@ -42,8 +45,9 @@ public class currentSessionPanel extends JPanel {
 		 */
 
 		// set text content
-		AttendanceDAO dBA = new AttendanceDAO(cDB);
-		ArrayList<attendanceContainer> timeInfoList = dBA.pullTimeData(cDB.getId(),null,null);
+	
+		
+		ArrayList<AttendanceModel> timeInfoList = AttendanceService.pullTimeData(em.getId(),null,null);
 		System.out.print("time info list contains:" + timeInfoList.size() + "\n");
 
 		String[] headers = { "Date", "Clock-in", "Clock-Out", "Subtotal" };

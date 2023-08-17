@@ -7,19 +7,20 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import com.lawranta.DatabaseModels.EmployeeModel;
 import com.lawranta.Globals.*;
 import com.lawranta.containersObjects.attendanceContainer;
 import com.lawranta.containersObjects.employeeContainer;
 
 public class EmployeeDAO {
 
--
+
 	/**
 	 * Connect to the test.db database
 	 * 
 	 * @return the Connection object
 	 */
-	private Connection connect() {
+	private static Connection connect() {
 
 		Connection conn = DataConn.getConnection();
 
@@ -34,7 +35,7 @@ public class EmployeeDAO {
 
 		// check pin exists
 
-		try (Connection conn = this.connect();
+		try (Connection conn = connect();
 				Statement stmt = conn.createStatement();
 
 				ResultSet check = stmt.executeQuery(checksql)) {
@@ -62,11 +63,11 @@ public class EmployeeDAO {
 	 * select all rows in the warehouses table
 	 */
 
-	public void setEmployeeInfo() {
+	public static void setEmployeeInfo(EmployeeModel e) {
 
-		String sql = "SELECT * FROM Employees WHERE pinCode = '" + PIN + "'";
+		String sql = "SELECT * FROM Employees WHERE pinCode = '" + e.getPIN() + "'";
 
-		try (Connection conn = this.connect();
+		try (Connection conn = connect();
 				Statement stmt = conn.createStatement();
 
 				ResultSet rs = stmt.executeQuery(sql)) {
@@ -78,25 +79,25 @@ public class EmployeeDAO {
 
 			// }
 
-			setId(rs.getInt("id"));
-			setName(rs.getString("lastName") + ", " + rs.getString("firstName"));
-			setStatus(rs.getString("clockedStatus"));
+			e.setId(rs.getInt("id"));
+			e.setName(rs.getString("lastName") + ", " + rs.getString("firstName"));
+			e.setStatus(rs.getString("clockedStatus"));
 
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+		} catch (SQLException er) {
+			System.out.println(er.getMessage());
 		}
 
 	}
 	
-	public void dbUpdateEmployeeStatus(String status) {
+	public static void dbUpdateEmployeeStatus(EmployeeModel em, String status) {
 		
 		String sql =  "UPDATE Employees SET clockedStatus = '"
 				+ status +
 				"'  "
                 + "WHERE pinCode = '"
-				+ this.PIN + "'";
+				+ em.getPIN() + "'";
 		
-		try (Connection conn = this.connect();
+		try (Connection conn = connect();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
           /*  // set the corresponding param
@@ -104,8 +105,8 @@ public class EmployeeDAO {
             pstmt.setString(2, this.PIN);*/
             // update 
             pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());}
+        } catch (SQLException er) {
+            System.out.println(er.getMessage());}
         }
 		
 	
@@ -116,7 +117,7 @@ public class EmployeeDAO {
 			System.out.println("retrieving employees");
 			String sql = "SELECT * FROM Employees";
 			ArrayList<employeeContainer> employeeList = new ArrayList<>();
-			try (Connection conn = this.connect();
+			try (Connection conn = connect();
 					Statement stmt = conn.createStatement();
 
 					ResultSet rs = stmt.executeQuery(sql)) {
@@ -157,7 +158,7 @@ public class EmployeeDAO {
 			String sql = "INSERT INTO EMPLOYEES (lastName, firstName, workClass, clockedStatus, pinCode)\n" + "VALUES (" + "'" + e.getLastName() + "'"
 					+ "," +"'"+ e.getFirstName()+"'" + "," + "'" + e.getWorkGroup() + "'" + "," + "'" + e.getClockedStatus() + "'" + "," + "'"+ e.getPincode()+ "' );";
 			
-			try (Connection conn = this.connect(); PreparedStatement pstmt = conn.prepareStatement(sql);
+			try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql);
 
 					) {
 
@@ -173,11 +174,11 @@ public class EmployeeDAO {
 		
 		
 		
-		public void setEmployeeByID(int ID) {
+		public static EmployeeModel setEmployeeByID(EmployeeModel em, int ID) {
 			
 			String sql = "SELECT * FROM Employees WHERE id = '" + ID + "'";
 
-			try (Connection conn = this.connect();
+			try (Connection conn = connect();
 					Statement stmt = conn.createStatement();
 
 					ResultSet rs = stmt.executeQuery(sql)) {
@@ -189,26 +190,28 @@ public class EmployeeDAO {
 
 				// }
 
-				setId(rs.getInt("id"));
-				setName(rs.getString("lastName") + ", " + rs.getString("firstName"));
-				setStatus(rs.getString("clockedStatus"));
+				em.setId(rs.getInt("id"));
+				em.setName(rs.getString("lastName") + ", " + rs.getString("firstName"));
+				em.setStatus(rs.getString("clockedStatus"));
+				
 
 			} catch (SQLException e) {
 				System.out.println(e.getMessage());
 			}
+			return em;
 
 			
 			
 		}
 		
-		public void deleteEmployee(){
+		public static void deleteEmployee(EmployeeModel em){
 			
-			String sql = "Delete FROM Employees WHERE id = " + getId() + "";
+			String sql = "Delete FROM Employees WHERE id = " + em.getId() + "";
 
 			
 				
 						try {
-							Connection conn = this.connect();
+							Connection conn = connect();
 							Statement stmt;
 
 							stmt = conn.createStatement();

@@ -1,5 +1,7 @@
 package com.lawranta.DatabaseModels;
 
+import com.lawranta.services.EmployeeService;
+
 public class EmployeeModel {
 
 	String PIN;
@@ -16,6 +18,11 @@ public class EmployeeModel {
 		System.out.println("penisesss");
 
 	}
+	
+	public String getPIN() {
+		return PIN;
+	}
+	
 
 	/**
 	 * @return the name
@@ -59,6 +66,16 @@ public class EmployeeModel {
 		this.status = status;
 	}
 
+	public void setEmployeeInfo() {
+		
+		EmployeeService.setEmployeeInfo(this);
+		
+		
+		
+		
+	}
+	
+	
 	
 	
 }

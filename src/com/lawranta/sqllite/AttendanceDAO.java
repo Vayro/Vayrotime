@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.lawranta.Globals.*;
 import com.lawranta.containersObjects.attendanceContainer;
+import com.lawranta.DatabaseModels.AttendanceModel;
 
 public class AttendanceDAO {
 
@@ -28,93 +30,8 @@ public class AttendanceDAO {
 	 * "	endTime text NOT NULL,\n" + "	subTotal text NOT NULL,\n"
 	 */
 
-	int primaryKey;
-	String date;
-	int employeeID;
-	String startTime;
-	String endTime;
-	String subTotal;
-	String name;
-	String workGroup;
 
-	public String getWorkGroup() {
-		return workGroup;
-	}
 
-	public void setWorkGroup(String workGroup) {
-		this.workGroup = workGroup;
-	}
-
-	public int getPrimaryKey() {
-		return primaryKey;
-	}
-
-	public void setPrimaryKey(int primaryKey) {
-		this.primaryKey = primaryKey;
-	}
-
-	EmployeeDAO cDB;
-
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
-	}
-
-	public int getEmployeeID() {
-		return employeeID;
-	}
-
-	public void setEmployeeID(int employeeID) {
-		this.employeeID = employeeID;
-	}
-
-	public String getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(String startTime) {
-		this.startTime = startTime;
-	}
-
-	public String getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(String endTime) {
-		this.endTime = endTime;
-	}
-
-	public String getSubTotal() {
-		return subTotal;
-	}
-
-	public void setSubTotal(String subTotal) {
-		this.subTotal = subTotal;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public AttendanceDAO(EmployeeDAO passedDB, String today) {
-		cDB = passedDB;
-		setDate(today);
-		setEmployeeID(cDB.getId());
-
-	}
-
-	public AttendanceDAO(EmployeeDAO passedDB) {
-		cDB = passedDB;
-		setEmployeeID(cDB.getId());
-
-	}
 
 	public AttendanceDAO() {
 		// TODO Auto-generated constructor stub
@@ -122,7 +39,7 @@ public class AttendanceDAO {
 	}
 
 	// connect db
-	private Connection connect() {
+	private static Connection connect() {
 		// SQLite connection string
 
 		Connection conn = DataConn.getConnection();
@@ -131,14 +48,14 @@ public class AttendanceDAO {
 
 	}
 
-	public void clockIn(String time) {
+	public static void clockIn(AttendanceModel am, String time) {
 
-		String sql = "INSERT INTO Attendance (date, employeeID, lastName, startTime)\n" + "VALUES (" + "'" + date + "'"
-				+ "," + employeeID + "," + "'" + cDB.getName() + "'" + "," + "'" + time + "' );";
+		String sql = "INSERT INTO Attendance (date, employeeID, lastName, startTime)\n" + "VALUES (" + "'" + am.getDate() + "'"
+				+ "," + am.getEmployeeID() + "," + "'" + am.getName() + "'" + "," + "'" + time + "' );";
 		String sql2 = "SELECT last_insert_rowid() AS LAST FROM Attendance";
-		setStartTime(time);
+		am.setStartTime(time);
 
-		try (Connection conn = this.connect(); PreparedStatement pstmt = conn.prepareStatement(sql);
+		try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql);
 
 		) {
 
@@ -154,14 +71,14 @@ public class AttendanceDAO {
 
 	}
 
-	public void clockOut(String time) throws ParseException {
+	public static void clockOut(AttendanceModel am, String now, String date) throws ParseException {
 		String select = "SELECT MAX(id) AS LAST FROM Attendance";
 		String maxID;
-		setEndTime(time);
+		am.setEndTime(now);
 
 		// Select SQL Statement
 
-		try (Connection conn = this.connect();
+		try (Connection conn = connect();
 
 				PreparedStatement pstmt = conn.prepareStatement(select);
 
@@ -171,7 +88,7 @@ public class AttendanceDAO {
 			ResultSet rs = stmt.executeQuery(select);
 			String lastID = rs.getString("LAST");
 			int id = (Integer.parseInt(lastID));
-			setPrimaryKey(id);
+			am.setPrimaryKey(id);
 			System.out.println("Primary key for Attendance is " + lastID);
 
 		} catch (SQLException e) {
@@ -180,34 +97,34 @@ public class AttendanceDAO {
 
 //ADD TIME TO SELECTED 
 
-		System.out.println("Primary Key is " + primaryKey);
-		String sql = "UPDATE Attendance SET endTime = '" + time + "' WHERE ID=" + this.primaryKey;
-		try (Connection conn = this.connect();
+		System.out.println("Primary Key is " + am.getPrimaryKey());
+		String sql = "UPDATE Attendance SET endTime = '" + now + "' WHERE ID=" + am.getPrimaryKey();
+		try (Connection conn = connect();
 
 				PreparedStatement pstmt = conn.prepareStatement(sql);
 
 		) {
 
-			System.out.println("Added " + time + " to primaryKey " + primaryKey);
+			System.out.println("Added " + now + " to primaryKey " + am.getPrimaryKey());
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
 
 //Pull Start Time
-		String pullTime = "SELECT * FROM Attendance where ID =" + this.primaryKey;
-		try (Connection conn = this.connect();
+		String pullTime = "SELECT * FROM Attendance where ID =" + am.getPrimaryKey();
+		try (Connection conn = connect();
 
 				PreparedStatement pstmt2 = conn.prepareStatement(pullTime);
 				ResultSet sTime = pstmt2.executeQuery();) {
-			setStartTime(sTime.getString("startTime"));
+			am.setStartTime(sTime.getString("startTime"));
 
 //calculate subTotal
-			System.out.println(startTime + "-" + endTime);
+			System.out.println(am.getStartTime() + "-" + am.getEndTime());
 
 			SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
-			Date x1 = format.parse(startTime);
-			Date x2 = format.parse(endTime);
+			Date x1 = format.parse(am.getStartTime());
+			Date x2 = format.parse(am.getEndTime());
 			long timeElapsed = x2.getTime() - x1.getTime();
 //convert milliseconds
 			String converted = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(timeElapsed),
@@ -218,10 +135,10 @@ public class AttendanceDAO {
 
 //update sub total
 
-			String sqlSubTotal = "UPDATE Attendance SET subTotal = '" + converted + "' WHERE ID=" + this.primaryKey;
+			String sqlSubTotal = "UPDATE Attendance SET subTotal = '" + converted + "' WHERE ID=" + am.getPrimaryKey();
 
 			PreparedStatement substmt = conn.prepareStatement(sqlSubTotal);
-			System.out.println("Added " + time + " to primaryKey " + primaryKey);
+			System.out.println("Added " + now + " to primaryKey " + am.getPrimaryKey());
 			substmt.executeUpdate();
 
 			System.out.println(converted);
@@ -232,7 +149,7 @@ public class AttendanceDAO {
 
 	}
 
-	public ArrayList<attendanceContainer> pullTimeData(int employeeID, String firstDate, String secondDate) {
+	public static ArrayList<AttendanceModel> pullTimeData(int employeeID, String firstDate, String secondDate) {
 
 
 		
@@ -260,23 +177,23 @@ public class AttendanceDAO {
 		
 		
 
-		ArrayList<attendanceContainer> timeInfoList = new ArrayList<>();
+		ArrayList<AttendanceModel> timeInfoList = new ArrayList<>();
 		System.out.println("Trying to pull attendance data");
 
-		try (Connection conn = this.connect();
+		try (Connection conn = connect();
 				Statement stmt = conn.createStatement();
 
 				ResultSet rs = stmt.executeQuery(sql)) {
 
 			// loop through the result set
 			while (rs.next()) {
-				attendanceContainer newLine = new attendanceContainer();
+				AttendanceModel newLine = new AttendanceModel();
 				newLine.setPrimaryKey(rs.getInt("id"));;
 				newLine.setDate(rs.getString("date"));
 				newLine.setStartTime(rs.getString("startTime"));
 				newLine.setEndTime(rs.getString("endTime"));
 				newLine.setSubTotal(rs.getString("subTotal"));
-				newLine.setEmployeeID(rs.getString("employeeID"));
+				newLine.setEmployeeID(rs.getInt("employeeID"));
 				newLine.setName(rs.getString("lastName"));
 				timeInfoList.add(newLine);
 				// System.out.println("looped");
@@ -290,18 +207,20 @@ public class AttendanceDAO {
 
 	}
 
-	public void deleteLogs() {
-		String sql = "Delete * FROM Attendance WHERE id = " + getEmployeeID() + "";
+	public static void deleteLogs(AttendanceModel am) {
+		System.out.println("Delete FROM Attendance WHERE employeeid = " + am.getEmployeeID() + "");
+		String sql = "Delete FROM Attendance WHERE employeeid = " + am.getEmployeeID() + "";
 
 		try {
-			Connection conn = this.connect();
+			Connection conn = connect();
 			Statement stmt;
 
 			stmt = conn.createStatement();
 			stmt.executeUpdate(sql);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+		e.printStackTrace();
 		}
 
 	}

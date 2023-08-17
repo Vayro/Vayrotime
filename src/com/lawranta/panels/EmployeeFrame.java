@@ -22,8 +22,11 @@ import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.border.MatteBorder;
 
+import com.lawranta.DatabaseModels.EmployeeModel;
 import com.lawranta.SubPanels.currentSessionPanel;
 import com.lawranta.frames.PanelContainerFrame;
+import com.lawranta.services.AttendanceService;
+import com.lawranta.services.EmployeeService;
 import com.lawranta.sqllite.AttendanceDAO;
 import com.lawranta.sqllite.EmployeeDAO;
 
@@ -37,7 +40,7 @@ public class EmployeeFrame extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 	boolean clocked = false;
-	private static EmployeeDAO cDB;
+	private static EmployeeModel em;
 	private static PinPanel INITIALIZE;
 	boolean sort=false;
 	private PanelContainerFrame frame;
@@ -47,16 +50,16 @@ public class EmployeeFrame extends JPanel {
 	/**
 	 * Create the frame.
 	 */
-	public EmployeeFrame(EmployeeDAO passedDB, PanelContainerFrame frame)
+	public EmployeeFrame(EmployeeModel passedE, PanelContainerFrame frame)
 
 	{
 	    super();
 	    this.frame = frame;
 		// loaded from database
-		cDB = passedDB;
-		cDB.setEmployeeInfo();
+		em = passedE;
+		em.setEmployeeInfo();
 
-		if (cDB.getStatus().equals("in")) {
+		if (em.getStatus().equals("in")) {
 			clocked = true;
 		} else {
 			clocked = false;
@@ -71,7 +74,7 @@ setBorder(new EmptyBorder(5, 5, 5, 5));
 
 setLayout(null);
 
-		JLabel lblClocked = new JLabel("Clocked " + cDB.getStatus());
+		JLabel lblClocked = new JLabel("Clocked " + em.getStatus());
 		lblClocked.setHorizontalAlignment(SwingConstants.CENTER);
 		lblClocked.setBounds(179, 45, 162, 14);
 add(lblClocked);
@@ -87,7 +90,7 @@ add(lblDate);
 		lblTime.setBounds(10, 131, 514, 14);
 add(lblTime);
 
-		JLabel lblName = new JLabel(cDB.getName());
+		JLabel lblName = new JLabel(em.getName());
 		lblName.setHorizontalAlignment(SwingConstants.CENTER);
 		lblName.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		lblName.setBounds(5, 11, 524, 23);
@@ -127,7 +130,7 @@ add(btnClockOut);
 
 		// Employee time sessions
 
-		JPanel employeeContent = new currentSessionPanel(cDB, sort);
+		JPanel employeeContent = new currentSessionPanel(em, sort);
 		employeeContent.setBounds(10, 315, 514, 367);
 add(employeeContent);
 		
@@ -147,7 +150,7 @@ add(employeeContent);
 				
 				
 				remove(employeeContent);
-				JPanel employeeContent = new currentSessionPanel(cDB, sort);
+				JPanel employeeContent = new currentSessionPanel(em, sort);
 				employeeContent.setBounds(10, 315, 514, 367);
 				add(employeeContent);
 				
@@ -215,10 +218,11 @@ add(employeeContent);
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 		LocalDateTime now = LocalDateTime.now();
 
-		cDB.setStatus("in");
-		cDB.dbUpdateEmployeeStatus("in");
-		AttendanceDAO dBA = new AttendanceDAO(cDB, dtf.format(now));
-		dBA.clockIn(currentTime());
+		em.setStatus("in");
+		EmployeeService.setStatus(em, "in");
+		AttendanceService.clockIn(em, currentTime(), dtf.format(now));
+		
+
 
 	}
 
@@ -226,13 +230,11 @@ add(employeeContent);
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 		LocalDateTime now = LocalDateTime.now();
 
-		cDB.setStatus("out");
-		cDB.dbUpdateEmployeeStatus("out");
-		AttendanceDAO dBA = new AttendanceDAO(cDB, dtf.format(now));
+		em.setStatus("out");
+		EmployeeService.dbUpdateEmployeeStatus(em, "out");
+		AttendanceService.clockOut(em, dtf.format(now), currentTime());
+		
 
-		dBA.setEmployeeID(cDB.getId());
-		dBA.setDate(dtf.format(now));
-		dBA.clockOut(currentTime());
 	}
 
 	public String currentTime() {

@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.lawranta.DatabaseModels.AttendanceModel;
 import com.lawranta.Globals.Global;
 import com.lawranta.SubPanels.AdminSubPanel;
 import com.lawranta.SubPanels.currentSessionPanel;
@@ -14,6 +15,7 @@ import com.lawranta.frames.*;
 import com.lawranta.popups.DateChooserDialog;
 import com.lawranta.popups.TimeLogPopupMenu;
 import com.lawranta.popups.newEmployeeDialog;
+import com.lawranta.services.AttendanceService;
 import com.lawranta.sqllite.AttendanceDAO;
 
 import javax.swing.JButton;
@@ -224,7 +226,7 @@ public class AdminPanel extends JPanel {
 		System.out.println("ID: " + id + " firstDate: " + firstDate + " secondDate: " + secondDate);
 		
 		
-		ArrayList<attendanceContainer> logList = new AttendanceDAO().pullTimeData(id, firstDate, secondDate);
+		ArrayList<AttendanceModel> logList = AttendanceService.pullTimeData(id, firstDate, secondDate);
 		asp= new AdminSubPanel(frame).logList(this, logList);
 		subPanelChange(asp);
 		

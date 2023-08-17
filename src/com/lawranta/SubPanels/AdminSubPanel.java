@@ -23,6 +23,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 
+import com.lawranta.DatabaseModels.AttendanceModel;
 import com.lawranta.containersObjects.attendanceContainer;
 import com.lawranta.containersObjects.employeeContainer;
 import com.lawranta.frames.PanelContainerFrame;
@@ -94,7 +95,7 @@ table.getColumnModel().getColumn(col).setHeaderRenderer(new ClickableHeaderRende
 		}};
 	
 	
-	public JPanel logList(AdminPanel parentPanel, ArrayList<attendanceContainer> logList) {
+	public JPanel logList(AdminPanel parentPanel, ArrayList<AttendanceModel> logList) {
 		
 
 		

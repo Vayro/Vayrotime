@@ -14,6 +14,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 import javax.swing.text.PlainDocument;
 
+import com.lawranta.DatabaseModels.EmployeeModel;
 import com.lawranta.Globals.Global;
 import com.lawranta.frames.*;
 import com.lawranta.panels.*;
@@ -331,11 +332,15 @@ add(lblTime);
 		String strPin = new String(charpin);
 		System.out.println("Checking if pin is valid. (" + strPin + ")");
 
-		if (eSer.databaseCompare(strPin)) {
+		if (EmployeeService.databaseCompare(strPin)) {
 			// if YES, move to employee screen
 			System.out.println("Pin Valid");
-			EmployeeDAO cDB = new EmployeeDAO(strPin);
-			frame.PanelChange(new EmployeeFrame(cDB,frame));
+			
+			
+			EmployeeModel e = new EmployeeModel(strPin);
+			
+			
+			frame.PanelChange(new EmployeeFrame(e,frame));
 			setVisible(false);
 			System.out.println("Launching private employee frame");
 			setVisible(false);
