@@ -49,9 +49,9 @@ public class AdminPanel extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 323277068294353532L;
-	private AdminPanel owner;
+	public static AdminPanel owner;
 	protected AdminPanel INITIALIZE;
-	public JPanel asp;
+	public AdminSubPanel asp;
 	public JPanel employeeContent;
 	public JPanel contents;
 	public PanelContainerFrame frame;
@@ -62,6 +62,7 @@ public class AdminPanel extends JPanel {
 	 */
 	public AdminPanel(PanelContainerFrame frame) {
 		this.frame=frame;
+		System.out.println("Passing " + this + " panel as owner");
 		owner=this;
 		
 		
@@ -145,6 +146,8 @@ public class AdminPanel extends JPanel {
 
 			}
 		});
+		
+		
 		btnNewEmployee.setBounds(276, 247, 119, 23);
 		add(btnNewEmployee);
 
@@ -160,6 +163,18 @@ public class AdminPanel extends JPanel {
 			}
 		});
 		add(btnDates);
+		
+		JButton btnExportAll = new JButton("Export");
+		btnExportAll.setBounds(10, 281, 119, 23);
+		btnExportAll.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				if(asp!=null) {
+				asp.exportList();}
+				
+			}
+		});
+		add(btnExportAll);
 
 	}
 	
@@ -207,7 +222,8 @@ public class AdminPanel extends JPanel {
 					newEmployee.setModalityType(ModalityType.APPLICATION_MODAL);
 					newEmployee.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					newEmployee.setVisible(true);
-					AdminSubPanel asp=(AdminSubPanel) new AdminSubPanel(frame).employeeList(this);
+					System.out.println("Passing " + this + " panel as owner");
+					asp=(AdminSubPanel) new AdminSubPanel(frame).employeeList(this);
 					subPanelChange(asp);
 		
 		
@@ -221,13 +237,14 @@ public class AdminPanel extends JPanel {
 	public void relistLogs(int id, String firstDate, String secondDate) {
 		logID=id;
 		if (contents!=null) {contents.removeAll();}
-		JPanel asp=(AdminSubPanel) new AdminSubPanel(frame).employeeList(owner);
+		System.out.println("Passing " + owner + " panel as owner");
+		 asp=(AdminSubPanel) new AdminSubPanel(frame).employeeList(owner);
 		System.out.println("Trying to refresh employee list...");
 		System.out.println("ID: " + id + " firstDate: " + firstDate + " secondDate: " + secondDate);
 		
 		
 		ArrayList<AttendanceModel> logList = AttendanceService.pullTimeData(id, firstDate, secondDate);
-		asp= new AdminSubPanel(frame).logList(this, logList);
+		asp= (AdminSubPanel) new AdminSubPanel(frame).logList(this, logList, frame);
 		subPanelChange(asp);
 		
 		
@@ -241,7 +258,8 @@ public class AdminPanel extends JPanel {
 	public void relistEmployees(){
 
 		if (contents!=null) {contents.removeAll();}
-		JPanel asp=(AdminSubPanel) new AdminSubPanel(frame).employeeList(owner);
+		System.out.println("Passing " + owner + " panel as owner");
+		asp=(AdminSubPanel) new AdminSubPanel(frame).employeeList(owner);
 		System.out.println("Trying to refresh employee list...");
 		subPanelChange(asp);
 	}
@@ -274,18 +292,4 @@ public class AdminPanel extends JPanel {
 		
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }

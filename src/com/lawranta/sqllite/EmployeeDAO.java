@@ -116,7 +116,7 @@ public class EmployeeDAO {
 		public ArrayList<employeeContainer> getEmployees() {
 			System.out.println("retrieving employees");
 			String sql = "SELECT * FROM Employees";
-			ArrayList<employeeContainer> employeeList = new ArrayList<>();
+			ArrayList<EmployeeModel> employeeList = new ArrayList<>();
 			try (Connection conn = connect();
 					Statement stmt = conn.createStatement();
 
@@ -124,7 +124,7 @@ public class EmployeeDAO {
 
 				// loop through the result set
 				while (rs.next()) {
-					employeeContainer newLine = new employeeContainer();
+					EmployeeModel newLine = new EmployeeModel();
 					newLine.setID(rs.getInt("id"));
 					newLine.setLastName(rs.getString("lastName"));
 					newLine.setFirstName(rs.getString("firstName"));
@@ -147,7 +147,7 @@ public class EmployeeDAO {
 		
 		
 		
-		public void addNewEmployee(employeeContainer e)
+		public static void addNewEmployee(EmployeeModel x)
 		{
 			System.out.println("adding employee");
 			
@@ -155,8 +155,8 @@ public class EmployeeDAO {
 			
 			
 			
-			String sql = "INSERT INTO EMPLOYEES (lastName, firstName, workClass, clockedStatus, pinCode)\n" + "VALUES (" + "'" + e.getLastName() + "'"
-					+ "," +"'"+ e.getFirstName()+"'" + "," + "'" + e.getWorkGroup() + "'" + "," + "'" + e.getClockedStatus() + "'" + "," + "'"+ e.getPincode()+ "' );";
+			String sql = "INSERT INTO EMPLOYEES (lastName, firstName, workClass, clockedStatus, pinCode)\n" + "VALUES (" + "'" + x.getLastName() + "'"
+					+ "," +"'"+ x.getFirstName()+"'" + "," + "'" + x.getWorkGroup() + "'" + "," + "'" + x.getClockedStatus() + "'" + "," + "'"+ x.getPincode()+ "' );";
 			
 			try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql);
 

@@ -11,6 +11,8 @@ import javax.swing.border.EmptyBorder;
 import com.lawranta.DatabaseModels.EmployeeModel;
 import com.lawranta.SubPanels.AdminSubPanel;
 import com.lawranta.containersObjects.employeeContainer;
+import com.lawranta.frames.PanelContainerFrame;
+import com.lawranta.panels.AdminPanel;
 import com.lawranta.services.AttendanceService;
 import com.lawranta.services.EmployeeService;
 import com.lawranta.sqllite.*;
@@ -36,6 +38,8 @@ public class confirmDeleteDialog extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	EmployeeModel e = new EmployeeModel();
 	boolean confirm = false;
+	private AdminPanel adminPanel;
+	public PanelContainerFrame frame;
 
 
 
@@ -51,7 +55,7 @@ public class confirmDeleteDialog extends JDialog {
 	
 
 	
-	public confirmDeleteDialog(int id) {
+	public confirmDeleteDialog(int id, AdminPanel adminPanel, PanelContainerFrame frame) {
 
 		setTitle("Delete Employee");
 		setBounds(100, 100, 336, 284);
@@ -63,6 +67,8 @@ public class confirmDeleteDialog extends JDialog {
 		gbl_contentPanel.rowHeights = new int[] {0, 0, 0};
 		gbl_contentPanel.columnWeights = new double[]{0.0};
 		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0};
+        this.adminPanel = adminPanel;
+        this.frame = frame;
 		contentPanel.setLayout(gbl_contentPanel);
 		{
 			JTextArea textArea = new JTextArea();
@@ -143,10 +149,10 @@ public class confirmDeleteDialog extends JDialog {
 	
 	
 
-	public void act(String action){
+	public boolean act(String action){
 	
 		switch (action) {
-		case "Delete": {
+		case "Delete": {	
 	
 			EmployeeService.deleteEmployee(e);
 			AttendanceService.deleteLogs(e);
@@ -155,22 +161,23 @@ public class confirmDeleteDialog extends JDialog {
 
 			
 			confirm=true;
-			
+			adminPanel.relistEmployees();
 			dispose();
-			
+			return true;
 			
 			
 		}
-			break;
+			
 
 		case "Cancel": {
 			confirm=false;
 		
 			dispose();
-
-			break;
+			return false;
+			
 		}
 		}
+		return confirm;
 		
 		
 		

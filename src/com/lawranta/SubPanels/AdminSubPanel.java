@@ -8,6 +8,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.JDialog;
@@ -22,6 +25,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableModel;
 
 import com.lawranta.DatabaseModels.AttendanceModel;
 import com.lawranta.containersObjects.attendanceContainer;
@@ -34,6 +38,7 @@ import com.lawranta.popups.*;
 import com.lawranta.sqllite.EmployeeDAO;
 
 import java.awt.FlowLayout;
+import java.io.File;  
 
 public class AdminSubPanel extends JPanel {
 	public AdminSubPanel(PanelContainerFrame frame) {
@@ -51,6 +56,7 @@ public class AdminSubPanel extends JPanel {
 	JTable table;
 	EmployeeDAO cDb = new EmployeeDAO();
 	private AdminPanel parentPanel;
+	private PanelContainerFrame frame;
 
 	/**
 	 * Create the panel.
@@ -95,11 +101,13 @@ table.getColumnModel().getColumn(col).setHeaderRenderer(new ClickableHeaderRende
 		}};
 	
 	
-	public JPanel logList(AdminPanel parentPanel, ArrayList<AttendanceModel> logList) {
+	public JPanel logList(AdminPanel parentPanel, ArrayList<AttendanceModel> logList, PanelContainerFrame frame) {
 		
 
 		
 		this.parentPanel = parentPanel;
+		this.frame=frame;
+		
 		
 		System.out.print("Retrieved: " + logList.size() + "\n");
 		String[] headers = { "ID", "EmployeeID", "Employee", "Date","Start Time", "End Time", "Subtotal" };
@@ -127,7 +135,7 @@ table.getColumnModel().getColumn(col).setHeaderRenderer(new ClickableHeaderRende
 		Object[][] sorted = (Arrays.copyOf(data, data.length));
 
 		JScrollPane scroll = new JScrollPane();
-		table = new JTable(sorted, headers) {
+		this.table = new JTable(sorted, headers) {
 			/**
 			 * 
 			 */
@@ -146,17 +154,17 @@ table.getColumnModel().getColumn(col).setHeaderRenderer(new ClickableHeaderRende
 
 		for (int x = 0; x < headers.length; x++) {
 			//table.getColumnModel().getColumn(x).setCellRenderer(centerRenderer);
-			table.getColumnModel().getColumn(x).setHeaderRenderer(new ClickableHeaderRenderer(1));
+			this.table.getColumnModel().getColumn(x).setHeaderRenderer(new ClickableHeaderRenderer(1));
 		}
 		;
 
-		header = table.getTableHeader();
+		header = this.table.getTableHeader();
 		//header.setBackground(Color.LIGHT_GRAY);
 		header.addMouseListener( actionListener);
 
 		//scroll.setBounds(0, 0, 100,100); // <-- THIS
 
-		scroll.setViewportView(table);
+		scroll.setViewportView(this.table);
 
 		add(scroll);
 
@@ -221,7 +229,7 @@ table.getColumnModel().getColumn(col).setHeaderRenderer(new ClickableHeaderRende
 		Object[][] sorted = (Arrays.copyOf(data, data.length));
 
 		JScrollPane scroll = new JScrollPane();
-		table = new JTable(sorted, headers) {
+		this.table = new JTable(sorted, headers) {
 			/**
 			 * 
 			 */
@@ -238,15 +246,15 @@ table.getColumnModel().getColumn(col).setHeaderRenderer(new ClickableHeaderRende
 		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
 
 		for (int x = 0; x < 7; x++) {
-			table.getColumnModel().getColumn(x).setCellRenderer(centerRenderer);
+			this.table.getColumnModel().getColumn(x).setCellRenderer(centerRenderer);
 		}
 		;
 
-		header = table.getTableHeader();
+		header = this.table.getTableHeader();
 		header.setBackground(Color.LIGHT_GRAY);
 		//scroll.setBounds(0, 0, 514, 367); // <-- THIS
 
-		scroll.setViewportView(table);
+		scroll.setViewportView(this.table);
 
 		add(scroll);
 
@@ -254,7 +262,7 @@ table.getColumnModel().getColumn(col).setHeaderRenderer(new ClickableHeaderRende
 
 		// Table Listener
 
-		table.addMouseListener(new MouseAdapter() {
+		this.table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
@@ -265,6 +273,7 @@ table.getColumnModel().getColumn(col).setHeaderRenderer(new ClickableHeaderRende
 
 					switch (cellData) {
 					case "X": {
+					
 						delete(id);
 					}
 
@@ -284,29 +293,30 @@ table.getColumnModel().getColumn(col).setHeaderRenderer(new ClickableHeaderRende
 	}
 
 	private void delete(int id) {
-
-		JDialog delete = new confirmDeleteDialog(id);
+		
+		JDialog delete = new confirmDeleteDialog(id, parentPanel, frame);
 		delete.setVisible(true);
 		boolean returnB = ((confirmDeleteDialog) delete).resultB();
 
 		if (returnB) {
 
 			
-			parentPanel.employeeContent.removeAll();
-			parentPanel.employeeContent.setVisible(false);
+			//parentPanel.employeeContent.removeAll();
+			//parentPanel.employeeContent.setVisible(false);
 			// AdminPanel test = (AdminPanel) SwingUtilities.getUnwrappedParent(this);
 			// JPanel thisPanel = this;
-		//	((AdminPanel) parentPanel).relistEmployees();
-			setVisible(false);
-			removeAll();
+			//parentPanel.relistEmployees();
+			System.out.println("cancelled?");
+			//setVisible(false);
+		//	removeAll();
 
 
 		}
 		
 		
-		setVisible(false);
-		removeAll();
-		parentPanel.relistEmployees();
+		//setVisible(false);
+		//removeAll();
+		//parentPanel.relistEmployees();
 		
 	}
 	
@@ -319,24 +329,79 @@ table.getColumnModel().getColumn(col).setHeaderRenderer(new ClickableHeaderRende
 	
 	private void action(String str) {
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
 		
 		
 	}
 	
 	
+public boolean exportList() {
+		
+System.out.println("Trying to Export: " + table.toString()); 
+
+String pathToExportTo = "csv.csv";
+
+//write to CSV
+
+
+    try {
+
+        TableModel model = this.table.getModel();
+        FileWriter csv = new FileWriter(new File(pathToExportTo));
+
+        for (int i = 0; i < model.getColumnCount(); i++) {
+            csv.write(model.getColumnName(i) + ",");
+        }
+
+        csv.write("\n");
+
+        for (int i = 0; i < model.getRowCount(); i++) {
+            for (int j = 0; j < model.getColumnCount(); j++) {
+            	
+            	
+            	if(model.getValueAt(i, j) 	!=null) {
+                csv.write(model.getValueAt(i, j).toString() + ",");}
+                
+                
+                
+                
+            }
+            csv.write("\n");
+        }
+
+        csv.close();
+        return true;
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    return false;
+
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
+		
+		
+	}
 	
 	
 	

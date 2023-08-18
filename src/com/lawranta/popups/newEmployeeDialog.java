@@ -25,10 +25,12 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellEditor;
 import org.xml.sax.InputSource;
 
+import com.lawranta.DatabaseModels.EmployeeModel;
 import com.lawranta.SubPanels.AdminSubPanel;
 import com.lawranta.containersObjects.*;
 import com.lawranta.frames.PanelContainerFrame;
 import com.lawranta.panels.AdminPanel;
+import com.lawranta.services.EmployeeService;
 import com.lawranta.sqllite.EmployeeDAO;
 
 import javax.swing.table.DefaultTableModel;
@@ -140,14 +142,22 @@ public class newEmployeeDialog extends JDialog {
 				break;
 			} else {
 
-				employeeContainer x = new employeeContainer();
+				EmployeeModel x = new EmployeeModel();
 				x.setAll(table.getValueAt(0, firstName).toString(), table.getValueAt(0, lastName).toString(),
 						table.getValueAt(0, workGroup).toString(), "out", table.getValueAt(0, pinCode).toString()
 
 				);
-				EmployeeDAO eC = new EmployeeDAO();
-				eC.addNewEmployee(x);
+				
+				
+			
+				EmployeeService.addNewEmployee(x);
+				
+				
+				
+				
 				adminPanel.subPanelChange(new AdminSubPanel(frame));
+				
+				
 				dispose();
 			}
 		}

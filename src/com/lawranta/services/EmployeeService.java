@@ -49,6 +49,13 @@ public class EmployeeService {
 		 EmployeeDAO.deleteEmployee(em);
 		 
 	 }
+
+	public static void addNewEmployee(EmployeeModel x) {
+		
+		EmployeeDAO.addNewEmployee(x);
+		// TODO Auto-generated method stub
+		
+	}
 	 
 
 	
