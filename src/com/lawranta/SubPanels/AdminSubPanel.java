@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.lang.model.element.Element;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -28,6 +29,7 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableModel;
 
 import com.lawranta.DatabaseModels.AttendanceModel;
+import com.lawranta.DatabaseModels.EmployeeModel;
 import com.lawranta.containersObjects.attendanceContainer;
 import com.lawranta.containersObjects.employeeContainer;
 import com.lawranta.frames.PanelContainerFrame;
@@ -119,7 +121,7 @@ table.getColumnModel().getColumn(col).setHeaderRenderer(new ClickableHeaderRende
 
 			data[i][0] = logList.get(i).getPrimaryKey();
 			data[i][1] = logList.get(i).getEmployeeID();
-			data[i][2] = logList.get(i).getName();
+			data[i][2] = logList.get(i).getName().replace(", ",", ");
 			data[i][3] = logList.get(i).getDate();
 			data[i][4] = logList.get(i).getStartTime();
 			data[i][5] = logList.get(i).getEndTime();
@@ -206,7 +208,7 @@ table.getColumnModel().getColumn(col).setHeaderRenderer(new ClickableHeaderRende
 
 		this.parentPanel = parentPanel;
 
-		ArrayList<employeeContainer> employeeList = cDb.getEmployees();
+		ArrayList<EmployeeModel> employeeList = cDb.getEmployees();
 		System.out.print("Employees:" + employeeList.size() + "\n");
 		String[] headers = { "ID", "Last Name", "First Name", "Workgroup", "Status", "PinCode", "Delete" };
 		Object[][] data = new Object[employeeList.size()][7];
@@ -339,7 +341,36 @@ public boolean exportList() {
 		
 System.out.println("Trying to Export: " + table.toString()); 
 
-String pathToExportTo = "csv.csv";
+String absPath = "csv.csv";
+
+
+FilePathDialog path = new FilePathDialog();
+Integer opt = path.showSaveDialog(this);
+
+if(opt == JFileChooser.APPROVE_OPTION) {
+	//get selected pathfile
+    File f = path.getSelectedFile();
+     absPath = f.getAbsolutePath();
+    
+ 
+   
+    
+    if(!f.getAbsolutePath().endsWith(".csv"))
+    {
+    	
+    	absPath=f.getAbsolutePath()+".csv";
+    }
+    
+    
+    
+    
+    
+    System.out.print(absPath);
+  
+}
+
+
+
 
 //write to CSV
 
@@ -347,7 +378,7 @@ String pathToExportTo = "csv.csv";
     try {
 
         TableModel model = this.table.getModel();
-        FileWriter csv = new FileWriter(new File(pathToExportTo));
+        FileWriter csv = new FileWriter(new File(absPath));
 
         for (int i = 0; i < model.getColumnCount(); i++) {
             csv.write(model.getColumnName(i) + ",");
@@ -359,8 +390,16 @@ String pathToExportTo = "csv.csv";
             for (int j = 0; j < model.getColumnCount(); j++) {
             	
             	
-            	if(model.getValueAt(i, j) 	!=null) {
-                csv.write(model.getValueAt(i, j).toString() + ",");}
+            	if(model.getValueAt(i, j) 	!=null && model.getValueAt(i, j).toString().indexOf(',')<0
+            			) {
+                csv.write(model.getValueAt(i, j).toString() + "," );}
+            	
+            	else if(model.getValueAt(i, j) 	!=null)
+            		
+            	{
+            		  csv.write("\"" + model.getValueAt(i, j).toString() + "\" " + ",") ;}
+            		
+            	
                 
                 
                 
@@ -388,8 +427,6 @@ String pathToExportTo = "csv.csv";
 	
 	
 	
-	
-
 
 
 

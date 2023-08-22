@@ -6,7 +6,7 @@ public class EmployeeModel {
 
 	String PIN;
 	String name;
-	int id;
+	int ID;
 	String status="out";
 	String firstName;
 	String lastName;
@@ -14,6 +14,12 @@ public class EmployeeModel {
 	String clockedStatus;
 	String pincode;
 
+	
+	
+	public void setID(int ID) {
+		this.ID = ID;
+	}
+	
 	public EmployeeModel(String enteredPin) {
 		// TODO Auto-generated constructor stub
 		PIN = enteredPin;
@@ -47,16 +53,18 @@ public class EmployeeModel {
 	 * @return the id
 	 */
 	public int getId() {
-		return id;
+		return ID;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
 	public void setId(int id) {
-		this.id = id;
+		this.ID = id;
 	}
-
+	public int getID() {
+		return ID;
+	}
 	/**
 	 * @return the status
 	 */

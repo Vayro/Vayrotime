@@ -113,7 +113,7 @@ public class EmployeeDAO {
 	
 	
 	
-		public ArrayList<employeeContainer> getEmployees() {
+		public ArrayList<EmployeeModel> getEmployees() {
 			System.out.println("retrieving employees");
 			String sql = "SELECT * FROM Employees";
 			ArrayList<EmployeeModel> employeeList = new ArrayList<>();

@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.border.EmptyBorder;
 
+import com.lawranta.DatabaseModels.EmployeeModel;
 import com.lawranta.containersObjects.employeeContainer;
 import com.lawranta.panels.AdminPanel;
 import com.lawranta.sqllite.EmployeeDAO;
@@ -119,7 +120,7 @@ public class TimeLogPopupMenu extends JPopupMenu {
 		
 		JPopupMenu m = new JPopupMenu();
 		EmployeeDAO cDb = new EmployeeDAO();
-		ArrayList<employeeContainer> employeeList = cDb.getEmployees();
+		ArrayList<EmployeeModel> employeeList = cDb.getEmployees();
 		System.out.print("Employees:" + employeeList.size() + "\n");
 		m.setLabel("Employee Filter");
 		m.setBackground(Color.BLACK);
