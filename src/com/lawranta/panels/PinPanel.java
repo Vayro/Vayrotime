@@ -1,5 +1,6 @@
 package com.lawranta.panels;
 import java.awt.AWTException;
+import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.time.format.DateTimeFormatter;
@@ -37,6 +38,9 @@ import javax.swing.JButton;
 
 import javax.swing.JPasswordField;
 import javax.swing.JTextArea;
+import javax.swing.BoxLayout;
+import java.awt.Component;
+import javax.swing.border.BevelBorder;
 
 public class PinPanel extends JPanel {
 
@@ -55,28 +59,78 @@ public class PinPanel extends JPanel {
 	 * Create the frame.
 	 */
 	public PinPanel(PanelContainerFrame frame) {
-		   super();
-		    this.frame = frame;
-			//setResizable(false);
-			//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			
-			//setBounds(400, 400, 550, 800);
-			//setLocationRelativeTo(null);
-			setVisible(true);
+		setBackground(Color.LIGHT_GRAY);
 
-			setBackground(Color.WHITE);
-			setBorder(new EmptyBorder(5, 5, 5, 5));
-			setLayout(null);
+		    this.frame = frame;
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+			//setBackground(Color.WHITE);
+		//	setBorder(new EmptyBorder(5, 5, 5, 5));
+		//setLayout(null);
 		lblTitle = new JLabel("Vayrotime");
-		lblTitle.setBounds(10, 11, 519, 82);
+		lblTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+		lblTitle.setAlignmentY(Component.TOP_ALIGNMENT);
 		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTitle.setFont(Global.headerFont);
 		add(lblTitle);
 
+		
+		
+		
+		// date time
+				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+				LocalDateTime now = LocalDateTime.now();
+
+				JLabel lblDate = new JLabel(dtf.format(now));
+				lblDate.setAlignmentX(Component.CENTER_ALIGNMENT);
+				lblDate.setHorizontalAlignment(SwingConstants.CENTER);
+		add(lblDate);
+
+				JLabel lblTime = new JLabel("");
+				lblTime.setAlignmentX(Component.CENTER_ALIGNMENT);
+				lblTime.setHorizontalAlignment(SwingConstants.CENTER);
+		add(lblTime);
+
+				// System.out.println(currentTime());
+				lblTime.setText(currentTime());
+
+				JTextArea output = new JTextArea();
+				output.setVisible(false);
+				output.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+				output.setEditable(false);
+			add(output);
+
+				/*
+				 * PrintStream printStream = new PrintStream(new CustomOutputStream(output));
+				 * 
+				 * System.setOut(printStream); System.setErr(printStream);
+				 */
+
+				ActionListener taskPerformer = new ActionListener() {
+					public void actionPerformed(ActionEvent evt) {
+						// System.out.println(currentTime());
+						lblTime.setText(currentTime());
+					}
+				};
+				Timer t = new Timer(1000, taskPerformer);
+				t.start();
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		JPanel panel = new JPanel();
-		panel.setBounds(117, 230, 300, 300);
+		panel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 add(panel);
-		panel.setLayout(new GridLayout(0, 3, 0, 0));
+		panel.setLayout(new GridLayout(5, 3, 5, 5));
 
 		JButton btn1 = new JButton("1");
 		btn1.addActionListener(new ActionListener() {
@@ -178,7 +232,6 @@ add(panel);
 		// PIN FIELD
 
 		passwordField = new JPasswordField();
-		passwordField.setBounds(117, 187, 300, 20);
 
 		PlainDocument document = (PlainDocument) passwordField.getDocument();
 		document.setDocumentFilter(new DocumentFilter() {
@@ -210,6 +263,7 @@ add(panel);
 add(passwordField);
 
 		JButton btnAdmin = new JButton("admin");
+		btnAdmin.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnAdmin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String s = new String(passwordField.getPassword());
@@ -224,47 +278,21 @@ add(passwordField);
 			}
 		});
 		btnAdmin.setVisible(true);
-		btnAdmin.setBounds(222, 541, 89, 23);
 add(btnAdmin);
 
-		// date time
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-		LocalDateTime now = LocalDateTime.now();
-
-		JLabel lblDate = new JLabel(dtf.format(now));
-		lblDate.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDate.setBounds(117, 162, 300, 14);
-add(lblDate);
-
-		JLabel lblTime = new JLabel("");
-		lblTime.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTime.setBounds(10, 137, 514, 14);
-add(lblTime);
-
-		// System.out.println(currentTime());
-		lblTime.setText(currentTime());
-
-		JTextArea output = new JTextArea();
-		output.setBounds(10, 587, 514, 82);
-		output.setEditable(false);
-	add(output);
-
-		/*
-		 * PrintStream printStream = new PrintStream(new CustomOutputStream(output));
-		 * 
-		 * System.setOut(printStream); System.setErr(printStream);
-		 */
-
-		ActionListener taskPerformer = new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				// System.out.println(currentTime());
-				lblTime.setText(currentTime());
-			}
-		};
-		Timer t = new Timer(1000, taskPerformer);
-		t.start();
-
+		
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	public String currentTime() {
 		Calendar calendar = Calendar.getInstance();

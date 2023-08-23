@@ -2,11 +2,15 @@ package com.lawranta.frames;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.GridBagLayout;
 import java.awt.LayoutManager;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.RootPaneContainer;
 import javax.swing.border.EmptyBorder;
 
 import com.lawranta.frames.*;
@@ -26,6 +30,8 @@ public class PanelContainerFrame extends JFrame {
 			public void run() {
 				try {
 					PanelContainerFrame frame = new PanelContainerFrame();
+			
+		
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -38,19 +44,27 @@ public class PanelContainerFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public PanelContainerFrame() {
-		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		
+		
+
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setResizable(true);
 		setBounds(400, 400, 550, 800);
+		
 		setLocationRelativeTo(null);
 		
-		contentPane = new JPanel();
-		contentPane.setBackground(new Color(255, 255, 255));
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		JPanel panel=new PinPanel(this);
 		
+		
+
+	
+		
+		
+		contentPane=new JPanel();
+		
+		contentPane.setVisible(true);
+		panel=new PinPanel(this);		
+
 		PanelChange(panel);
 		
 	
@@ -60,10 +74,12 @@ public class PanelContainerFrame extends JFrame {
 	
 	public void PanelChange(JPanel panel) {
 		
-
 		
-		setContentPane(panel);
-		setVisible(true);
+		panel.setVisible(true);
+		contentPane.removeAll();
+		contentPane.add(panel);
+		setContentPane(contentPane);
+	//	pack();
 	}
 	
 	

@@ -64,6 +64,11 @@ public class AdminPanel extends JPanel {
 		this.frame=frame;
 		System.out.println("Passing " + this + " panel as owner");
 		owner=this;
+
+	
+		
+		
+		
 		
 		
 		setVisible(true);
@@ -71,6 +76,27 @@ public class AdminPanel extends JPanel {
 		setBackground(new Color(0, 0, 0));
 		setLayout(null);
 
+		
+		
+		final JButton btnClear = new JButton("Clear Dates"); 
+		btnClear.setVisible(false);
+		btnClear.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				fromToDates[0]=null;
+				fromToDates[1]=null;
+				relistLogs(logID, fromToDates[0], 	fromToDates[1]);
+				btnClear.setVisible(false);
+				
+			}
+		});
+		btnClear.setBounds(139, 280, 119, 23);
+		
+		
+		
+		
+		
 		JPopupMenu pm = new TimeLogPopupMenu(this);
 		
 		JLabel lblNewLabel = new JLabel("Admins Only");
@@ -119,23 +145,14 @@ public class AdminPanel extends JPanel {
 				pm.setPopupSize(btnTimeLogs.getSize().width, 100);
 				pm.show(owner, btnTimeLogs.getLocation().x, btnTimeLogs.getLocation().y+20);
 				
-				
+
 			}
 			});
 		add(btnTimeLogs);
 
-		JButton btnClear = new JButton("Clear Dates");
-		btnClear.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnClear.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				fromToDates[0]=null;
-				fromToDates[1]=null;
-				relistLogs(logID, fromToDates[0], 	fromToDates[1]);
-				
-			}
-		});
-		btnClear.setBounds(139, 280, 119, 23);
+	
+		
+		
 		
 
 		JButton btnNewEmployee = new JButton("New Employee");
@@ -158,7 +175,8 @@ public class AdminPanel extends JPanel {
 
 				openDateChooserDialog();
 				btnClear.setVisible(true);
-				add(btnClear);
+				getParent().add(btnClear);
+			
 				
 			}
 		});
