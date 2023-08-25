@@ -42,6 +42,11 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
+import java.awt.BorderLayout;
+import javax.swing.BoxLayout;
+import java.awt.GridLayout;
+import javax.swing.border.TitledBorder;
+import javax.swing.border.EtchedBorder;
 
 public class AdminPanel extends JPanel {
 
@@ -64,18 +69,37 @@ public class AdminPanel extends JPanel {
 		this.frame=frame;
 		System.out.println("Passing " + this + " panel as owner");
 		owner=this;
-
-	
-		
-		
-		
-		
-		
 		setVisible(true);
 		setBounds(400, 400, 550, 800);
 		setBackground(new Color(0, 0, 0));
-		setLayout(null);
 
+		
+		
+
+		
+		
+		
+		
+		
+		JPopupMenu pm = new TimeLogPopupMenu(this);
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		
+		JLabel lblNewLabel = new JLabel("Admins Only");
+		lblNewLabel.setVisible(false);
+		lblNewLabel.setAlignmentY(Component.TOP_ALIGNMENT);
+		lblNewLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		lblNewLabel.setBounds(0, 0, 0, 0);
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setFont(Global.header2Font);
+		lblNewLabel.setBackground(new Color(255, 255, 255));
+		lblNewLabel.setOpaque(true);
+		add(lblNewLabel);
+		
+		JPanel buttonContainer = new JPanel();
+		buttonContainer.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Aministrative Tools", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		add(buttonContainer);
+		buttonContainer.setLayout(new GridLayout(0, 4, 4, 4));
+		
 		
 		
 		final JButton btnClear = new JButton("Clear Dates"); 
@@ -92,24 +116,88 @@ public class AdminPanel extends JPanel {
 			}
 		});
 		btnClear.setBounds(139, 280, 119, 23);
-		
-		
-		
-		
-		
-		JPopupMenu pm = new TimeLogPopupMenu(this);
-		
-		JLabel lblNewLabel = new JLabel("Admins Only");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setFont(Global.header2Font);
-		lblNewLabel.setBackground(new Color(255, 255, 255));
-		lblNewLabel.setOpaque(true);
-		lblNewLabel.setBounds(10, 11, 514, 67);
-		add(lblNewLabel);
 
 		JButton btnLogOut = new JButton("Log Out");
-		btnLogOut.setBounds(405, 281, 119, 23);
-		add(btnLogOut);
+		buttonContainer.add(btnLogOut);
+		btnLogOut.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnLogOut.setBounds(0, 0, 0, 0);
+		
+		
+				JButton btnListEmployees = new JButton("Employees");
+				buttonContainer.add(btnListEmployees);
+				btnListEmployees.setAlignmentX(Component.CENTER_ALIGNMENT);
+				btnListEmployees.setBounds(0, 0, 0, 0);
+				
+						JButton btnAdminPin = new JButton("Admin PIN");
+						buttonContainer.add(btnAdminPin);
+						btnAdminPin.setAlignmentX(Component.CENTER_ALIGNMENT);
+						btnAdminPin.setBounds(0, 0, 0, 0);
+						
+								JButton btnTimeLogs = new JButton("Time Logs");
+								buttonContainer.add(btnTimeLogs);
+								btnTimeLogs.setAlignmentX(Component.CENTER_ALIGNMENT);
+								btnTimeLogs.setBounds(0, 0, 0, 0);
+								
+									
+										
+										
+										
+								
+										JButton btnNewEmployee = new JButton("New Employee");
+										buttonContainer.add(btnNewEmployee);
+										btnNewEmployee.setAlignmentX(Component.CENTER_ALIGNMENT);
+										btnNewEmployee.setBounds(0, 0, 0, 0);
+										
+												JButton btnDates = new JButton("Dates");
+												buttonContainer.add(btnDates);
+												btnDates.setAlignmentX(Component.CENTER_ALIGNMENT);
+												btnDates.setBounds(0, 0, 0, 0);
+												
+												JButton btnExportAll = new JButton("Export");
+												buttonContainer.add(btnExportAll);
+												btnExportAll.setAlignmentX(Component.CENTER_ALIGNMENT);
+												btnExportAll.setBounds(0, 0, 550, 800);
+												btnExportAll.addActionListener(new ActionListener() {
+													public void actionPerformed(ActionEvent e) {
+
+														if(asp!=null) {
+														asp.exportList();}
+														
+													}
+												});
+												btnDates.addActionListener(new ActionListener() {
+													public void actionPerformed(ActionEvent e) {
+
+														openDateChooserDialog();
+														btnClear.setVisible(true);
+														buttonContainer.add(btnClear);
+													
+														
+													}
+												});
+										btnNewEmployee.addActionListener(new ActionListener() {
+											public void actionPerformed(ActionEvent e) {
+
+												openNewEmployeeDialog();
+
+											}
+										});
+								btnTimeLogs.addActionListener(new ActionListener() {
+									public void actionPerformed(ActionEvent e) {
+										pm.setVisible(true);
+										((TimeLogPopupMenu) pm).addPopup(owner, pm, e);
+										pm.setPopupSize(btnTimeLogs.getSize().width, 100);
+										pm.show(owner, btnTimeLogs.getLocation().x, btnTimeLogs.getLocation().y+20);
+										
+
+									}
+									});
+				btnListEmployees.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						
+						relistEmployees();
+					}
+				});
 		btnLogOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -117,82 +205,13 @@ public class AdminPanel extends JPanel {
 				setVisible(false);
 			}
 		});
-
+		
+		
+		
 		employeeContent = new JPanel();
-		employeeContent.setBounds(10, 315, 514, 440);
+		employeeContent.setBounds(0, 0, 0, 0);
 		add(employeeContent);
 
-		JButton btnListEmployees = new JButton("Employees");
-		btnListEmployees.setBounds(405, 247, 119, 23);
-		btnListEmployees.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				relistEmployees();
-			}
-		});
-		add(btnListEmployees);
-
-		JButton btnAdminPin = new JButton("Admin PIN");
-		btnAdminPin.setBounds(405, 213, 119, 23);
-		add(btnAdminPin);
-
-		JButton btnTimeLogs = new JButton("Time Logs");
-		btnTimeLogs.setBounds(10, 247, 119, 23);
-		btnTimeLogs.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				pm.setVisible(true);
-				((TimeLogPopupMenu) pm).addPopup(owner, pm, e);
-				pm.setPopupSize(btnTimeLogs.getSize().width, 100);
-				pm.show(owner, btnTimeLogs.getLocation().x, btnTimeLogs.getLocation().y+20);
-				
-
-			}
-			});
-		add(btnTimeLogs);
-
-	
-		
-		
-		
-
-		JButton btnNewEmployee = new JButton("New Employee");
-		btnNewEmployee.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				openNewEmployeeDialog();
-
-			}
-		});
-		
-		
-		btnNewEmployee.setBounds(276, 247, 119, 23);
-		add(btnNewEmployee);
-
-		JButton btnDates = new JButton("Dates");
-		btnDates.setBounds(139, 247, 119, 23);
-		btnDates.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				openDateChooserDialog();
-				btnClear.setVisible(true);
-				getParent().add(btnClear);
-			
-				
-			}
-		});
-		add(btnDates);
-		
-		JButton btnExportAll = new JButton("Export");
-		btnExportAll.setBounds(10, 281, 119, 23);
-		btnExportAll.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				if(asp!=null) {
-				asp.exportList();}
-				
-			}
-		});
-		add(btnExportAll);
 
 	}
 	

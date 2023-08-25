@@ -13,6 +13,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import javax.swing.BoxLayout;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.lang.model.element.Element;
@@ -45,9 +47,7 @@ import java.io.File;
 public class AdminSubPanel extends JPanel {
 	public AdminSubPanel(PanelContainerFrame frame) {
 		super();
-		FlowLayout flowLayout = (FlowLayout) getLayout();
-		flowLayout.setVgap(0);
-		flowLayout.setHgap(0);
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		// TODO Auto-generated constructor stub
 	}
 

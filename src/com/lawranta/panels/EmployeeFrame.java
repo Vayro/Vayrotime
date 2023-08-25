@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
@@ -32,6 +33,9 @@ import com.lawranta.sqllite.EmployeeDAO;
 
 import java.awt.Color;
 import javax.swing.JTextArea;
+import java.awt.Component;
+import java.awt.Dimension;
+import javax.swing.border.BevelBorder;
 
 public class EmployeeFrame extends JPanel {
 
@@ -65,38 +69,41 @@ public class EmployeeFrame extends JPanel {
 			clocked = false;
 		}
 
-		setVisible(true);
-
 		// setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 
-setBorder(new EmptyBorder(5, 5, 5, 5));
+setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 
-setLayout(null);
+setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
 		JLabel lblClocked = new JLabel("Clocked " + em.getStatus());
+		lblClocked.setAlignmentX(Component.CENTER_ALIGNMENT);
 		lblClocked.setHorizontalAlignment(SwingConstants.CENTER);
 		lblClocked.setBounds(179, 45, 162, 14);
 add(lblClocked);
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 		LocalDateTime now = LocalDateTime.now();
 		JLabel lblDate = new JLabel(dtf.format(now));
+		lblDate.setAlignmentX(Component.CENTER_ALIGNMENT);
 		lblDate.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDate.setBounds(193, 117, 148, 14);
 add(lblDate);
 
 		JLabel lblTime = new JLabel(currentTime());
+		lblTime.setAlignmentX(Component.CENTER_ALIGNMENT);
 		lblTime.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTime.setBounds(10, 131, 514, 14);
 add(lblTime);
 
 		JLabel lblName = new JLabel(em.getName());
+		lblName.setAlignmentX(Component.CENTER_ALIGNMENT);
 		lblName.setHorizontalAlignment(SwingConstants.CENTER);
 		lblName.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		lblName.setBounds(5, 11, 524, 23);
 add(lblName);
 
 		JButton btnClockIn = new JButton("Clock-In");
+		btnClockIn.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnClockIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				clocked = true;
@@ -110,6 +117,7 @@ add(lblName);
 add(btnClockIn);
 
 		JButton btnClockOut = new JButton("Clock-Out");
+		btnClockOut.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnClockOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				clocked = false;
@@ -135,6 +143,7 @@ add(btnClockOut);
 add(employeeContent);
 		
 		JButton btnSort = new JButton("sort");
+		btnSort.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnSort.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -166,6 +175,7 @@ add(employeeContent);
 		
 		
 		JButton btnLogOut = new JButton("Log Out");
+		btnLogOut.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnLogOut.setBounds(405, 281, 119, 23);
 		add(btnLogOut);
 		btnLogOut.addActionListener(new ActionListener() {

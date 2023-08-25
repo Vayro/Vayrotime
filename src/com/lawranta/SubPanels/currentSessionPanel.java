@@ -21,6 +21,7 @@ import com.lawranta.containersObjects.attendanceContainer;
 import com.lawranta.services.AttendanceService;
 import com.lawranta.sqllite.AttendanceDAO;
 import com.lawranta.sqllite.EmployeeDAO;
+import java.awt.BorderLayout;
 
 public class currentSessionPanel extends JPanel {
 
@@ -35,7 +36,6 @@ public class currentSessionPanel extends JPanel {
 	 */
 	public currentSessionPanel(EmployeeModel em, boolean sort) {
 		setBackground(new Color(255, 217, 217));
-		setLayout(null);
 
 		/*
 		 * JTextPane timeListText = new JTextPane(); timeListText.setBackground(new
@@ -98,8 +98,7 @@ public class currentSessionPanel extends JPanel {
 		};
 
 		JTableHeader header = table.getTableHeader();
-
-		scroll.setBounds(0, 0, 514, 367); // <-- THIS
+		setLayout(new BorderLayout(0, 0));
 
 		scroll.setViewportView(table);
 

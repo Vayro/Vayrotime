@@ -44,6 +44,7 @@ public class PanelContainerFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public PanelContainerFrame() {
+		setBackground(new Color(0, 0, 0));
 		
 		
 		
@@ -61,6 +62,7 @@ public class PanelContainerFrame extends JFrame {
 		
 		
 		contentPane=new JPanel();
+		contentPane.setBackground(new Color(0, 0, 0));
 		
 		contentPane.setVisible(true);
 		panel=new PinPanel(this);		
