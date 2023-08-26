@@ -57,7 +57,7 @@ import java.awt.Dimension;
 import java.awt.Cursor;
 import javax.swing.border.CompoundBorder;
 
-public class PinPanel extends JPanel {
+public class AdminPinPanel extends JPanel {
 
 	/**
 	 * 
@@ -73,7 +73,7 @@ public class PinPanel extends JPanel {
 	/**
 	 * Create the frame.
 	 */
-	public PinPanel(PanelContainerFrame frame) {
+	public AdminPinPanel(PanelContainerFrame frame) {
 		setBackground(new Color(58, 58, 58));
 		setBorder(new CompoundBorder());
 		    this.frame = frame;
@@ -82,59 +82,21 @@ public class PinPanel extends JPanel {
 			//setBackground(Color.WHITE);
 		//	setBorder(new EmptyBorder(5, 5, 5, 5));
 		//setLayout(null);
-		lblTitle = new JLabel("Vayrotime");
+		lblTitle = new JLabel("Enter admin PIN");
+		lblTitle.setForeground(new Color(255, 255, 255));
 		lblTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 		lblTitle.setAlignmentY(Component.TOP_ALIGNMENT);
 		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTitle.setFont(Global.headerFont);
-		//add(lblTitle);
+		lblTitle.setFont(Global.analogFont32f);
+		add(Global.padding(20));
+		add(lblTitle);
+		add(Global.padding(32));
 
 		//DisplayImage();
 		
 		
 		// date time
-				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-				LocalDateTime now = LocalDateTime.now();
-
-				JLabel lblDate = new JLabel(dtf.format(now));
-				lblDate.setForeground(new Color(255, 255, 255));
-				lblDate.setAlignmentX(Component.CENTER_ALIGNMENT);
-				lblDate.setHorizontalAlignment(SwingConstants.CENTER);
-				lblDate.setFont(Global.analogFont32f);
-		add(lblDate);
-
-				JLabel lblTime = new JLabel("");
-				lblTime.setForeground(new Color(255, 255, 255));
-				lblTime.setAlignmentX(Component.CENTER_ALIGNMENT);
-				lblTime.setHorizontalAlignment(SwingConstants.CENTER);
-		add(lblTime);
-
-				// System.out.println(currentTime());
-				lblTime.setText(currentTime());
-				lblTime.setFont(Global.analogFont16f);
-				JTextArea output = new JTextArea();
-				output.setVisible(false);
-				output.setAlignmentY(Component.BOTTOM_ALIGNMENT);
-				output.setEditable(false);
-			add(output);
-
-				/*
-				 * PrintStream printStream = new PrintStream(new CustomOutputStream(output));
-				 * 
-				 * System.setOut(printStream); System.setErr(printStream);
-				 */
-
-				ActionListener taskPerformer = new ActionListener() {
-					public void actionPerformed(ActionEvent evt) {
-						// System.out.println(currentTime());
-						lblTime.setText(currentTime());
-					}
-				};
-				Timer t = new Timer(1000, taskPerformer);
-				t.start();
-
-				//add vertical padding
-				add(Global.padding(32));
+				
 	
 				// PIN FIELD
 
@@ -351,23 +313,23 @@ add(keyPadPanel);
 
 		
 
-		JButton btnAdmin = new JButton("admin");
-		btnAdmin.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btnAdmin.addActionListener(new ActionListener() {
+		JButton btnBack = new JButton("Back\r\n");
+		btnBack.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String s = new String(passwordField.getPassword());
 				System.out.println("PIN: " + s);
 
-				JPanel panel=new AdminPinPanel(frame);
+				JPanel panel=new PinPanel(frame);
 				frame.PanelChange(panel);
-	
+				setVisible(false);
 				
 			//	dispose();
 
 			}
 		});
-		btnAdmin.setVisible(true);
-add(btnAdmin);
+		btnBack.setVisible(true);
+add(btnBack);
 
 		
 	}
@@ -383,34 +345,11 @@ add(btnAdmin);
 	
 	
 
-	public String currentTime() {
-		Calendar calendar = Calendar.getInstance();
-		int hours = calendar.get(Calendar.HOUR_OF_DAY);
-		int minutes = calendar.get(Calendar.MINUTE);
-		int seconds = calendar.get(Calendar.SECOND);
-		int aP = calendar.get(Calendar.AM_PM);
-		String currentTime = hours + ":" + checkTime(minutes) + ":" + checkTime(seconds) + " " + amP(aP);
-		return currentTime;
-	}
+	
 
-	public String checkTime(int t) {
-		String time1;
-		if (t < 10) {
-			time1 = ("0" + t);
-		} else {
-			time1 = ("" + t);
-		}
-		return time1;
-	}
+	
 
-	public String amP(int ap) {
-		String amPm;
-		if (ap == 0)
-			amPm = "AM";
-		else
-			amPm = "PM";
-		return amPm;
-	}
+	
 
 	public void buttonPress(int key) {
 
@@ -439,27 +378,25 @@ add(btnAdmin);
 
 	public void checkPin(char[] charpin) {
 		// This is where we want to check if the PIN entered is valid. It should occur
-		// as soon as 4 digits are entered.
+		// as soon as 6 digits are entered.
 		// if pin is valid, go to next frame
 
-		String achtungPin = "372707"; // temp pin
+	
 
 		// check database
 
 		String strPin = new String(charpin);
-		System.out.println("Checking if pin is valid. (" + strPin + ")");
+		System.out.println("Checking if adminPin is valid. (" + strPin + ")");
 
-		if (EmployeeService.databaseCompare(strPin)) {
+		if (strPin.equals(Global.adminPin)) {
 			// if YES, move to employee screen
-			System.out.println("Pin Valid");
+			System.out.println("Admin Pin Valid");
+
 			
 			
-			EmployeeModel e = new EmployeeModel(strPin);
-			
-			
-			frame.PanelChange(new EmployeeFrame(e,frame));
+			frame.PanelChange(new AdminPanel(this.frame));
 			setVisible(false);
-			System.out.println("Launching private employee frame");
+			System.out.println("Launching private admin frame");
 			setVisible(false);
 			//dispose();
 			
@@ -472,24 +409,6 @@ add(btnAdmin);
 
 	}
 	
-	 public void DisplayImage() 
-	    {
-		Image i = null;
-		try {
-			i = ImageIO.read(new File("src\\images\\timeline.png"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		i=i.getScaledInstance(480, 106, Image.SCALE_DEFAULT);
-		
-		 JLabel picLabel = new JLabel(new ImageIcon(i));
-		 picLabel.setAlignmentY(Component.BOTTOM_ALIGNMENT);
-		 picLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-	
-		 add(picLabel);
-	    }
 	
 	
 

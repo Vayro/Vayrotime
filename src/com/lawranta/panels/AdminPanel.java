@@ -96,7 +96,9 @@ public class AdminPanel extends JPanel {
 		add(lblNewLabel);
 		
 		JPanel buttonContainer = new JPanel();
-		buttonContainer.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Aministrative Tools", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		buttonContainer.setForeground(new Color(255, 255, 255));
+		buttonContainer.setBackground(new Color(70, 70, 70));
+		buttonContainer.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Aministrative Tools", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(255, 255, 255)));
 		add(buttonContainer);
 		buttonContainer.setLayout(new GridLayout(0, 4, 4, 4));
 		

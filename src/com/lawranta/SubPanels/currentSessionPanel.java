@@ -16,6 +16,8 @@ import javax.swing.JTable;
 import javax.swing.table.*;
 
 import com.lawranta.DatabaseModels.EmployeeModel;
+import com.lawranta.Globals.Global;
+import com.lawranta.Globals.SetGlobalFont;
 import com.lawranta.DatabaseModels.AttendanceModel;
 import com.lawranta.containersObjects.attendanceContainer;
 import com.lawranta.services.AttendanceService;
@@ -36,7 +38,7 @@ public class currentSessionPanel extends JPanel {
 	 */
 	public currentSessionPanel(EmployeeModel em, boolean sort) {
 		setBackground(new Color(255, 217, 217));
-
+		SetGlobalFont.setUIFont(new javax.swing.plaf.FontUIResource(Global.timesFont12));
 		/*
 		 * JTextPane timeListText = new JTextPane(); timeListText.setBackground(new
 		 * Color(255, 217, 217)); timeListText.setText(""); timeListText.setBounds(0, 0,

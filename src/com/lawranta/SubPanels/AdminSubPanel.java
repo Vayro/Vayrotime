@@ -32,6 +32,8 @@ import javax.swing.table.TableModel;
 
 import com.lawranta.DatabaseModels.AttendanceModel;
 import com.lawranta.DatabaseModels.EmployeeModel;
+import com.lawranta.Globals.Global;
+import com.lawranta.Globals.SetGlobalFont;
 import com.lawranta.containersObjects.attendanceContainer;
 import com.lawranta.containersObjects.employeeContainer;
 import com.lawranta.frames.PanelContainerFrame;
@@ -48,6 +50,7 @@ public class AdminSubPanel extends JPanel {
 	public AdminSubPanel(PanelContainerFrame frame) {
 		super();
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		SetGlobalFont.setUIFont(new javax.swing.plaf.FontUIResource(Global.timesFont12));
 		// TODO Auto-generated constructor stub
 	}
 

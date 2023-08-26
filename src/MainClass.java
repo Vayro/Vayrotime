@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.lawranta.Globals.Global;
+import com.lawranta.Globals.PropertiesCFG;
 import com.lawranta.frames.*;
 
 public class MainClass {
@@ -35,11 +36,14 @@ public class MainClass {
 			}
 
 			System.out.println("Initializing Vayrotime");
+			PropertiesCFG.cfgLoad();
+			PropertiesCFG.setGlobals();
 			INITIALIZE = new PanelContainerFrame();
+			INITIALIZE.setVisible(true);
 
 		}
 		
-		
+
 		
 		
 

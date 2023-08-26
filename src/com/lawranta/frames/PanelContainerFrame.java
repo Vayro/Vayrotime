@@ -13,6 +13,8 @@ import javax.swing.JTextArea;
 import javax.swing.RootPaneContainer;
 import javax.swing.border.EmptyBorder;
 
+import com.lawranta.Globals.Global;
+import com.lawranta.Globals.SetGlobalFont;
 import com.lawranta.frames.*;
 import com.lawranta.panels.PinPanel;
 
@@ -54,7 +56,7 @@ public class PanelContainerFrame extends JFrame {
 		setBounds(400, 400, 550, 800);
 		
 		setLocationRelativeTo(null);
-		
+		SetGlobalFont.setUIFont(new javax.swing.plaf.FontUIResource(Global.analogFont12f));
 		
 		
 
