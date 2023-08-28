@@ -11,6 +11,7 @@ import java.io.IOException;
 import javax.swing.JLabel;
 
 import com.lawranta.popups.ErrorDialog;
+import com.lawranta.popups.SuccessDialog;
 
 public class Global {
 	//database directory
@@ -24,6 +25,19 @@ public class Global {
 	public static Font timesFont12 = new Font("TimesRoman", Font.PLAIN, 12);
 	public static String adminPin;
 	public final static String cfgPath="src\\null.cfg";
+	
+	
+	
+	
+	
+	//image sources
+	
+		public static String errorImgPath="src\\images\\error.png";
+		public static String succImgPath="src\\images\\gear.png";
+
+		
+		
+		
 	
 	
 
@@ -59,7 +73,16 @@ public class Global {
 		
 		
 	}
-
+	
+//Global success dialog
+	public static void showSuccess(String e) {
+		
+		SuccessDialog SuccessDialog = new SuccessDialog(e);
+		SuccessDialog.setVisible(true);
+			
+			
+		}
+		
 
 
 

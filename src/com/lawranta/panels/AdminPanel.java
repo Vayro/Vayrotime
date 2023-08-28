@@ -296,7 +296,9 @@ public class AdminPanel extends JPanel {
 							// TODO Auto-generated method stub
 
 							if(newPin.equals(confirmPinDialog.getPin())){
-								System.out.println("Pins match! ");
+								String suc="Sucess! New Admin pin: " + newPin;
+								Global.showSuccess(suc);
+								System.out.println(suc);
 								try {
 									updatePin(newPin);
 								} catch (IOException e1) {

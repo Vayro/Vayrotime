@@ -19,6 +19,7 @@ import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.TimePicker;
 import com.github.lgooddatepicker.components.TimePickerSettings;
 import com.github.lgooddatepicker.optionalusertools.PickerUtilities;
+import com.lawranta.Globals.Global;
 import com.lawranta.SubPanels.AdminSubPanel;
 import com.lawranta.containersObjects.employeeContainer;
 import com.lawranta.panels.AdminPanel;
@@ -213,6 +214,7 @@ public class DateChooserDialog extends JDialog {
 			boolean b = validCheck();
 			if (b == false) {
 				System.out.println("dates invalid");
+				Global.showError("Invalid dates!");
 				break;
 			} else {
 

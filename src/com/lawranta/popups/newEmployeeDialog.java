@@ -26,6 +26,7 @@ import javax.swing.table.TableCellEditor;
 import org.xml.sax.InputSource;
 
 import com.lawranta.DatabaseModels.EmployeeModel;
+import com.lawranta.Globals.Global;
 import com.lawranta.SubPanels.AdminSubPanel;
 import com.lawranta.containersObjects.*;
 import com.lawranta.frames.PanelContainerFrame;
@@ -181,6 +182,7 @@ public class newEmployeeDialog extends JDialog {
 
 		for (int i = 0; i < table.getColumnCount(); i++) {
 			if (table.getValueAt(0, i) == null || table.getValueAt(0, i).toString().trim().length() == 0) {
+				Global.showError("Please fill out the entire form");
 				System.out.println("cell empty");
 				return false;
 			}

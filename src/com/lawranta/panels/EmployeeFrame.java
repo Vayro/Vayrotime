@@ -1,4 +1,5 @@
 package com.lawranta.panels;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.time.format.DateTimeFormatter;
@@ -49,11 +50,13 @@ public class EmployeeFrame extends JPanel {
 	boolean clocked = false;
 	private static EmployeeModel em;
 	private static PinPanel INITIALIZE;
-	boolean sort=false;
+	boolean sort = false;
 	private PanelContainerFrame frame;
 	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 	LocalDateTime now = LocalDateTime.now();
+	JPanel employeeContent;
 	// private String PIN;
+	
 
 	/**
 	 * Create the frame.
@@ -61,8 +64,8 @@ public class EmployeeFrame extends JPanel {
 	public EmployeeFrame(EmployeeModel passedE, PanelContainerFrame frame)
 
 	{
-	    super();
-	    this.frame = frame;
+		super();
+		this.frame = frame;
 		// loaded from database
 		em = passedE;
 		em.setEmployeeInfo();
@@ -75,11 +78,10 @@ public class EmployeeFrame extends JPanel {
 
 		// setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 
-setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
-setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		
 		JPanel panel = new JPanel();
 		panel.setMaximumSize(new Dimension(128, 32767));
 		panel.setBorder(null);
@@ -96,120 +98,101 @@ setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		lblDate.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDate.setBounds(193, 117, 148, 14);
 		lblDate.setFont(Global.analogFont16f);
-		
-				JLabel lblTime = new JLabel(currentTime());
-				panel.add(lblTime);
-				lblTime.setAlignmentX(Component.CENTER_ALIGNMENT);
-				lblTime.setHorizontalAlignment(SwingConstants.CENTER);
-				lblTime.setFont(Global.analogFont16f);
-				lblTime.setBounds(10, 131, 514, 14);
-				
-						JLabel lblName = new JLabel(em.getName());
-						panel.add(lblName);
-						lblName.setAlignmentX(Component.CENTER_ALIGNMENT);
-						lblName.setHorizontalAlignment(SwingConstants.CENTER);
-						lblName.setFont(new Font("Tahoma", Font.PLAIN, 17));
-						lblName.setBounds(5, 11, 524, 23);
-						
-								JButton btnClockIn = new JButton("Clock-In");
-								btnClockIn.setPreferredSize(new Dimension(64, 25));
-								btnClockIn.setMaximumSize(new Dimension(64, 25));
-								btnClockIn.setMinimumSize(new Dimension(64, 25));
-								panel.add(btnClockIn);
-								btnClockIn.setAlignmentX(Component.CENTER_ALIGNMENT);
-								btnClockIn.addActionListener(new ActionListener() {
-									public void actionPerformed(ActionEvent arg0) {
-										clocked = true;
 
-										clockIn(currentTime());
-										frame.PanelChange(new PinPanel(frame));
-										setVisible(false);
-									}
-								});
-								btnClockIn.setBounds(5, 693, 524, 23);
-								
-										JButton btnClockOut = new JButton("Clock-Out");
-										panel.add(btnClockOut);
-										btnClockOut.setAlignmentX(Component.CENTER_ALIGNMENT);
-										btnClockOut.addActionListener(new ActionListener() {
-											public void actionPerformed(ActionEvent e) {
-												clocked = false;
+		JLabel lblTime = new JLabel(currentTime());
+		panel.add(lblTime);
+		lblTime.setAlignmentX(Component.CENTER_ALIGNMENT);
+		lblTime.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTime.setFont(Global.analogFont16f);
+		lblTime.setBounds(10, 131, 514, 14);
 
-												try {
-													clockOut(currentTime());
-												} catch (ParseException e1) {
-													// TODO Auto-generated catch block
-													e1.printStackTrace();
-												}
+		JLabel lblName = new JLabel(em.getName());
+		panel.add(lblName);
+		lblName.setAlignmentX(Component.CENTER_ALIGNMENT);
+		lblName.setHorizontalAlignment(SwingConstants.CENTER);
+		lblName.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lblName.setBounds(5, 11, 524, 23);
 
-												frame.PanelChange(new PinPanel(frame));
-												setVisible(false);
-											}
-										});
-										btnClockOut.setBounds(5, 727, 524, 23);
-										
-										add(Global.padding(32));
-										
-		dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-		now = LocalDateTime.now();
+		JButton btnClockIn = new JButton("Clock-In");
+		btnClockIn.setPreferredSize(new Dimension(64, 25));
+		btnClockIn.setMaximumSize(new Dimension(64, 25));
+		btnClockIn.setMinimumSize(new Dimension(64, 25));
+		panel.add(btnClockIn);
+		btnClockIn.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnClockIn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				clocked = true;
 
-		// Employee time sessions
-
-		JPanel employeeContent = new currentSessionPanel(em, sort);
-		employeeContent.setBounds(10, 315, 514, 367);
-add(employeeContent);
-		
-		JButton btnSort = new JButton("sort");
-		btnSort.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btnSort.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-
-				if(sort) {
-					sort=false;
-				}else
-				{
-					sort=true;
-				}
-				
-				
-				
-				
-				remove(employeeContent);
-				JPanel employeeContent = new currentSessionPanel(em, sort);
-				employeeContent.setBounds(10, 315, 514, 367);
-				add(employeeContent);
-				
-			}
-		});
-		
-		btnSort.setBounds(10, 281, 89, 23);
-		add(btnSort);
-		
-		
-		
-		
-		
-		
-		JButton btnLogOut = new JButton("Log Out");
-		btnLogOut.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btnLogOut.setBounds(405, 281, 119, 23);
-		add(btnLogOut);
-		btnLogOut.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-
-		
+				clockIn(currentTime());
 				frame.PanelChange(new PinPanel(frame));
 				setVisible(false);
 			}
 		});
-		
-		
-		
-		
-		
-		
+		btnClockIn.setBounds(5, 693, 524, 23);
+
+		JButton btnClockOut = new JButton("Clock-Out");
+		panel.add(btnClockOut);
+		btnClockOut.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnClockOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				clocked = false;
+
+				try {
+					clockOut(currentTime());
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				frame.PanelChange(new PinPanel(frame));
+				setVisible(false);
+			}
+		});
+		btnClockOut.setBounds(5, 727, 524, 23);
+
+		add(Global.padding(32));
+
+		dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+		now = LocalDateTime.now();
+
+	
+
+		JButton btnSort = new JButton("sort");
+		btnSort.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnSort.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				if (sort) {
+					sort = false;
+				} else {
+					sort = true;
+				}
+
+				//remove(employeeContent);
+				//remove(btnSort);
+				//JPanel employeeContent = new currentSessionPanel(em, sort);
+				// employeeContent.setBounds(10, 315, 514, 367);
+				//add(employeeContent);
+				toggleSort();
+
+			}
+		});
+
+		btnSort.setBounds(10, 281, 89, 23);
+		add(btnSort);
+		Global.padding(32);
+		JButton btnLogOut = new JButton("Log Out");
+		btnLogOut.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnLogOut.setBounds(405, 281, 119, 23);
+		add(btnLogOut); 
+		Global.padding(32);
+		btnLogOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				frame.PanelChange(new PinPanel(frame));
+				setVisible(false);
+			}
+		});
 
 		if (clocked == false) {
 			btnClockIn.setVisible(true);
@@ -233,6 +216,21 @@ add(employeeContent);
 		Timer t = new Timer(1000, taskPerformer);
 		t.start();
 
+		
+		
+		
+		
+		// Employee time sessions
+
+		employeeContent = new currentSessionPanel(em, sort);
+		employeeContent.setBounds(10, 315, 514, 367);
+		add(employeeContent);
+		
+		
+		
+		
+		
+		
 	}
 
 	/*
@@ -248,8 +246,6 @@ add(employeeContent);
 		em.setStatus("in");
 		EmployeeService.setStatus(em, "in");
 		AttendanceService.clockIn(em, currentTime(), dtf.format(now));
-		
-
 
 	}
 
@@ -260,7 +256,6 @@ add(employeeContent);
 		em.setStatus("out");
 		EmployeeService.dbUpdateEmployeeStatus(em, "out");
 		AttendanceService.clockOut(em, dtf.format(now), currentTime());
-		
 
 	}
 
@@ -292,4 +287,14 @@ add(employeeContent);
 			amPm = "PM";
 		return amPm;
 	}
+	
+	
+	
+	public void toggleSort() {
+		remove(employeeContent);
+		employeeContent = new currentSessionPanel(em, sort);
+		add(employeeContent);
+	
+	}
+	
 }
