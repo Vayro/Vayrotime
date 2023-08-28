@@ -305,10 +305,12 @@ public class AdminPanel extends JPanel {
 								}
 								
 							}else {
+								String er="Pins do not match: " + newPin + " and " + confirmPinDialog.getPin();
+								Global.showError(er);
+								System.out.println(er);
 								
-								System.out.println("Pins do not match: " + newPin + " and " + confirmPinDialog.getPin() );
 							}
-							
+							;
 						}
 
 					

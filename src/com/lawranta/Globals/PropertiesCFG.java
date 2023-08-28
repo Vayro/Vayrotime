@@ -69,7 +69,7 @@ public class PropertiesCFG {
 			prop.setProperty("adminPin", newPin);
 			prop.store(op, "adminPin updated");
 			System.out.println("Admin pin updated.");
-		
+			
 		
 	}
 	

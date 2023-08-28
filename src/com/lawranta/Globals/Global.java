@@ -10,6 +10,8 @@ import java.io.IOException;
 
 import javax.swing.JLabel;
 
+import com.lawranta.popups.ErrorDialog;
+
 public class Global {
 	//database directory
 	public static String dbPath = "database/records.db";
@@ -48,7 +50,15 @@ public class Global {
 	}
 
 
-
+//Global error dialog
+	
+	public static void showError(String e) {
+		
+	ErrorDialog errorDialog = new ErrorDialog(e);
+		errorDialog.setVisible(true);
+		
+		
+	}
 
 
 

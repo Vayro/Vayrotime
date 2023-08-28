@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 import java.awt.Dimension;
 import javax.swing.SwingConstants;
 
-public class ErrorDialog extends JDialog {
+public class SuccessDialog extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JLabel errorTextField;
@@ -26,7 +26,7 @@ public class ErrorDialog extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			ErrorDialog dialog = new ErrorDialog(null);
+			SuccessDialog dialog = new SuccessDialog(null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -37,7 +37,7 @@ public class ErrorDialog extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public ErrorDialog(String errorString) {
+	public SuccessDialog(String errorString) {
 		setSize(new Dimension(240, 140));
 		setPreferredSize(new Dimension(240, 140));
 		this.errorString=errorString;
