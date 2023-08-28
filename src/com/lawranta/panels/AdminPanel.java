@@ -8,12 +8,14 @@ import javax.swing.border.EmptyBorder;
 
 import com.lawranta.DatabaseModels.AttendanceModel;
 import com.lawranta.Globals.Global;
+import com.lawranta.Globals.PropertiesCFG;
 import com.lawranta.SubPanels.AdminSubPanel;
 import com.lawranta.SubPanels.currentSessionPanel;
 import com.lawranta.containersObjects.attendanceContainer;
 import com.lawranta.frames.*;
 import com.lawranta.popups.DateChooserDialog;
 import com.lawranta.popups.TimeLogPopupMenu;
+import com.lawranta.popups.adminNewPinDialog;
 import com.lawranta.popups.newEmployeeDialog;
 import com.lawranta.services.AttendanceService;
 import com.lawranta.sqllite.AttendanceDAO;
@@ -38,6 +40,10 @@ import java.awt.Component;
 import java.awt.Dialog.ModalityType;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -131,6 +137,16 @@ public class AdminPanel extends JPanel {
 				btnListEmployees.setBounds(0, 0, 0, 0);
 				
 						JButton btnAdminPin = new JButton("Admin PIN");
+						btnAdminPin.addActionListener(new ActionListener() {
+
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								// TODO Auto-generated method stub
+								addNewPin();
+								
+								
+								
+							}});
 						buttonContainer.add(btnAdminPin);
 						btnAdminPin.setAlignmentX(Component.CENTER_ALIGNMENT);
 						btnAdminPin.setBounds(0, 0, 0, 0);
@@ -140,12 +156,7 @@ public class AdminPanel extends JPanel {
 								btnTimeLogs.setAlignmentX(Component.CENTER_ALIGNMENT);
 								btnTimeLogs.setBounds(0, 0, 0, 0);
 								
-									
-										
-										
-										
-								
-										JButton btnNewEmployee = new JButton("New Employee");
+								JButton btnNewEmployee = new JButton("New Employee");
 										buttonContainer.add(btnNewEmployee);
 										btnNewEmployee.setAlignmentX(Component.CENTER_ALIGNMENT);
 										btnNewEmployee.setBounds(0, 0, 0, 0);
@@ -214,6 +225,16 @@ public class AdminPanel extends JPanel {
 		employeeContent.setBounds(0, 0, 0, 0);
 		add(employeeContent);
 
+		
+		
+		
+		
+		
+		
+		
+		
+	
+		
 
 	}
 	
@@ -222,6 +243,175 @@ public class AdminPanel extends JPanel {
 	
 	
 	
+
+
+
+
+
+
+	protected void addNewPin() {
+		// TODO Auto-generated method stub
+		
+		
+		String s[]= {"Enter new Pin.", "Must be 6 numerical digits."};
+		
+		adminNewPinDialog newPinDialog = new adminNewPinDialog(owner,s);
+		
+	
+		newPinDialog.addWindowListener(new WindowListener() {
+
+			@Override
+			public void windowClosed(WindowEvent e) {
+				// TODO Auto-generated method stub
+				String newPin = newPinDialog.getPin();
+				System.out.println("New PIN: "+newPin);
+				
+				if (newPin!=null) {
+					//confirm
+					s[0]="Confirm Pin";s[1]="Re-enter the same exact pin.";
+					adminNewPinDialog confirmPinDialog = new adminNewPinDialog(owner,s);
+					
+					
+					
+					
+					confirmPinDialog.addWindowListener(new WindowListener() {
+
+						@Override
+						public void windowOpened(WindowEvent e) {
+							// TODO Auto-generated method stub
+							
+						}
+
+						@Override
+						public void windowClosing(WindowEvent e) {
+							// TODO Auto-generated method stub
+							
+							
+							
+							
+						}
+
+						@Override
+						public void windowClosed(WindowEvent e) {
+							// TODO Auto-generated method stub
+
+							if(newPin.equals(confirmPinDialog.getPin())){
+								System.out.println("Pins match! ");
+								try {
+									updatePin(newPin);
+								} catch (IOException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+								
+							}else {
+								
+								System.out.println("Pins do not match: " + newPin + " and " + confirmPinDialog.getPin() );
+							}
+							
+						}
+
+					
+
+						@Override
+						public void windowIconified(WindowEvent e) {
+							// TODO Auto-generated method stub
+							
+						}
+
+						@Override
+						public void windowDeiconified(WindowEvent e) {
+							// TODO Auto-generated method stub
+							
+						}
+
+						@Override
+						public void windowActivated(WindowEvent e) {
+							// TODO Auto-generated method stub
+							
+						}
+
+						@Override
+						public void windowDeactivated(WindowEvent e) {
+							// TODO Auto-generated method stub
+							
+						}
+						
+						
+						
+						
+						
+					});
+		
+					confirmPinDialog.setVisible(true);
+					
+		
+					
+				}
+				
+				
+			}
+
+			@Override
+			public void windowOpened(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void windowIconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void windowActivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}		
+			
+		});
+		
+		
+		
+		
+		
+		
+		newPinDialog.setVisible(true);
+
+		
+		
+		
+		
+		
+		
+		
+		
+	}
+
+
+
+
+
+
 
 
 
@@ -331,4 +521,16 @@ public class AdminPanel extends JPanel {
 		
 		
 	}
+	
+
+	private void updatePin(String newPin) throws IOException {
+		// TODO Auto-generated method stub
+		PropertiesCFG.consistPin(newPin);
+		
+	}
+	
+	
+	
+	
+	
 }

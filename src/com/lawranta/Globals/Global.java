@@ -21,7 +21,7 @@ public class Global {
 	public static Font analogFont12f = SetGlobalFont.loadFontFromFile(analogFontPath,12f);
 	public static Font timesFont12 = new Font("TimesRoman", Font.PLAIN, 12);
 	public static String adminPin;
-	
+	public final static String cfgPath="src\\null.cfg";
 	
 	
 
