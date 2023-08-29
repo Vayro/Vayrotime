@@ -111,7 +111,7 @@ public class ErrorDialog extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("OK");
+				JButton okButton = new JButton("Ok");
 				okButton.setActionCommand("OK");
 				okButton.addActionListener(new ActionListener() {
 

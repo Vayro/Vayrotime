@@ -53,6 +53,9 @@ import javax.swing.BoxLayout;
 import java.awt.GridLayout;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
+import java.awt.ComponentOrientation;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
 
 public class AdminPanel extends JPanel {
 
@@ -68,6 +71,10 @@ public class AdminPanel extends JPanel {
 	public PanelContainerFrame frame;
 	public String [] fromToDates = new String[2];
 	public int logID=0;
+	public String totalHours;
+	public boolean toggleTotal;
+	JPanel totalPanel = new JPanel();
+	
 	/**
 	 * Create the frame.
 	 */
@@ -224,6 +231,19 @@ public class AdminPanel extends JPanel {
 		employeeContent = new JPanel();
 		employeeContent.setBounds(0, 0, 0, 0);
 		add(employeeContent);
+		
+	
+		totalPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		add(totalPanel);
+		totalPanel.setLayout(new BoxLayout(totalPanel, BoxLayout.X_AXIS));
+		
+		JLabel totalHoursText = new JLabel("Total: ");
+		totalHoursText.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		totalHoursText.setHorizontalTextPosition(SwingConstants.RIGHT);
+		totalHoursText.setHorizontalAlignment(SwingConstants.RIGHT);
+		totalHoursText.setVerticalTextPosition(SwingConstants.TOP);
+		totalHoursText.setVerticalAlignment(SwingConstants.TOP);
+		totalPanel.add(totalHoursText);
 
 		
 		
@@ -482,6 +502,14 @@ public class AdminPanel extends JPanel {
 		
 		
 		
+		if(!totalPanel.isVisible());
+		{
+			totalToggle();
+			
+		}
+		
+		
+		
 	}
 	
 	
@@ -495,6 +523,12 @@ public class AdminPanel extends JPanel {
 		asp=(AdminSubPanel) new AdminSubPanel(frame).employeeList(owner);
 		System.out.println("Trying to refresh employee list...");
 		subPanelChange(asp);
+		if(totalPanel.isVisible());
+		{
+			totalToggle();
+			
+		}
+		
 	}
 	
 	
@@ -534,7 +568,20 @@ public class AdminPanel extends JPanel {
 	}
 	
 	
+	void totalToggle(){
 	
+		if(toggleTotal) {
+			totalPanel.setVisible(false);
+			toggleTotal=false;
+			
+		}else {
+			totalPanel.setVisible(true);
+			toggleTotal=true;
+			
+		}
+		
+		
+	}
 	
 	
 }
