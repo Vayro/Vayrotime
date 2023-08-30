@@ -71,9 +71,11 @@ public class AdminPanel extends JPanel {
 	public PanelContainerFrame frame;
 	public String [] fromToDates = new String[2];
 	public int logID=0;
-	public String totalHours;
+	public float totalHours;
+	public String parsedTotal;
 	public boolean toggleTotal;
 	JPanel totalPanel = new JPanel();
+	JLabel totalHoursText = new JLabel("Total: ");
 	
 	/**
 	 * Create the frame.
@@ -181,7 +183,7 @@ public class AdminPanel extends JPanel {
 													public void actionPerformed(ActionEvent e) {
 
 														if(asp!=null) {
-														asp.exportList();}
+														asp.exportList(totalHours, parsedTotal);}
 														
 													}
 												});
@@ -231,18 +233,15 @@ public class AdminPanel extends JPanel {
 		employeeContent = new JPanel();
 		employeeContent.setBounds(0, 0, 0, 0);
 		add(employeeContent);
-		
-	
-		totalPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		totalPanel.setVisible(false);
 		add(totalPanel);
 		totalPanel.setLayout(new BoxLayout(totalPanel, BoxLayout.X_AXIS));
+		totalHoursText.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
-		JLabel totalHoursText = new JLabel("Total: ");
+
 		totalHoursText.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		totalHoursText.setHorizontalTextPosition(SwingConstants.RIGHT);
-		totalHoursText.setHorizontalAlignment(SwingConstants.RIGHT);
-		totalHoursText.setVerticalTextPosition(SwingConstants.TOP);
-		totalHoursText.setVerticalAlignment(SwingConstants.TOP);
+		totalHoursText.setHorizontalTextPosition(SwingConstants.CENTER);
+		totalHoursText.setFont(Global.analogFont16f);
 		totalPanel.add(totalHoursText);
 
 		
@@ -500,9 +499,9 @@ public class AdminPanel extends JPanel {
 		asp= (AdminSubPanel) new AdminSubPanel(frame).logList(this, logList, frame);
 		subPanelChange(asp);
 		
+		parseTotal();
 		
-		
-		if(!totalPanel.isVisible());
+		if(!toggleTotal)
 		{
 			totalToggle();
 			
@@ -523,7 +522,8 @@ public class AdminPanel extends JPanel {
 		asp=(AdminSubPanel) new AdminSubPanel(frame).employeeList(owner);
 		System.out.println("Trying to refresh employee list...");
 		subPanelChange(asp);
-		if(totalPanel.isVisible());
+		
+		if(toggleTotal)
 		{
 			totalToggle();
 			
@@ -568,7 +568,7 @@ public class AdminPanel extends JPanel {
 	}
 	
 	
-	void totalToggle(){
+	public void totalToggle(){
 	
 		if(toggleTotal) {
 			totalPanel.setVisible(false);
@@ -578,8 +578,42 @@ public class AdminPanel extends JPanel {
 			totalPanel.setVisible(true);
 			toggleTotal=true;
 			
+			
+			
 		}
 		
+		
+	}
+	
+	public void parseTotal() {
+		//format decimals to hh:mm:ss
+		String formatedTotalHours;
+		{
+				
+
+				int hour =(int) totalHours;
+				
+				int min = (int) ((totalHours - hour) * 60);
+				
+				int sec = (int) (((totalHours - hour) * 60 - min) * 60);
+				
+				
+				
+			       String formattedHours = String.format("%02d", hour);
+			        String formattedMinutes = String.format("%02d", min);
+			        String formattedSeconds = String.format("%02d", sec);
+
+				
+				parsedTotal = formattedHours + ":" + formattedMinutes + ":" + formattedSeconds;
+		}
+		
+		
+		
+		
+		
+		
+		
+		totalHoursText.setText("Calculated Total: " + totalHours + "hrs; " +" [" + parsedTotal + "] " );
 		
 	}
 	

@@ -15,6 +15,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
@@ -28,7 +29,7 @@ import javax.swing.SwingConstants;
 public class ErrorDialog extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
-	private JLabel errorTextField;
+	private JTextArea errorTextField;
 	String errorString="404!";
 
 	/**
@@ -54,6 +55,7 @@ public class ErrorDialog extends JDialog {
 		setMaximumSize(new Dimension(340, 500));
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
+		contentPanel.setPreferredSize(new Dimension(10, 20));
 		contentPanel.setBorder(new TitledBorder(null, "Error!", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BorderLayout(0, 0));
@@ -86,9 +88,13 @@ public class ErrorDialog extends JDialog {
 			
 			
 			
-			errorTextField = new JLabel();
+			errorTextField = new JTextArea();
+			errorTextField.setPreferredSize(new Dimension(5, 44));
+			errorTextField.setEditable(false);
+			errorTextField.setLineWrap(true);
 			errorTextField.setAlignmentX(Component.CENTER_ALIGNMENT);
-			errorTextField.setHorizontalAlignment(SwingConstants.CENTER);
+		//	errorTextField.setHorizontalAlignment(SwingConstants.CENTER);
+			
 			errorTextField.setText(this.errorString);
 			internalPanel.add(errorTextField);
 			

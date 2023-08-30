@@ -11,8 +11,11 @@ import java.awt.event.MouseListener;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.BoxLayout;
 import javax.swing.JDialog;
@@ -62,7 +65,7 @@ public class AdminSubPanel extends JPanel {
 	EmployeeDAO cDb = new EmployeeDAO();
 	private AdminPanel parentPanel;
 	private PanelContainerFrame frame;
-
+	private float totalHours=0;
 	/**
 	 * Create the panel.
 	 * @param logList 
@@ -132,9 +135,17 @@ table.getColumnModel().getColumn(col).setHeaderRenderer(new ClickableHeaderRende
 
 			int y = i + 1;
 
+			
+			
+			//parse subtotals and calculate total
+			parseSub(logList.get(i).getSubTotal());
+			
+			
 			System.out.println("loaded " + y + " lines");
 
 		}
+		System.out.println("Final Total hours: " + totalHours);
+		parentPanel.totalHours = totalHours;
 		
 		
 		Object[][] sorted = (Arrays.copyOf(data, data.length));
@@ -207,6 +218,73 @@ table.getColumnModel().getColumn(col).setHeaderRenderer(new ClickableHeaderRende
 	
 	
 	
+	private void parseSub(String subTotal) {
+		// TODO Auto-generated method stub
+		
+		
+		
+		
+		//calculate subTotal
+		System.out.println("adding " + subTotal + " to Total (" + totalHours + ")");
+
+		
+
+		
+		
+		if(subTotal!=null) {
+			
+			
+		    String[] hourMinSec = subTotal.split(":");
+		    float hour = Integer.parseInt(hourMinSec[0]);
+		    float mins = Integer.parseInt(hourMinSec[1]);
+		    float sec = Integer.parseInt(hourMinSec[2]);
+		    float minsInHours = mins / 60;
+		    float secsInHours = (sec / 60 )/ 60;
+		    float parsed= hour + minsInHours + secsInHours;
+		
+		
+		 System.out.println(subTotal + " parsed to " + parsed);
+		 
+		 
+		 
+		 
+			
+			totalHours+=parsed;
+			
+		
+		
+	
+		
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		System.out.println("Total hours: " + totalHours);
+		
+		
+		
+		
+		
+	}
+
+	
+	
+
+
+
+
+
+
+
+
+
+
+
 	public JPanel employeeList(AdminPanel parentPanel) {
 
 		this.parentPanel = parentPanel;
@@ -340,7 +418,7 @@ table.getColumnModel().getColumn(col).setHeaderRenderer(new ClickableHeaderRende
 	}
 	
 	
-public boolean exportList() {
+public boolean exportList(float totalHours2, String parsedTotal) {
 		
 System.out.println("Trying to Export: " + table.toString()); 
 
@@ -411,10 +489,14 @@ if(opt == JFileChooser.APPROVE_OPTION) {
             csv.write("\n");
         }
 
+        csv.write("\n\n,,,,,,,Total: ," + totalHours2 + "," + parsedTotal);
+        
+        
         csv.close();
         return true;
     } catch (IOException e) {
         e.printStackTrace();
+        Global.showError(e.toString());
     }
     return false;
 
