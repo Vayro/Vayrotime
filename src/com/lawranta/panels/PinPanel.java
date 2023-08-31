@@ -74,6 +74,7 @@ public class PinPanel extends JPanel {
 	 * Create the frame.
 	 */
 	public PinPanel(PanelContainerFrame frame) {
+		setPreferredSize(new Dimension(480, 480));
 		setBackground(new Color(58, 58, 58));
 		setBorder(new CompoundBorder());
 		    this.frame = frame;
@@ -135,14 +136,29 @@ public class PinPanel extends JPanel {
 
 				//add vertical padding
 				add(Global.padding(32));
+				
+				
+				
+				
+				
+				JPanel pwdPinPanel = new JPanel();
+				pwdPinPanel.setMaximumSize(new Dimension(256, 288));
+				pwdPinPanel.setPreferredSize(new Dimension(256, 288));
+				add(pwdPinPanel);
+				pwdPinPanel.setLayout(new BoxLayout(pwdPinPanel, BoxLayout.Y_AXIS));
+
+				
+				
 	
 				// PIN FIELD
 
 				passwordField = new JPasswordField();
+				pwdPinPanel.add(passwordField);
+				passwordField.setMaximumSize(new Dimension(1000, 7));
 				passwordField.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 				passwordField.setHorizontalAlignment(SwingConstants.CENTER);
 				passwordField.setFont(new Font("Tahoma", Font.PLAIN, 17));
-
+				
 				PlainDocument document = (PlainDocument) passwordField.getDocument();
 				document.setDocumentFilter(new DocumentFilter() {
 
@@ -171,183 +187,168 @@ public class PinPanel extends JPanel {
 				});
 				
 				
-				//set focus to password field
-				frame.addWindowListener( new WindowAdapter() {
-				    public void windowOpened( WindowEvent e ){
-				    	passwordField.requestFocus();
-				    }
-				}); 
-				
-
-		add(passwordField);
-		
 				
 				
 				
+
+				JPanel keyPadPanel = new JPanel();
+				pwdPinPanel.add(keyPadPanel);
+				keyPadPanel.setBackground(new Color(70, 70, 70));
+				keyPadPanel.setFont(Global.analogFont32f);
+				keyPadPanel.setSize(new Dimension(192, 256));
+				keyPadPanel.setPreferredSize(new Dimension(192, 256));
+				keyPadPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+				keyPadPanel.setLayout(new GridLayout(5, 3, 5, 5));
+
+				JButton btn1 = new JButton("1");
+
+				setIconImage(btn1);
+			
+				btn1.setFont(Global.analogFont32f);
+				btn1.setMinimumSize(new Dimension(16, 16));
+
+				btn1.setPreferredSize(new Dimension(32, 32));
+				btn1.setMaximumSize(new Dimension(32, 32));
+
+				btn1.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+
+						buttonPress(KeyEvent.VK_1);
+
+					}
+				});
+				keyPadPanel.add(btn1);
+
+				JButton btn2 = new JButton("2");
 				
-				
-		
-		
-		
-		
-		
-		JPanel keyPadPanel = new JPanel();
-		keyPadPanel.setBackground(new Color(70, 70, 70));
-		keyPadPanel.setFont(Global.analogFont32f);
-		keyPadPanel.setSize(new Dimension(480, 480));
-		keyPadPanel.setPreferredSize(new Dimension(480, 480));
-		keyPadPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-add(keyPadPanel);
-		keyPadPanel.setLayout(new GridLayout(5, 3, 5, 5));
+				setIconImage(btn2);
+				btn2.setMinimumSize(new Dimension(16, 16));
+				btn2.setPreferredSize(new Dimension(32, 32));
+				btn2.setMaximumSize(new Dimension(32, 32));
+				btn2.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						buttonPress(KeyEvent.VK_2);
 
-		JButton btn1 = new JButton("1");
-		btn1.setFont(Global.analogFont32f);
-		btn1.setMinimumSize(new Dimension(16, 16));
-		btn1.setSize(new Dimension(16, 16));
-		btn1.setPreferredSize(new Dimension(32, 32));
-		btn1.setMaximumSize(new Dimension(32, 32));
-		btn1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+					}
+				});
+				keyPadPanel.add(btn2);
 
-				buttonPress(KeyEvent.VK_1);
+				JButton btn3 = new JButton("3");
+				setIconImage(btn3);
+				btn3.setMinimumSize(new Dimension(16, 16));
+				btn3.setPreferredSize(new Dimension(32, 32));
+				btn3.setMaximumSize(new Dimension(32, 32));
+				btn3.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						buttonPress(KeyEvent.VK_3);
 
-			}
-		});
-		keyPadPanel.add(btn1);
+					}
+				});
+				keyPadPanel.add(btn3);
 
-		JButton btn2 = new JButton("2");
-		btn2.setFont(Global.analogFont32f);
-		btn2.setSize(new Dimension(16, 16));
-		btn2.setMinimumSize(new Dimension(16, 16));
-		btn2.setPreferredSize(new Dimension(32, 32));
-		btn2.setMaximumSize(new Dimension(32, 32));
-		btn2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				buttonPress(KeyEvent.VK_2);
+				JButton btn4 = new JButton("4");
+				setIconImage(btn4);
+				btn4.setMinimumSize(new Dimension(16, 16));
+				btn4.setPreferredSize(new Dimension(32, 32));
+				btn4.setMaximumSize(new Dimension(32, 32));
+				btn4.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						buttonPress(KeyEvent.VK_4);
 
-			}
-		});
-		keyPadPanel.add(btn2);
+					}
+				});
+				keyPadPanel.add(btn4);
 
-		JButton btn3 = new JButton("3");
-		btn3.setFont(Global.analogFont32f);
-		btn3.setSize(new Dimension(16, 16));
-		btn3.setMinimumSize(new Dimension(16, 16));
-		btn3.setPreferredSize(new Dimension(32, 32));
-		btn3.setMaximumSize(new Dimension(32, 32));
-		btn3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				buttonPress(KeyEvent.VK_3);
+				JButton btn5 = new JButton("5");
+				setIconImage(btn5);
+				btn5.setMinimumSize(new Dimension(16, 16));
+				btn5.setPreferredSize(new Dimension(32, 32));
+				btn5.setMaximumSize(new Dimension(32, 32));
+				btn5.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						buttonPress(KeyEvent.VK_5);
 
-			}
-		});
-		keyPadPanel.add(btn3);
+					}
+				});
+				keyPadPanel.add(btn5);
 
-		JButton btn4 = new JButton("4");
-		btn4.setFont(Global.analogFont32f);
-		btn4.setSize(new Dimension(16, 16));
-		btn4.setMinimumSize(new Dimension(16, 16));
-		btn4.setPreferredSize(new Dimension(32, 32));
-		btn4.setMaximumSize(new Dimension(32, 32));
-		btn4.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				buttonPress(KeyEvent.VK_4);
+				JButton btn6 = new JButton("6");
+				setIconImage(btn6);
 
-			}
-		});
-		keyPadPanel.add(btn4);
+				btn6.setMinimumSize(new Dimension(16, 16));
+				btn6.setPreferredSize(new Dimension(32, 32));
+				btn6.setMaximumSize(new Dimension(32, 32));
+				btn6.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						buttonPress(KeyEvent.VK_6);
 
-		JButton btn5 = new JButton("5");
-		btn5.setFont(Global.analogFont32f);
-		btn5.setSize(new Dimension(16, 16));
-		btn5.setMinimumSize(new Dimension(16, 16));
-		btn5.setPreferredSize(new Dimension(32, 32));
-		btn5.setMaximumSize(new Dimension(32, 32));
-		btn5.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				buttonPress(KeyEvent.VK_5);
+					}
+				});
+				keyPadPanel.add(btn6);
 
-			}
-		});
-		keyPadPanel.add(btn5);
-		
-		JButton btn6 = new JButton("6");
-		btn6.setFont(Global.analogFont32f);
-		btn6.setSize(new Dimension(16, 16));
-		btn6.setMinimumSize(new Dimension(16, 16));
-		btn6.setPreferredSize(new Dimension(32, 32));
-		btn6.setMaximumSize(new Dimension(32, 32));
-		btn6.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				buttonPress(KeyEvent.VK_6);
+				JButton btn7 = new JButton("7");
+				setIconImage(btn7);
 
-			}
-		});
-		keyPadPanel.add(btn6);
+				btn7.setMinimumSize(new Dimension(16, 16));
+				btn7.setPreferredSize(new Dimension(32, 32));
+				btn7.setMaximumSize(new Dimension(32, 32));
+				btn7.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						buttonPress(KeyEvent.VK_7);
 
-		JButton btn7 = new JButton("7");
-		btn7.setFont(Global.analogFont32f);
-		btn7.setSize(new Dimension(16, 16));
-		btn7.setMinimumSize(new Dimension(16, 16));
-		btn7.setPreferredSize(new Dimension(32, 32));
-		btn7.setMaximumSize(new Dimension(32, 32));
-		btn7.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				buttonPress(KeyEvent.VK_7);
+					}
+				});
+				keyPadPanel.add(btn7);
 
-			}
-		});
-		keyPadPanel.add(btn7);
+				JButton btn8 = new JButton("8");
+				setIconImage(btn8);
 
-		JButton btn8 = new JButton("8");
-		btn8.setFont(Global.analogFont32f);
-		btn8.setSize(new Dimension(16, 16));
-		btn8.setMinimumSize(new Dimension(16, 16));
-		btn8.setPreferredSize(new Dimension(32, 32));
-		btn8.setMaximumSize(new Dimension(32, 32));
-		btn8.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				buttonPress(KeyEvent.VK_8);
+				btn8.setMinimumSize(new Dimension(16, 16));
+				btn8.setPreferredSize(new Dimension(32, 32));
+				btn8.setMaximumSize(new Dimension(32, 32));
+				btn8.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						buttonPress(KeyEvent.VK_8);
 
-			}
-		});
-		keyPadPanel.add(btn8);
+					}
+				});
+				keyPadPanel.add(btn8);
 
-		JButton btn9 = new JButton("9");
-		btn9.setFont(Global.analogFont32f);
-		btn9.setSize(new Dimension(16, 16));
-		btn9.setMinimumSize(new Dimension(16, 16));
-		btn9.setPreferredSize(new Dimension(32, 32));
-		btn9.setMaximumSize(new Dimension(32, 32));
-		btn9.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				buttonPress(KeyEvent.VK_9);
+				JButton btn9 = new JButton("9");
+				btn9.setFont(Global.analogFont32f);
+				setIconImage(btn9);
+				btn9.setMinimumSize(new Dimension(16, 16));
+				btn9.setPreferredSize(new Dimension(32, 32));
+				btn9.setMaximumSize(new Dimension(32, 32));
+				btn9.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						buttonPress(KeyEvent.VK_9);
 
-			}
-		});
-		keyPadPanel.add(btn9);
+					}
+				});
+				keyPadPanel.add(btn9);
 
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setSize(new Dimension(16, 16));
-		keyPadPanel.add(lblNewLabel);
+				JLabel lblNewLabel = new JLabel("");
+				lblNewLabel.setSize(new Dimension(16, 16));
+				keyPadPanel.add(lblNewLabel);
 
-		JButton btn0 = new JButton("0");
-		btn0.setFont(Global.analogFont32f);
-		btn0.setSize(new Dimension(16, 16));
-		btn0.setMinimumSize(new Dimension(16, 16));
-		btn0.setPreferredSize(new Dimension(32, 32));
-		btn0.setMaximumSize(new Dimension(32, 32));
-		btn0.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				buttonPress(KeyEvent.VK_0);
+				JButton btn0 = new JButton("0");
+				btn0.setFont(Global.analogFont32f);
+				setIconImage(btn0);
+				btn0.setMinimumSize(new Dimension(16, 16));
+				btn0.setPreferredSize(new Dimension(32, 32));
+				btn0.setMaximumSize(new Dimension(32, 32));
+				btn0.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						buttonPress(KeyEvent.VK_0);
 
-			}
-		});
-		keyPadPanel.add(btn0);
+					}
+				});
+				keyPadPanel.add(btn0);
 
-		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setSize(new Dimension(16, 16));
-		keyPadPanel.add(lblNewLabel_1);
+				JLabel lblNewLabel_1 = new JLabel("");
+
+				keyPadPanel.add(lblNewLabel_1);
 
 		
 
@@ -369,7 +370,7 @@ add(keyPadPanel);
 		btnAdmin.setVisible(true);
 add(btnAdmin);
 
-		
+	
 	}
 	
 	
@@ -490,7 +491,20 @@ add(btnAdmin);
 	
 		 add(picLabel);
 	    }
-	
+	 private void setIconImage(JButton btn) {
+			btn.setIcon(new ImageIcon(AdminPinPanel.class.getResource("/images/button1.png")));
+			btn.setPressedIcon(new ImageIcon(AdminPinPanel.class.getResource("/images/button1.png")));
+			btn.setBackground(new Color(255,255,255));
+			btn.setForeground(Color.BLACK);
+			btn.setFont(Global.analogFont32f);
+			btn.setForeground(Color.RED);
+			btn.setOpaque(false);
+			btn.setContentAreaFilled(false);
+			btn.setBorderPainted(false);
+			btn.setHorizontalTextPosition(SwingConstants.CENTER);
+		}
+		
+		
 	
 
 

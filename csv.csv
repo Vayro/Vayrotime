@@ -37,3 +37,6 @@ ID,EmployeeID,Employee,Date,Start Time,End Time,Subtotal,
 36,1,"admin, admin" ,2023/08/16,17:13:29 PM,2023-08-16T17:13:36.254194600,
 37,1,"admin, admin" ,2023/08/16,17:20:02 PM,17:20:17 PM,00:00:15,
 38,1,"admin, admin" ,2023/08/25,16:13:52 PM,16:14:37 PM,00:00:45,
+
+
+,,,,,,,Total: ,0.05,00:03:00

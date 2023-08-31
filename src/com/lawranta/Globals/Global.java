@@ -7,6 +7,8 @@ import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.JLabel;
 
@@ -14,8 +16,9 @@ import com.lawranta.popups.ErrorDialog;
 import com.lawranta.popups.SuccessDialog;
 
 public class Global {
-	//database directory
-	public static String dbPath = "database/records.db";
+
+	
+	//Fonts
 	public static Font headerFont = new Font("TimesRoman", Font.PLAIN, 64);
 	public static Font header2Font = new Font("TimesRoman", Font.PLAIN, 32);
 	private static String analogFontPath="src\\fonts\\Analog.ttf"; 
@@ -23,10 +26,19 @@ public class Global {
 	public static Font analogFont16f = SetGlobalFont.loadFontFromFile(analogFontPath,16f);
 	public static Font analogFont12f = SetGlobalFont.loadFontFromFile(analogFontPath,12f);
 	public static Font timesFont12 = new Font("TimesRoman", Font.PLAIN, 12);
-	public static String adminPin;
+	
+	
+
+	
+	//Paths
 	public final static String cfgPath="src\\null.cfg";
+	public static String dbPath = "database/records.db";
 	
-	
+	//date and time 
+	static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	static LocalDateTime now = LocalDateTime.now();
+
+	public static String today=dtf.format(now);
 	
 	
 	
@@ -37,13 +49,9 @@ public class Global {
 
 		
 		
-		
-	
-	
-
-	
-	//loaded from crumb.dat
-	
+		//properties
+		public static String adminPin;
+	//loaded from crumb.dat	
 	public static String lastPath= new String();
 
 

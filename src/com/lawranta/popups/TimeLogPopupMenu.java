@@ -139,6 +139,8 @@ public class TimeLogPopupMenu extends JPopupMenu {
 	            public void actionPerformed(ActionEvent e)
 	            {
 	                System.out.println(employeeList.get(num).getLastName()+", "+employeeList.get(num).getFirstName() + " clicked.");
+	                
+	              (  (AdminPanel) contentPanel).timeLogFilter=employeeList.get(num).getLastName()+"_"+employeeList.get(num).getFirstName() ;
 	                ((AdminPanel) contentPanel).relistLogs(+employeeList.get(num).getID(),  null,  null);
 	              
 	            }

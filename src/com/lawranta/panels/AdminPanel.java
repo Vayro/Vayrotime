@@ -76,6 +76,7 @@ public class AdminPanel extends JPanel {
 	public boolean toggleTotal;
 	JPanel totalPanel = new JPanel();
 	JLabel totalHoursText = new JLabel("Total: ");
+	public String timeLogFilter = "all";
 	
 	/**
 	 * Create the frame.

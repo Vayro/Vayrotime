@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -25,6 +26,8 @@ import com.lawranta.Globals.Global;
 import javax.swing.JLabel;
 import java.awt.Dimension;
 import javax.swing.SwingConstants;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 
 public class ErrorDialog extends JDialog {
 
@@ -59,13 +62,16 @@ public class ErrorDialog extends JDialog {
 		contentPanel.setBorder(new TitledBorder(null, "Error!", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BorderLayout(0, 0));
+		
+
+		
 		{
 			
 			
 			JPanel internalPanel = new JPanel();
 			contentPanel.add(internalPanel, BorderLayout.NORTH);
 			internalPanel.setLayout(new BoxLayout(internalPanel, BoxLayout.X_AXIS));
-			
+			setModal(true);
 			
 			
 			
@@ -87,17 +93,26 @@ public class ErrorDialog extends JDialog {
 			
 			
 			
-			
+			 JScrollPane scroll = new JScrollPane();
+				scroll.createVerticalScrollBar();
+
 			errorTextField = new JTextArea();
-			errorTextField.setPreferredSize(new Dimension(5, 44));
+			//errorTextField.setPreferredSize(new Dimension(5, 44));
 			errorTextField.setEditable(false);
+		errorTextField.setWrapStyleWord(true);
 			errorTextField.setLineWrap(true);
 			errorTextField.setAlignmentX(Component.CENTER_ALIGNMENT);
+			
 		//	errorTextField.setHorizontalAlignment(SwingConstants.CENTER);
 			
-			errorTextField.setText(this.errorString);
-			internalPanel.add(errorTextField);
-			
+		errorTextField.setText(this.errorString);
+			//.add(errorTextField);
+			scroll.setViewportView(errorTextField);
+			scroll.createVerticalScrollBar();
+			//scroll.getViewport().setViewPosition( new Point(0, 0) );
+			errorTextField.setSelectionStart(0);
+			errorTextField.setSelectionEnd(0);
+			internalPanel.add(scroll);
 			
 			
 			
@@ -117,20 +132,19 @@ public class ErrorDialog extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("Ok");
-				okButton.setActionCommand("OK");
-				okButton.addActionListener(new ActionListener() {
+				JButton cButton = new JButton("Confirm");
+				cButton.addActionListener(new ActionListener() {
 
 					@Override
-					public void actionPerformed(ActionEvent e) {
+					public void actionPerformed(ActionEvent t) {
 						dispose();
 						
 					}
 					
 					
 				});
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+				buttonPane.add(cButton);
+				getRootPane().setDefaultButton(cButton);
 			}
 
 		}

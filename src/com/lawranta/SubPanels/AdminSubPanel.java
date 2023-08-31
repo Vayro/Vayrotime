@@ -420,12 +420,16 @@ table.getColumnModel().getColumn(col).setHeaderRenderer(new ClickableHeaderRende
 	
 public boolean exportList(float totalHours2, String parsedTotal) {
 		
+	
+String defaultFileName=Global.today + "_" + parentPanel.timeLogFilter +".csv";
+	
 System.out.println("Trying to Export: " + table.toString()); 
 
 String absPath = "csv.csv";
 
 
 FilePathDialog path = new FilePathDialog();
+path.setSelectedFile(new File(defaultFileName));
 Integer opt = path.showSaveDialog(this);
 
 if(opt == JFileChooser.APPROVE_OPTION) {
@@ -496,7 +500,7 @@ if(opt == JFileChooser.APPROVE_OPTION) {
         return true;
     } catch (IOException e) {
         e.printStackTrace();
-        Global.showError(e.toString());
+        Global.showError(e.getMessage());
     }
     return false;
 

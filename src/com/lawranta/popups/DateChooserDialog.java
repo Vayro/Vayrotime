@@ -209,29 +209,46 @@ public class DateChooserDialog extends JDialog {
 	private void action(String str) {
 	
 
-		switch (str) {
-		case "OK": {
+		
+		
+		
+		
+		
+		if(str.equals("OK")) {
 			boolean b = validCheck();
 			if (b == false) {
 				System.out.println("dates invalid");
 				Global.showError("Invalid dates!");
-				break;
 			} else {
 
 				System.out.println("dates valid");
 				
 				dispose();
 			}
+			
 		}
-			break;
-
-		case "Cancel": {
-
+		else
+		{
 			dispose();
 
-			break;
+			
 		}
-		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	
+		
+		
 	}
 	
 	private boolean validCheck() {

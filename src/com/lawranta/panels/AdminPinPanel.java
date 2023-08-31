@@ -1,4 +1,5 @@
 package com.lawranta.panels;
+
 import java.awt.AWTException;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -22,6 +23,7 @@ import com.lawranta.frames.*;
 import com.lawranta.panels.*;
 import com.lawranta.services.EmployeeService;
 import com.lawranta.sqllite.EmployeeDAO;
+
 
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -56,6 +58,7 @@ import javax.swing.border.BevelBorder;
 import java.awt.Dimension;
 import java.awt.Cursor;
 import javax.swing.border.CompoundBorder;
+import java.awt.SystemColor;
 
 public class AdminPinPanel extends JPanel {
 
@@ -68,106 +71,117 @@ public class AdminPinPanel extends JPanel {
 	private JPasswordField passwordField;
 	protected AdminPanel INITIALIZE;
 	private PanelContainerFrame frame;
-	EmployeeService eSer = new EmployeeService(); 
+	EmployeeService eSer = new EmployeeService();
 
 	/**
 	 * Create the frame.
 	 */
 	public AdminPinPanel(PanelContainerFrame frame) {
+		setPreferredSize(new Dimension(480, 480));
 		setBackground(new Color(58, 58, 58));
 		setBorder(new CompoundBorder());
-		    this.frame = frame;
+		this.frame = frame;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		
-			//setBackground(Color.WHITE);
-		//	setBorder(new EmptyBorder(5, 5, 5, 5));
-		//setLayout(null);
+		add(Global.padding(20));
+
+	/*	JPanel headingPanel = new JPanel();
+		headingPanel.setPreferredSize(new Dimension(0, 0));
+		headingPanel.setBackground(Color.BLACK);
+		add(headingPanel);
+*/
+		// setBackground(Color.WHITE);
+		// setBorder(new EmptyBorder(5, 5, 5, 5));
+		// setLayout(null);
 		lblTitle = new JLabel("Enter admin PIN");
+		lblTitle.setPreferredSize(new Dimension(400, 71));
+		lblTitle.setMinimumSize(new Dimension(400, 71));
+		lblTitle.setMaximumSize(new Dimension(400, 71));
+		add(lblTitle);
 		lblTitle.setForeground(new Color(255, 255, 255));
 		lblTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 		lblTitle.setAlignmentY(Component.TOP_ALIGNMENT);
 		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTitle.setFont(Global.analogFont32f);
-		add(Global.padding(20));
-		add(lblTitle);
-		add(Global.padding(32));
+		Global.padding(32);
 
-		//DisplayImage();
-		
-		
+
+		// set focus to password field
+		frame.addWindowListener(new WindowAdapter() {
+			public void windowOpened(WindowEvent e) {
+				passwordField.requestFocus();
+			}
+		});
+
+		JPanel pwdPinPanel = new JPanel();
+		pwdPinPanel.setMaximumSize(new Dimension(256, 288));
+		pwdPinPanel.setPreferredSize(new Dimension(256, 288));
+		add(pwdPinPanel);
+		pwdPinPanel.setLayout(new BoxLayout(pwdPinPanel, BoxLayout.Y_AXIS));
+
+		// DisplayImage();
+
 		// date time
-				
-	
-				// PIN FIELD
 
-				passwordField = new JPasswordField();
-				passwordField.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
-				passwordField.setHorizontalAlignment(SwingConstants.CENTER);
-				passwordField.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		// PIN FIELD
 
-				PlainDocument document = (PlainDocument) passwordField.getDocument();
-				document.setDocumentFilter(new DocumentFilter() {
-
-					@Override
-					public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
-							throws BadLocationException {
-						String string = fb.getDocument().getText(0, fb.getDocument().getLength()) + text;
-
-						if (string.length() <= 6) {
-							super.replace(fb, offset, length, text, attrs); // To change body of generated methods, choose Tools
-																			// | Templates.
-						}
-						if (string.length() == 6) {
-
-							// This is where we want to check if the PIN entered is valid. It should occur
-							// as soon as 6 digits are entered.
-							// if pin is valid, go to next frame
-							char[] charpin = passwordField.getPassword();
-							passwordField.setText("");
-							checkPin(charpin);
-
-						}
-
-					}
-
-				});
-				
-				
-				//set focus to password field
-				frame.addWindowListener( new WindowAdapter() {
-				    public void windowOpened( WindowEvent e ){
-				    	passwordField.requestFocus();
-				    }
-				}); 
-				
-
-		add(passwordField);
+		passwordField = new JPasswordField();
+		pwdPinPanel.add(passwordField);
+		passwordField.setMaximumSize(new Dimension(1000, 7));
+		passwordField.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+		passwordField.setHorizontalAlignment(SwingConstants.CENTER);
+		passwordField.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		
-				
-				
-				
-				
-				
+		PlainDocument document = (PlainDocument) passwordField.getDocument();
+		document.setDocumentFilter(new DocumentFilter() {
+
+			@Override
+			public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
+					throws BadLocationException {
+				String string = fb.getDocument().getText(0, fb.getDocument().getLength()) + text;
+
+				if (string.length() <= 6) {
+					super.replace(fb, offset, length, text, attrs); // To change body of generated methods, choose Tools
+																	// | Templates.
+				}
+				if (string.length() == 6) {
+
+					// This is where we want to check if the PIN entered is valid. It should occur
+					// as soon as 6 digits are entered.
+					// if pin is valid, go to next frame
+					char[] charpin = passwordField.getPassword();
+					passwordField.setText("");
+					checkPin(charpin);
+
+				}
+
+			}
+
+		});
 		
 		
 		
 		
 		
+
 		JPanel keyPadPanel = new JPanel();
-		keyPadPanel.setBackground(new Color(70, 70, 70));
+		keyPadPanel.setBackground(Color.DARK_GRAY);
+		pwdPinPanel.add(keyPadPanel);
 		keyPadPanel.setFont(Global.analogFont32f);
-		keyPadPanel.setSize(new Dimension(480, 480));
-		keyPadPanel.setPreferredSize(new Dimension(480, 480));
+		keyPadPanel.setSize(new Dimension(192, 256));
+		keyPadPanel.setPreferredSize(new Dimension(192, 256));
 		keyPadPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-add(keyPadPanel);
 		keyPadPanel.setLayout(new GridLayout(5, 3, 5, 5));
 
 		JButton btn1 = new JButton("1");
+
+		setIconImage(btn1);
 		btn1.setFont(Global.analogFont32f);
 		btn1.setMinimumSize(new Dimension(16, 16));
-		btn1.setSize(new Dimension(16, 16));
+
 		btn1.setPreferredSize(new Dimension(32, 32));
 		btn1.setMaximumSize(new Dimension(32, 32));
+
+
 		btn1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -178,8 +192,8 @@ add(keyPadPanel);
 		keyPadPanel.add(btn1);
 
 		JButton btn2 = new JButton("2");
-		btn2.setFont(Global.analogFont32f);
-		btn2.setSize(new Dimension(16, 16));
+		
+		setIconImage(btn2);
 		btn2.setMinimumSize(new Dimension(16, 16));
 		btn2.setPreferredSize(new Dimension(32, 32));
 		btn2.setMaximumSize(new Dimension(32, 32));
@@ -192,8 +206,7 @@ add(keyPadPanel);
 		keyPadPanel.add(btn2);
 
 		JButton btn3 = new JButton("3");
-		btn3.setFont(Global.analogFont32f);
-		btn3.setSize(new Dimension(16, 16));
+		setIconImage(btn3);
 		btn3.setMinimumSize(new Dimension(16, 16));
 		btn3.setPreferredSize(new Dimension(32, 32));
 		btn3.setMaximumSize(new Dimension(32, 32));
@@ -206,8 +219,7 @@ add(keyPadPanel);
 		keyPadPanel.add(btn3);
 
 		JButton btn4 = new JButton("4");
-		btn4.setFont(Global.analogFont32f);
-		btn4.setSize(new Dimension(16, 16));
+		setIconImage(btn4);
 		btn4.setMinimumSize(new Dimension(16, 16));
 		btn4.setPreferredSize(new Dimension(32, 32));
 		btn4.setMaximumSize(new Dimension(32, 32));
@@ -220,8 +232,7 @@ add(keyPadPanel);
 		keyPadPanel.add(btn4);
 
 		JButton btn5 = new JButton("5");
-		btn5.setFont(Global.analogFont32f);
-		btn5.setSize(new Dimension(16, 16));
+		setIconImage(btn5);
 		btn5.setMinimumSize(new Dimension(16, 16));
 		btn5.setPreferredSize(new Dimension(32, 32));
 		btn5.setMaximumSize(new Dimension(32, 32));
@@ -232,10 +243,10 @@ add(keyPadPanel);
 			}
 		});
 		keyPadPanel.add(btn5);
-		
+
 		JButton btn6 = new JButton("6");
-		btn6.setFont(Global.analogFont32f);
-		btn6.setSize(new Dimension(16, 16));
+		setIconImage(btn6);
+
 		btn6.setMinimumSize(new Dimension(16, 16));
 		btn6.setPreferredSize(new Dimension(32, 32));
 		btn6.setMaximumSize(new Dimension(32, 32));
@@ -248,8 +259,8 @@ add(keyPadPanel);
 		keyPadPanel.add(btn6);
 
 		JButton btn7 = new JButton("7");
-		btn7.setFont(Global.analogFont32f);
-		btn7.setSize(new Dimension(16, 16));
+		setIconImage(btn7);
+
 		btn7.setMinimumSize(new Dimension(16, 16));
 		btn7.setPreferredSize(new Dimension(32, 32));
 		btn7.setMaximumSize(new Dimension(32, 32));
@@ -262,8 +273,8 @@ add(keyPadPanel);
 		keyPadPanel.add(btn7);
 
 		JButton btn8 = new JButton("8");
-		btn8.setFont(Global.analogFont32f);
-		btn8.setSize(new Dimension(16, 16));
+		setIconImage(btn8);
+
 		btn8.setMinimumSize(new Dimension(16, 16));
 		btn8.setPreferredSize(new Dimension(32, 32));
 		btn8.setMaximumSize(new Dimension(32, 32));
@@ -277,7 +288,7 @@ add(keyPadPanel);
 
 		JButton btn9 = new JButton("9");
 		btn9.setFont(Global.analogFont32f);
-		btn9.setSize(new Dimension(16, 16));
+		setIconImage(btn9);
 		btn9.setMinimumSize(new Dimension(16, 16));
 		btn9.setPreferredSize(new Dimension(32, 32));
 		btn9.setMaximumSize(new Dimension(32, 32));
@@ -295,7 +306,7 @@ add(keyPadPanel);
 
 		JButton btn0 = new JButton("0");
 		btn0.setFont(Global.analogFont32f);
-		btn0.setSize(new Dimension(16, 16));
+		setIconImage(btn0);
 		btn0.setMinimumSize(new Dimension(16, 16));
 		btn0.setPreferredSize(new Dimension(32, 32));
 		btn0.setMaximumSize(new Dimension(32, 32));
@@ -308,11 +319,11 @@ add(keyPadPanel);
 		keyPadPanel.add(btn0);
 
 		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setSize(new Dimension(16, 16));
+
 		keyPadPanel.add(lblNewLabel_1);
 
-		
 
+		
 		JButton btnBack = new JButton("Back\r\n");
 		btnBack.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnBack.addActionListener(new ActionListener() {
@@ -320,36 +331,18 @@ add(keyPadPanel);
 				String s = new String(passwordField.getPassword());
 				System.out.println("PIN: " + s);
 
-				JPanel panel=new PinPanel(frame);
+				JPanel panel = new PinPanel(frame);
 				frame.PanelChange(panel);
 				setVisible(false);
-				
-			//	dispose();
+
+				// dispose();
 
 			}
 		});
 		btnBack.setVisible(true);
-add(btnBack);
+		add(btnBack);
 
-		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-	
-
-	
-
-	
 
 	public void buttonPress(int key) {
 
@@ -381,8 +374,6 @@ add(btnBack);
 		// as soon as 6 digits are entered.
 		// if pin is valid, go to next frame
 
-	
-
 		// check database
 
 		String strPin = new String(charpin);
@@ -392,14 +383,12 @@ add(btnBack);
 			// if YES, move to employee screen
 			System.out.println("Admin Pin Valid");
 
-			
-			
 			frame.PanelChange(new AdminPanel(this.frame));
 			setVisible(false);
 			System.out.println("Launching private admin frame");
 			setVisible(false);
-			//dispose();
-			
+			// dispose();
+
 		} else {
 			// incorrect pin entered, reset password field
 
@@ -408,9 +397,20 @@ add(btnBack);
 		}
 
 	}
-	
-	
-	
 
-
+	
+	private void setIconImage(JButton btn) {
+		btn.setIcon(new ImageIcon(AdminPinPanel.class.getResource("/images/button1.png")));
+		btn.setPressedIcon(new ImageIcon(AdminPinPanel.class.getResource("/images/button1.png")));
+		btn.setBackground(new Color(0,0,0));
+		btn.setForeground(Color.RED);
+		btn.setFont(Global.analogFont32f);
+		btn.setForeground(Color.RED);
+		btn.setOpaque(false);
+		btn.setContentAreaFilled(false);
+		btn.setBorderPainted(false);
+		btn.setHorizontalTextPosition(SwingConstants.CENTER);
+	}
+	
+	
 }
