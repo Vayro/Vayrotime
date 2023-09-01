@@ -18,6 +18,7 @@ import com.lawranta.popups.TimeLogPopupMenu;
 import com.lawranta.popups.adminNewPinDialog;
 import com.lawranta.popups.newEmployeeDialog;
 import com.lawranta.services.AttendanceService;
+import com.lawranta.services.daytimeDifferance;
 import com.lawranta.sqllite.AttendanceDAO;
 
 import javax.swing.JButton;
@@ -500,7 +501,9 @@ public class AdminPanel extends JPanel {
 		asp= (AdminSubPanel) new AdminSubPanel(frame).logList(this, logList, frame);
 		subPanelChange(asp);
 		
-		parseTotal();
+		parsedTotal = daytimeDifferance.parseTotal(totalHours);
+		totalHoursText.setText("Calculated Total: " + totalHours + "hrs; " +" [" + parsedTotal + "] " );
+
 		
 		if(!toggleTotal)
 		{
@@ -586,37 +589,7 @@ public class AdminPanel extends JPanel {
 		
 	}
 	
-	public void parseTotal() {
-		//format decimals to hh:mm:ss
-		String formatedTotalHours;
-		{
-				
 
-				int hour =(int) totalHours;
-				
-				int min = (int) ((totalHours - hour) * 60);
-				
-				int sec = (int) (((totalHours - hour) * 60 - min) * 60);
-				
-				
-				
-			       String formattedHours = String.format("%02d", hour);
-			        String formattedMinutes = String.format("%02d", min);
-			        String formattedSeconds = String.format("%02d", sec);
-
-				
-				parsedTotal = formattedHours + ":" + formattedMinutes + ":" + formattedSeconds;
-		}
-		
-		
-		
-		
-		
-		
-		
-		totalHoursText.setText("Calculated Total: " + totalHours + "hrs; " +" [" + parsedTotal + "] " );
-		
-	}
 	
 	
 }

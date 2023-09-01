@@ -44,10 +44,11 @@ import com.lawranta.modifiers.*;
 import com.lawranta.panels.AdminPanel;
 import com.lawranta.panels.PinPanel;
 import com.lawranta.popups.*;
+import com.lawranta.services.AttendanceService;
 import com.lawranta.sqllite.EmployeeDAO;
 
 import java.awt.FlowLayout;
-import java.io.File;  
+import java.io.File;
 
 public class AdminSubPanel extends JPanel {
 	public AdminSubPanel(PanelContainerFrame frame) {
@@ -65,34 +66,36 @@ public class AdminSubPanel extends JPanel {
 	EmployeeDAO cDb = new EmployeeDAO();
 	private AdminPanel parentPanel;
 	private PanelContainerFrame frame;
-	private float totalHours=0;
+	private float totalHours = 0;
 	/**
 	 * Create the panel.
-	 * @param logList 
+	 * 
+	 * @param logList
 	 */
 
 	JTableHeader header;
 	MouseListener actionListener = new MouseListener() {
 		public void mouseClicked(MouseEvent event) {
 			int col = table.columnAtPoint(event.getPoint());
-	        String name = table.getColumnName(col);
-	        System.out.println("Column index selected " + col + " " + name);
+			String name = table.getColumnName(col);
+			System.out.println("Column index selected " + col + " " + name);
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e) {
 			// TODO Auto-generated method stub
 			int col = table.columnAtPoint(e.getPoint());
-table.getColumnModel().getColumn(col).setHeaderRenderer(new ClickableHeaderRenderer(0));;
+			table.getColumnModel().getColumn(col).setHeaderRenderer(new ClickableHeaderRenderer(0));
+			;
 		}
-			
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			// TODO Auto-generated method stub
-		
+
 			int col = table.columnAtPoint(e.getPoint());
-table.getColumnModel().getColumn(col).setHeaderRenderer(new ClickableHeaderRenderer(1));;
+			table.getColumnModel().getColumn(col).setHeaderRenderer(new ClickableHeaderRenderer(1));
+			;
 		}
 
 		@Override
@@ -105,29 +108,23 @@ table.getColumnModel().getColumn(col).setHeaderRenderer(new ClickableHeaderRende
 		public void mouseExited(MouseEvent e) {
 			// TODO Auto-generated method stub
 
-			
-		}};
-	
-	
-	public JPanel logList(AdminPanel parentPanel, ArrayList<AttendanceModel> logList, PanelContainerFrame frame) {
-		
+		}
+	};
 
-		
+	public JPanel logList(AdminPanel parentPanel, ArrayList<AttendanceModel> logList, PanelContainerFrame frame) {
+
 		this.parentPanel = parentPanel;
-		this.frame=frame;
-		
-		
+		this.frame = frame;
+
 		System.out.print("Retrieved: " + logList.size() + "\n");
-		String[] headers = { "ID", "EmployeeID", "Employee", "Date","Start Time", "End Time", "Subtotal" };
+		String[] headers = { "ID", "EmployeeID", "Employee", "Date", "Start Time", "End Time", "Subtotal" };
 		Object[][] data = new Object[logList.size()][7];
-		
-		
-		
+
 		for (int i = 0; i < logList.size(); i++) {
 
 			data[i][0] = logList.get(i).getPrimaryKey();
 			data[i][1] = logList.get(i).getEmployeeID();
-			data[i][2] = logList.get(i).getName().replace(", ",", ");
+			data[i][2] = logList.get(i).getName().replace(", ", ", ");
 			data[i][3] = logList.get(i).getDate();
 			data[i][4] = logList.get(i).getStartTime();
 			data[i][5] = logList.get(i).getEndTime();
@@ -135,19 +132,15 @@ table.getColumnModel().getColumn(col).setHeaderRenderer(new ClickableHeaderRende
 
 			int y = i + 1;
 
-			
-			
-			//parse subtotals and calculate total
+			// parse subtotals and calculate total
 			parseSub(logList.get(i).getSubTotal());
-			
-			
+
 			System.out.println("loaded " + y + " lines");
 
 		}
 		System.out.println("Final Total hours: " + totalHours);
 		parentPanel.totalHours = totalHours;
-		
-		
+
 		Object[][] sorted = (Arrays.copyOf(data, data.length));
 
 		JScrollPane scroll = new JScrollPane();
@@ -156,7 +149,6 @@ table.getColumnModel().getColumn(col).setHeaderRenderer(new ClickableHeaderRende
 			 * 
 			 */
 			private static final long serialVersionUID = 5288212106116261772L;
-	
 
 			@Override
 			public boolean isCellEditable(int row, int column) {
@@ -165,125 +157,84 @@ table.getColumnModel().getColumn(col).setHeaderRenderer(new ClickableHeaderRende
 			}
 
 		};
-		//DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-	//	centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+		// DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		// centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
 
 		for (int x = 0; x < headers.length; x++) {
-			//table.getColumnModel().getColumn(x).setCellRenderer(centerRenderer);
+			// table.getColumnModel().getColumn(x).setCellRenderer(centerRenderer);
 			this.table.getColumnModel().getColumn(x).setHeaderRenderer(new ClickableHeaderRenderer(1));
 		}
 		;
 
 		header = this.table.getTableHeader();
-		//header.setBackground(Color.LIGHT_GRAY);
-		header.addMouseListener( actionListener);
+		// header.setBackground(Color.LIGHT_GRAY);
+		header.addMouseListener(actionListener);
 
-		//scroll.setBounds(0, 0, 100,100); // <-- THIS
+		// scroll.setBounds(0, 0, 100,100); // <-- THIS
 
 		scroll.setViewportView(this.table);
 
 		add(scroll);
 
 		setVisible(true);
-		
-		
-		
-		
-		
-		
-		
-		
-		
 
-		
-		
-		
-		
-		
-		
-		
-		
-		
+		// make clickable
+
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+		for (int x = 0; x < 7; x++) {
+			this.table.getColumnModel().getColumn(x).setCellRenderer(centerRenderer);
+		}
+		;
+
+		this.table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+					// System.out.println("double clicked");
+					String cellData = table.getValueAt(table.getSelectedRow(), table.getSelectedColumn()).toString();
+					System.out.println(cellData);
+					int id = Integer.parseInt(table.getValueAt(table.getSelectedRow(), (0)).toString());
+					System.out.println(table.getValueAt(table.getSelectedRow(), (0)).toString());
+					// launch edit dialog
+					AttendanceModel byId = AttendanceService.getModelByID(id);
+					
+					EditRecordDialog editRecordDialog = new EditRecordDialog(byId);
+					editRecordDialog.setVisible(true);
+
+				}
+			}
+		});
+
 		return this;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	private void parseSub(String subTotal) {
 		// TODO Auto-generated method stub
-		
-		
-		
-		
-		//calculate subTotal
+
+		// calculate subTotal
 		System.out.println("adding " + subTotal + " to Total (" + totalHours + ")");
 
-		
+		if (subTotal != null) {
 
-		
-		
-		if(subTotal!=null) {
-			
-			
-		    String[] hourMinSec = subTotal.split(":");
-		    float hour = Integer.parseInt(hourMinSec[0]);
-		    float mins = Integer.parseInt(hourMinSec[1]);
-		    float sec = Integer.parseInt(hourMinSec[2]);
-		    float minsInHours = mins / 60;
-		    float secsInHours = (sec / 60 )/ 60;
-		    float parsed= hour + minsInHours + secsInHours;
-		
-		
-		 System.out.println(subTotal + " parsed to " + parsed);
-		 
-		 
-		 
-		 
-			
-			totalHours+=parsed;
-			
-		
-		
-	
-		
+			String[] hourMinSec = subTotal.split(":");
+			float hour = Integer.parseInt(hourMinSec[0]);
+			float mins = Integer.parseInt(hourMinSec[1]);
+			float sec = Integer.parseInt(hourMinSec[2]);
+			float minsInHours = mins / 60;
+			float secsInHours = (sec / 60) / 60;
+			float parsed = hour + minsInHours + secsInHours;
+
+			System.out.println(subTotal + " parsed to " + parsed);
+
+			totalHours += parsed;
+
 		}
-		
-		
-		
-		
-		
-		
-		
-		
+
 		System.out.println("Total hours: " + totalHours);
-		
-		
-		
-		
-		
+
 	}
-
-	
-	
-
-
-
-
-
-
-
-
-
-
 
 	public JPanel employeeList(AdminPanel parentPanel) {
 
@@ -335,7 +286,7 @@ table.getColumnModel().getColumn(col).setHeaderRenderer(new ClickableHeaderRende
 
 		header = this.table.getTableHeader();
 		header.setBackground(Color.LIGHT_GRAY);
-		//scroll.setBounds(0, 0, 514, 367); // <-- THIS
+		// scroll.setBounds(0, 0, 514, 367); // <-- THIS
 
 		scroll.setViewportView(this.table);
 
@@ -356,7 +307,7 @@ table.getColumnModel().getColumn(col).setHeaderRenderer(new ClickableHeaderRende
 
 					switch (cellData) {
 					case "X": {
-					
+
 						delete(id);
 					}
 
@@ -376,173 +327,97 @@ table.getColumnModel().getColumn(col).setHeaderRenderer(new ClickableHeaderRende
 	}
 
 	private void delete(int id) {
-		
+
 		JDialog delete = new confirmDeleteDialog(id, parentPanel, frame);
 		delete.setVisible(true);
 		boolean returnB = ((confirmDeleteDialog) delete).resultB();
 
 		if (returnB) {
 
-			
-			//parentPanel.employeeContent.removeAll();
-			//parentPanel.employeeContent.setVisible(false);
+			// parentPanel.employeeContent.removeAll();
+			// parentPanel.employeeContent.setVisible(false);
 			// AdminPanel test = (AdminPanel) SwingUtilities.getUnwrappedParent(this);
 			// JPanel thisPanel = this;
-			//parentPanel.relistEmployees();
+			// parentPanel.relistEmployees();
 			System.out.println("cancelled?");
-			//setVisible(false);
-		//	removeAll();
-
+			// setVisible(false);
+			// removeAll();
 
 		}
-		
-		
-		//setVisible(false);
-		//removeAll();
-		//parentPanel.relistEmployees();
-		
+
+		// setVisible(false);
+		// removeAll();
+		// parentPanel.relistEmployees();
+
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	private void action(String str) {
-		
-
-		
-		
-	}
-	
-	
-public boolean exportList(float totalHours2, String parsedTotal) {
-		
-	
-String defaultFileName=Global.today + "_" + parentPanel.timeLogFilter +".csv";
-	
-System.out.println("Trying to Export: " + table.toString()); 
-
-String absPath = "csv.csv";
 
 
-FilePathDialog path = new FilePathDialog();
-path.setSelectedFile(new File(defaultFileName));
-Integer opt = path.showSaveDialog(this);
+	public boolean exportList(float totalHours2, String parsedTotal) {
 
-if(opt == JFileChooser.APPROVE_OPTION) {
-	//get selected pathfile
-    File f = path.getSelectedFile();
-     absPath = f.getAbsolutePath();
-    
- 
-   
-    
-    if(!f.getAbsolutePath().endsWith(".csv"))
-    {
-    	
-    	absPath=f.getAbsolutePath()+".csv";
-    }
-    
-    
-    
-    
-    
-    System.out.print(absPath);
-  
-}
+		String defaultFileName = Global.today + "_" + parentPanel.timeLogFilter + ".csv";
 
+		System.out.println("Trying to Export: " + table.toString());
 
+		String absPath = "csv.csv";
 
+		FilePathDialog path = new FilePathDialog();
+		path.setSelectedFile(new File(defaultFileName));
+		Integer opt = path.showSaveDialog(this);
+
+		if (opt == JFileChooser.APPROVE_OPTION) {
+			// get selected pathfile
+			File f = path.getSelectedFile();
+			absPath = f.getAbsolutePath();
+
+			if (!f.getAbsolutePath().endsWith(".csv")) {
+
+				absPath = f.getAbsolutePath() + ".csv";
+			}
+
+			System.out.print(absPath);
+
+		}
 
 //write to CSV
 
+		try {
 
-    try {
+			TableModel model = this.table.getModel();
+			FileWriter csv = new FileWriter(new File(absPath));
 
-        TableModel model = this.table.getModel();
-        FileWriter csv = new FileWriter(new File(absPath));
+			for (int i = 0; i < model.getColumnCount(); i++) {
+				csv.write(model.getColumnName(i) + ",");
+			}
 
-        for (int i = 0; i < model.getColumnCount(); i++) {
-            csv.write(model.getColumnName(i) + ",");
-        }
+			csv.write("\n");
 
-        csv.write("\n");
+			for (int i = 0; i < model.getRowCount(); i++) {
+				for (int j = 0; j < model.getColumnCount(); j++) {
 
-        for (int i = 0; i < model.getRowCount(); i++) {
-            for (int j = 0; j < model.getColumnCount(); j++) {
-            	
-            	
-            	if(model.getValueAt(i, j) 	!=null && model.getValueAt(i, j).toString().indexOf(',')<0
-            			) {
-                csv.write(model.getValueAt(i, j).toString() + "," );}
-            	
-            	else if(model.getValueAt(i, j) 	!=null)
-            		
-            	{
-            		  csv.write("\"" + model.getValueAt(i, j).toString() + "\" " + ",") ;}
-            		
-            	
-                
-                
-                
-                
-            }
-            csv.write("\n");
-        }
+					if (model.getValueAt(i, j) != null && model.getValueAt(i, j).toString().indexOf(',') < 0) {
+						csv.write(model.getValueAt(i, j).toString() + ",");
+					}
 
-        csv.write("\n\n,,,,,,,Total: ," + totalHours2 + "," + parsedTotal);
-        
-        
-        csv.close();
-        return true;
-    } catch (IOException e) {
-        e.printStackTrace();
-        Global.showError(e.getMessage());
-    }
-    return false;
+					else if (model.getValueAt(i, j) != null)
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+					{
+						csv.write("\"" + model.getValueAt(i, j).toString() + "\" " + ",");
+					}
 
+				}
+				csv.write("\n");
+			}
 
+			csv.write("\n\n,,,,,,,Total: ," + totalHours2 + "," + parsedTotal);
 
+			csv.close();
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+			Global.showError(e.getMessage());
+		}
+		return false;
 
-
-
-
-
-
-		
-		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 }

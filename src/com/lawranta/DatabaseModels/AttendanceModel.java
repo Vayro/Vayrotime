@@ -18,6 +18,10 @@ public class AttendanceModel {
 		setName(e.getName());
 		
 	}
+	
+	
+	
+	
 	public AttendanceModel() {
 		// TODO Auto-generated constructor stub
 	}
@@ -89,5 +93,18 @@ public class AttendanceModel {
 	
 	
 	
+	public String toString() {
+		
+		
+		return 	primaryKey + ","+
+		 date + "," +
+		 employeeID + "," +
+		 startTime + "," +
+		 endTime + "," +
+		 subTotal + "," +
+		 name;
+		
+		
+	}
 
 }

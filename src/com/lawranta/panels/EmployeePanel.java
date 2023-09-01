@@ -41,7 +41,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.GridLayout;
 
-public class EmployeeFrame extends JPanel {
+public class EmployeePanel extends JPanel {
 
 	/**
 	 * 
@@ -61,7 +61,7 @@ public class EmployeeFrame extends JPanel {
 	/**
 	 * Create the frame.
 	 */
-	public EmployeeFrame(EmployeeModel passedE, PanelContainerFrame frame)
+	public EmployeePanel(EmployeeModel passedE, PanelContainerFrame frame)
 
 	{
 		super();
@@ -152,7 +152,7 @@ public class EmployeeFrame extends JPanel {
 
 		add(Global.padding(32));
 
-		dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+		dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		now = LocalDateTime.now();
 
 	
@@ -240,22 +240,22 @@ public class EmployeeFrame extends JPanel {
 
 	private void clockIn(String time) {
 
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDateTime now = LocalDateTime.now();
 
 		em.setStatus("in");
 		EmployeeService.setStatus(em, "in");
-		AttendanceService.clockIn(em, currentTime(), dtf.format(now));
+		AttendanceService.clockIn(em,dtf.format(now) + " " + currentTime(), dtf.format(now));
 
 	}
 
 	private void clockOut(String time) throws ParseException {
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDateTime now = LocalDateTime.now();
 
 		em.setStatus("out");
 		EmployeeService.dbUpdateEmployeeStatus(em, "out");
-		AttendanceService.clockOut(em, dtf.format(now), currentTime());
+		AttendanceService.clockOut(em, dtf.format(now),dtf.format(now) + " " + currentTime());
 
 	}
 
@@ -265,7 +265,7 @@ public class EmployeeFrame extends JPanel {
 		int minutes = calendar.get(Calendar.MINUTE);
 		int seconds = calendar.get(Calendar.SECOND);
 		int aP = calendar.get(Calendar.AM_PM);
-		String currentTime = hours + ":" + checkTime(minutes) + ":" + checkTime(seconds) + " " + amP(aP);
+		String currentTime = hours + ":" + checkTime(minutes) + ":" + checkTime(seconds);
 		return currentTime;
 	}
 

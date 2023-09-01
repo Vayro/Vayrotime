@@ -53,7 +53,14 @@ public class AttendanceService {
 	}
 	
 	
-	
+	public static AttendanceModel getModelByID(int PrimaryKey) {
+		
+		
+		
+		
+		
+		return AttendanceDAO.setModelwithID(PrimaryKey);
+	}
 	
 	
 

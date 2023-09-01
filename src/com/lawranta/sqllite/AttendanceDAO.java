@@ -20,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.lawranta.Globals.*;
 import com.lawranta.containersObjects.attendanceContainer;
+import com.lawranta.services.daytimeDifferance;
 import com.lawranta.DatabaseModels.AttendanceModel;
 
 public class AttendanceDAO {
@@ -122,16 +123,15 @@ public class AttendanceDAO {
 //calculate subTotal
 			System.out.println(am.getStartTime() + "-" + am.getEndTime());
 
-			SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+			/*SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
 			Date x1 = format.parse(am.getStartTime());
-			Date x2 = format.parse(am.getEndTime());
-			long timeElapsed = x2.getTime() - x1.getTime();
+			Date x2 = format.parse(am.getEndTime());*/
+			
+			
+			
+			
 //convert milliseconds
-			String converted = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(timeElapsed),
-					TimeUnit.MILLISECONDS.toMinutes(timeElapsed)
-							- TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(timeElapsed)),
-					TimeUnit.MILLISECONDS.toSeconds(timeElapsed)
-							- TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeElapsed)));
+			String converted =  daytimeDifferance.calculate(am.getStartTime(),am.getEndTime());
 
 //update sub total
 
@@ -147,8 +147,75 @@ public class AttendanceDAO {
 			System.out.println(e.getMessage());
 		}
 
+		
 	}
 
+	
+	public static AttendanceModel setModelwithID(int ID) {
+		
+		
+		System.out.println("Select * FROM Attendance WHERE id = " + ID );
+		String sql = "SELECT * FROM Attendance WHERE id =?";
+
+		AttendanceModel aM = new AttendanceModel();
+		
+		
+		try {
+			Connection conn = connect();
+			Statement stmt;
+			 PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, ID);
+			
+			ResultSet rs =	ps.executeQuery();
+
+			while (rs.next()) {
+				
+				aM.setPrimaryKey(rs.getInt("id"));;
+				aM.setDate(rs.getString("date"));
+				aM.setStartTime(rs.getString("startTime"));
+				aM.setEndTime(rs.getString("endTime"));
+				aM.setSubTotal(rs.getString("subTotal"));
+				aM.setEmployeeID(rs.getInt("employeeID"));
+				aM.setName(rs.getString("lastName"));
+			
+				// System.out.println("looped");
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+
+		e.printStackTrace();
+		}
+
+		
+		
+		
+		
+		
+		
+		
+		
+		System.out.println(aM.toString());
+		
+		return aM;
+	
+		
+	}
+	
+	
+	
+	
+	
+	
+	
 	public static ArrayList<AttendanceModel> pullTimeData(int employeeID, String firstDate, String secondDate) {
 
 

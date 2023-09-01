@@ -1,12 +1,18 @@
 package com.lawranta.popups;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 import com.lawranta.DatabaseModels.AttendanceModel;
 
@@ -46,72 +52,86 @@ public class EditRecordDialog extends JDialog {
 	 * Create the dialog.
 	 */
 	public EditRecordDialog(AttendanceModel aM) {
+		setPreferredSize(new Dimension(400, 200));
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		
+
+		setLocationRelativeTo(null);
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		GridBagLayout gbl_contentPanel = new GridBagLayout();
-		gbl_contentPanel.columnWidths = new int[] {100, 100, 100, 100};
-		gbl_contentPanel.rowHeights = new int[] {40, 0};
-		gbl_contentPanel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0};
-		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0};
-		contentPanel.setLayout(gbl_contentPanel);
 		{
-			startTimeButton = new JButton("Start Time");
+			
+			
+			
+	
+			
+			
+			
+			String[] headers = { "ID", "EmployeeID", "Employee", "Date","Start Time", "End Time", "Subtotal" };
+			Object[][] data = new Object[1][7];
+			data[0][0] = aM.getPrimaryKey();
+			data[0][1] = aM.getEmployeeID();
+			data[0][2] = aM.getName().replace(", ",", ");
+			data[0][3] = aM.getDate();
+			data[0][4] = aM.getStartTime();
+			data[0][5] = aM.getEndTime();
+			data[0][6] = aM.getSubTotal();
+			contentPanel.setLayout(new BorderLayout(0, 0));
+			
+			JTable infoTable = new JTable(data,headers){
+
+	            /**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+				boolean[] canEdit = new boolean[]{
+	                    false, false, false, false, true,true,true
+	            };
+
+	            public boolean isCellEditable(int rowIndex, int columnIndex) {
+	                return canEdit[columnIndex];
+	            }
+	            
+	            
+	            @Override
+	            public Component prepareRenderer(TableCellRenderer renderer, int row, int col) {
+	                Component comp = super.prepareRenderer(renderer, row, col);
+	     
+	                
+	                if (col<=3 ) {
+	                    comp.setBackground(Color.LIGHT_GRAY);
+	                
+	                } else {
+	                   comp.setBackground(Color.white);
+	                }
+	                return comp;
+	            }
+	            
+	            
+	            
+	            
+	};
+			
+			
+			
+			
+			
+			JScrollPane scrollPane = new JScrollPane(infoTable);
+			contentPanel.add(scrollPane);
 		}
-		{
-			infoField = new JTextField();
-			infoField.setMinimumSize(new Dimension(50, 20));
-			infoField.setPreferredSize(new Dimension(100, 20));
-			infoField.setColumns(10);
-		}
-		GridBagConstraints gbc_infoField = new GridBagConstraints();
-		gbc_infoField.gridwidth = 4;
-		gbc_infoField.fill = GridBagConstraints.BOTH;
-		gbc_infoField.gridx = 0;
-		gbc_infoField.gridy = 0;
-		contentPanel.add(infoField, gbc_infoField);
-		{
-			dateButton = new JButton("Edit Date");
-		}
-		GridBagConstraints gbc_dateButton = new GridBagConstraints();
-		gbc_dateButton.fill = GridBagConstraints.HORIZONTAL;
-		gbc_dateButton.anchor = GridBagConstraints.WEST;
-		gbc_dateButton.insets = new Insets(0, 0, 0, 5);
-		gbc_dateButton.gridx = 0;
-		gbc_dateButton.gridy = 1;
-		contentPanel.add(dateButton, gbc_dateButton);
-		GridBagConstraints gbc_startTimeButton = new GridBagConstraints();
-		gbc_startTimeButton.fill = GridBagConstraints.HORIZONTAL;
-		gbc_startTimeButton.anchor = GridBagConstraints.WEST;
-		gbc_startTimeButton.insets = new Insets(0, 0, 0, 5);
-		gbc_startTimeButton.gridx = 1;
-		gbc_startTimeButton.gridy = 1;
-		contentPanel.add(startTimeButton, gbc_startTimeButton);
-		{
-			deleteButton = new JButton("Delete Record");
-		}
-		{
-			editEndTimeButton = new JButton("End Time");
-		}
-		GridBagConstraints gbc_editEndTimeButton = new GridBagConstraints();
-		gbc_editEndTimeButton.fill = GridBagConstraints.HORIZONTAL;
-		gbc_editEndTimeButton.anchor = GridBagConstraints.WEST;
-		gbc_editEndTimeButton.insets = new Insets(0, 0, 0, 5);
-		gbc_editEndTimeButton.gridx = 2;
-		gbc_editEndTimeButton.gridy = 1;
-		contentPanel.add(editEndTimeButton, gbc_editEndTimeButton);
-		GridBagConstraints gbc_deleteButton = new GridBagConstraints();
-		gbc_deleteButton.fill = GridBagConstraints.HORIZONTAL;
-		gbc_deleteButton.anchor = GridBagConstraints.WEST;
-		gbc_deleteButton.gridx = 3;
-		gbc_deleteButton.gridy = 1;
-		contentPanel.add(deleteButton, gbc_deleteButton);
+		
+		
+	
 
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
+			{
+				JButton btnNewButton = new JButton("Calculate Subtotal");
+				buttonPane.add(btnNewButton);
+			}
 			{
 				JButton okButton = new JButton("OK");
 				okButton.setActionCommand("OK");

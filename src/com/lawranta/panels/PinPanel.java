@@ -458,7 +458,7 @@ add(btnAdmin);
 			EmployeeModel e = new EmployeeModel(strPin);
 			
 			
-			frame.PanelChange(new EmployeeFrame(e,frame));
+			frame.PanelChange(new EmployeePanel(e,frame));
 			setVisible(false);
 			System.out.println("Launching private employee frame");
 			setVisible(false);
