@@ -174,7 +174,7 @@ public class TimeLogPopupMenu extends JPopupMenu {
 			public void mousePressed(MouseEvent e) {
 				if (e.isPopupTrigger()) {
 					showMenu(e);
-					System.out.println("penis3");
+			
 			
 				}
 			}
@@ -183,14 +183,14 @@ public class TimeLogPopupMenu extends JPopupMenu {
 				if (e.isPopupTrigger()) {
 					showMenu(e);
 					show(component, 0, 0);
-					System.out.println("penis4");
+		
 				}
 			}
 
 			private void showMenu(MouseEvent e) {
 				popup.show(e.getComponent(), 0, 0);
 			
-				System.out.println("penis5");
+			
 			}
 		});
 	}
