@@ -187,7 +187,13 @@ public class AdminSubPanel extends JPanel {
 			this.table.getColumnModel().getColumn(x).setCellRenderer(centerRenderer);
 		}
 		;
-
+		
+		
+		
+		table.getColumnModel().getColumn(0).setPreferredWidth(16) ;
+		table.getColumnModel().getColumn(1).setPreferredWidth(16) ;
+		
+		
 		this.table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -200,7 +206,7 @@ public class AdminSubPanel extends JPanel {
 					// launch edit dialog
 					AttendanceModel byId = AttendanceService.getModelByID(id);
 					
-					EditRecordDialog editRecordDialog = new EditRecordDialog(byId);
+					EditRecordDialog editRecordDialog = new EditRecordDialog(byId, parentPanel);
 					editRecordDialog.setVisible(true);
 
 				}
@@ -293,9 +299,23 @@ public class AdminSubPanel extends JPanel {
 		add(scroll);
 
 		setVisible(true);
+		
+		
+		
+		table.getColumnModel().getColumn(0).setPreferredWidth(16) ;
+		
+		
+		
+		
+		
+		
+		
+		
 
 		// Table Listener
+		
 
+		
 		this.table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {

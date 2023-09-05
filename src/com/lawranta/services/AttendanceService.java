@@ -61,6 +61,12 @@ public class AttendanceService {
 		
 		return AttendanceDAO.setModelwithID(PrimaryKey);
 	}
+
+	public static void updateByModel(AttendanceModel am) {
+		// TODO Auto-generated method stub
+		AttendanceDAO.updateRecord(am);
+		
+	}
 	
 	
 

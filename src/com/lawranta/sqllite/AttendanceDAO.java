@@ -291,6 +291,35 @@ public class AttendanceDAO {
 		}
 
 	}
+
+	public static void updateRecord(AttendanceModel am) {
+		// TODO Auto-generated method stub
+		String sql = "UPDATE Attendance SET startTime = ?, endTime= ?, subTotal=? WHERE id =?";
+		
+
+		// Select SQL Statement
+
+		Connection conn = connect();
+		PreparedStatement pstmt;
+		try {
+			pstmt = conn.prepareStatement(sql);
+
+		
+			pstmt.setString(1, am.getStartTime());
+			pstmt.setString(2, am.getEndTime());
+			pstmt.setString(3, am.getSubTotal());
+			pstmt.setInt(4, am.getPrimaryKey());
+			pstmt.executeUpdate();
+		//	System.out.println("updated:  " + pstmt.toString());
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
+
+		
+	}
 	
 	
 	

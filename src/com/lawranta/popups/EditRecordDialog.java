@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -21,7 +22,11 @@ import com.github.lgooddatepicker.components.TimePicker;
 import com.github.lgooddatepicker.components.TimePickerSettings;
 import com.github.lgooddatepicker.optionalusertools.PickerUtilities;
 import com.lawranta.DatabaseModels.AttendanceModel;
+import com.lawranta.Globals.ConsoleColors;
 import com.lawranta.Globals.Global;
+import com.lawranta.panels.AdminPanel;
+import com.lawranta.services.AttendanceService;
+import com.lawranta.services.daytimeDifferance;
 
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
@@ -52,13 +57,20 @@ public class EditRecordDialog extends JDialog {
 	private JButton deleteButton;
 	Object[][] data = new Object[1][7];
 	JTable infoTable ;
+	TimePicker endTimePicker;
+	TimePicker startTimePicker;
+	DatePicker startDatePicker;
+	DatePicker endDatePicker;
+	JLabel validateLabel;
+	JButton okButton ;
+	JComponent owner;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			EditRecordDialog dialog = new EditRecordDialog(null);
+			EditRecordDialog dialog = new EditRecordDialog(null, null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -69,7 +81,8 @@ public class EditRecordDialog extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public EditRecordDialog(AttendanceModel aM) {
+	public EditRecordDialog(AttendanceModel aM, JComponent owner) {
+		this.owner=owner;
 		setMinimumSize(new Dimension(500, 500));
 	setSize(new Dimension(480, 480));
 	setPreferredSize(new Dimension(480, 480));
@@ -79,8 +92,8 @@ public class EditRecordDialog extends JDialog {
 	//	setPreferredSize(new Dimension(700, 200));
 		//setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
-
-		contentPanel.setPreferredSize(new Dimension(480, 320));
+		setModal(true);
+		contentPanel.setPreferredSize(new Dimension(480, 384));
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPanel.setVisible(true);
 
@@ -119,9 +132,9 @@ public class EditRecordDialog extends JDialog {
 
 			GridBagLayout gbl_contentPanel = new GridBagLayout();
 			gbl_contentPanel.columnWidths = new int[] {80, 80, 80, 80, 80, 80};
-			gbl_contentPanel.rowHeights = new int[] {100, 200, 64};
+			gbl_contentPanel.rowHeights = new int[] {100, 200, 64, 64, 0};
 			gbl_contentPanel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-			gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0};
+			gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0};
 			contentPanel.setLayout(gbl_contentPanel);
 			
 			
@@ -194,13 +207,13 @@ public class EditRecordDialog extends JDialog {
 					
 					
 					
-					    TimePicker startTimePicker = new TimePicker(timeSettings);
+					    startTimePicker = new TimePicker(timeSettings);
 					   startTimePicker.setMaximumSize(new Dimension(200, 32));
 					    startTimePicker.setSize(new Dimension(228, 64));
 					    startTimePicker.setText(aM.getStartTime().split(" ")[1]);
 					startTimePanel.setLayout(new BoxLayout(startTimePanel, BoxLayout.Y_AXIS));
 			
-					DatePicker startDatePicker = new DatePicker(dateSettings2);
+					startDatePicker = new DatePicker(dateSettings2);
 					startDatePicker.setText(aM.getStartTime().split(" ")[0]);
 					startDatePicker.setMaximumSize(new Dimension(200, 32));
 					startTimePanel.add(new JLabel("Clock-in Date"));
@@ -228,16 +241,17 @@ public class EditRecordDialog extends JDialog {
 				contentPanel.add(endTimePanel, gbc_endTimePanel);
 				
 				
-				TimePicker endTimePicker = new TimePicker(timeSettings);
+				endTimePicker = new TimePicker(timeSettings);
 				endTimePicker.setMaximumSize(new Dimension(200, 32));
 				endTimePicker.setSize(new Dimension(228, 64));
 				endTimePicker.setText(aM.getEndTime().split(" ")[1]);
 				endTimePanel.setLayout(new BoxLayout(endTimePanel, BoxLayout.Y_AXIS));
 		
 			
-				DatePicker endDatePicker = new DatePicker(dateSettings);
+				endDatePicker = new DatePicker(dateSettings);
 				endDatePicker.setText(aM.getEndTime().split(" ")[0]);
 				endDatePicker.setMaximumSize(new Dimension(200, 32));
+	
 				endTimePanel.add(new JLabel("Clock-out Date"));
 				endTimePanel.add(endDatePicker);
 				endTimePanel.add(new JLabel("24 hr time:"));
@@ -261,6 +275,20 @@ public class EditRecordDialog extends JDialog {
 			gbc_infoLabel.gridx = 0;
 			gbc_infoLabel.gridy = 2;
 			contentPanel.add(infoLabel, gbc_infoLabel);
+			
+			validateLabel = new JLabel("must be validated before confirming");
+			validateLabel.setBackground(new Color(51, 51, 51));
+			validateLabel.setForeground(new Color(255, 0, 204));
+			infoLabel.setMinimumSize(new Dimension(235, 32));
+			infoLabel.setMaximumSize(new Dimension(235, 140));
+			infoLabel.setPreferredSize(new Dimension(480, 32));
+			GridBagConstraints gbc_validateLabel = new GridBagConstraints();
+			gbc_validateLabel.anchor = GridBagConstraints.NORTH;
+			gbc_validateLabel.insets = new Insets(0, 0, 5, 0);
+			gbc_validateLabel.gridwidth = 6;
+			gbc_validateLabel.gridx = 0;
+			gbc_validateLabel.gridy = 3;
+			contentPanel.add(validateLabel, gbc_validateLabel);
 		}
 		
 		
@@ -271,20 +299,31 @@ public class EditRecordDialog extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton btnNewButton = new JButton("Calculate Subtotal");
-				buttonPane.add(btnNewButton);
-			}
-			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-				okButton.addActionListener(new ActionListener() {
+				JButton btnValidateButton = new JButton("Calculate Subtotal");
+				btnValidateButton.addActionListener(new ActionListener() {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
 						validCheck();
+						
+					}});
+				
+				buttonPane.add(btnValidateButton);
+			}
+			{
+				okButton = new JButton("OK");
+				okButton.setActionCommand("OK");
+				buttonPane.add(okButton);
+				getRootPane().setDefaultButton(okButton);
+				okButton.setEnabled(false);
+				okButton.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						commitChanges(validCheck(),aM);
+						
 						
 					}
 					
@@ -303,30 +342,64 @@ public class EditRecordDialog extends JDialog {
 	}
 	
 	
-	void validCheck(){
+	String validCheck(){
+		
+		String subTotal = validateLabel.getText() ;
+		try {
+		 subTotal = daytimeDifferance.calculate(startDatePicker.getText()+" "+startTimePicker.getText(),endDatePicker.getText()+" "+endTimePicker.getText());
+		
+		if(subTotal.startsWith("-")) {
+			
+			throw new Exception("Negative time: " + subTotal );
+		}
 		
 		
-
-
-
-	    infoTable.getSelectionModel().clearSelection();
+		okButton.setEnabled(true);
 		
 		
-		for(int i=0;i<7;i++) {
-		System.out.println(data[0][i]);
+		}
+		catch(Exception e){
+			
+			Global.showError(e.getMessage());
 		}
 		
 		
 		
+		validateLabel.setText("SubTotal: " + subTotal);
+	    infoTable.getSelectionModel().clearSelection();
+		
+		
+		/*	
+		for(int i=0;i<7;i++) {
+		System.out.println(data[0][i]);
+		}
+		
+	
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime startTime = LocalDateTime.parse(data[0][4].toString(),dtf);
 		LocalDateTime endTime = LocalDateTime.parse(data[0][5].toString(),dtf);
 		
-		System.out.println("Parsed " + startTime + "and" + endTime);
+		System.out.println("Parsed " + startTime + "and" + endTime);*/
 		
 		
 		
+		return subTotal;
 		
+		
+	}
+	
+	
+	
+	
+	void commitChanges(String subTotal, AttendanceModel am){
+		am.setSubTotal(subTotal);
+		am.setStartTime(startDatePicker.getText()+" "+startTimePicker.getText());
+		am.setEndTime(endDatePicker.getText()+" "+endTimePicker.getText());
+		System.out.println(ConsoleColors.YELLOW + am.toString() + ConsoleColors.RESET);
+		AttendanceService.updateByModel(am);
+		((AdminPanel) owner).relistLogs(0, null, null);
+		dispose();
+
 		
 		
 	}
