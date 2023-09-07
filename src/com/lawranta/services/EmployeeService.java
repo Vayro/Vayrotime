@@ -56,6 +56,12 @@ public class EmployeeService {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public static void dbUpdateEmployeeStatus(int primaryKey, String status) {
+		// TODO Auto-generated method stub
+		EmployeeDAO.updateByID(primaryKey, status);
+		
+	}
 	 
 
 	

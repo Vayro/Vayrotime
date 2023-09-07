@@ -228,6 +228,29 @@ public class EmployeeDAO {
 			
 		
 		}
+
+		public static void updateByID(int primaryKey, String status) {
+			// TODO Auto-generated method stub
+			String sql =  "UPDATE Employees SET clockedStatus = '"
+					+ status +
+					"'  "
+	                + "WHERE ID = '"
+					+ primaryKey + "'";
+			
+			try (Connection conn = connect();
+	                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+	          /*  // set the corresponding param
+	            pstmt.setString(1, status);
+	            pstmt.setString(2, this.PIN);*/
+	            // update 
+	            pstmt.executeUpdate();
+	        } catch (SQLException er) {
+	            System.out.println(er.getMessage());}
+			
+		}
+		
+		
 		
 		
 		

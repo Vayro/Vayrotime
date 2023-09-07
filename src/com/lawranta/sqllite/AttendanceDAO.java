@@ -320,6 +320,45 @@ public class AttendanceDAO {
 
 		
 	}
+
+	public static void clockOut(int recordID,LocalDateTime localDateTimeStart, LocalDateTime localDateTimeEnd) {
+		// TODO Auto-generated method stub
+			// TODO Auto-generated method stub
+			String sql = "UPDATE Attendance SET endTime= ?, subTotal=? WHERE id =?";
+			
+			
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+			String endTime=localDateTimeEnd.format(dtf);
+			String startTime=localDateTimeStart.format(dtf);
+			String subtotal=daytimeDifferance.calculate(startTime,endTime);
+			
+			
+			
+			
+			
+
+			// Select SQL Statement
+
+			Connection conn = connect();
+			PreparedStatement pstmt;
+			try {
+				pstmt = conn.prepareStatement(sql);
+
+			
+				pstmt.setString(1, am.getEndTime());
+				pstmt.setString(2, am.getSubTotal());
+				pstmt.setInt(3, am.getPrimaryKey());
+				pstmt.executeUpdate();
+			//	System.out.println("updated:  " + pstmt.toString());
+
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+				
+
+			
+	}
 	
 	
 	

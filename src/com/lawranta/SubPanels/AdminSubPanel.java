@@ -12,6 +12,9 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -22,7 +25,9 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.lang.model.element.Element;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -35,6 +40,7 @@ import javax.swing.table.TableModel;
 
 import com.lawranta.DatabaseModels.AttendanceModel;
 import com.lawranta.DatabaseModels.EmployeeModel;
+import com.lawranta.Globals.ConsoleColors;
 import com.lawranta.Globals.Global;
 import com.lawranta.Globals.SetGlobalFont;
 import com.lawranta.containersObjects.attendanceContainer;
@@ -45,6 +51,7 @@ import com.lawranta.panels.AdminPanel;
 import com.lawranta.panels.PinPanel;
 import com.lawranta.popups.*;
 import com.lawranta.services.AttendanceService;
+import com.lawranta.services.EmployeeService;
 import com.lawranta.sqllite.EmployeeDAO;
 
 import java.awt.FlowLayout;
@@ -187,27 +194,33 @@ public class AdminSubPanel extends JPanel {
 			this.table.getColumnModel().getColumn(x).setCellRenderer(centerRenderer);
 		}
 		;
-		
-		
-		
-		table.getColumnModel().getColumn(0).setPreferredWidth(16) ;
-		table.getColumnModel().getColumn(1).setPreferredWidth(16) ;
-		
-		
+
+		table.getColumnModel().getColumn(0).setPreferredWidth(16);
+		table.getColumnModel().getColumn(1).setPreferredWidth(16);
+
 		this.table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
 					// System.out.println("double clicked");
-					String cellData = table.getValueAt(table.getSelectedRow(), table.getSelectedColumn()).toString();
-					System.out.println(cellData);
-					int id = Integer.parseInt(table.getValueAt(table.getSelectedRow(), (0)).toString());
-					System.out.println(table.getValueAt(table.getSelectedRow(), (0)).toString());
-					// launch edit dialog
-					AttendanceModel byId = AttendanceService.getModelByID(id);
-					
-					EditRecordDialog editRecordDialog = new EditRecordDialog(byId, parentPanel);
-					editRecordDialog.setVisible(true);
+					try {
+						String cellData = table.getValueAt(table.getSelectedRow(), table.getSelectedColumn())
+								.toString();
+						System.out.println(cellData);
+
+						int id = Integer.parseInt(table.getValueAt(table.getSelectedRow(), (0)).toString());
+
+						System.out.println(table.getValueAt(table.getSelectedRow(), (0)).toString());
+
+						// launch edit dialog
+						AttendanceModel byId = AttendanceService.getModelByID(id);
+
+						EditRecordDialog editRecordDialog = new EditRecordDialog(byId, parentPanel);
+						editRecordDialog.setVisible(true);
+					} catch (Exception exc) {
+						Global.showError("Cannot edit while employee is still clocked in. \n");
+
+					}
 
 				}
 			}
@@ -274,14 +287,15 @@ public class AdminSubPanel extends JPanel {
 			 * 
 			 */
 			private static final long serialVersionUID = 7087360881226226551L;
+			boolean[] canEdit = new boolean[] { false, true, true, false, false, true, false };
 
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				// all cells false
-				return false;
+			public boolean isCellEditable(int rowIndex, int columnIndex) {
+				return canEdit[columnIndex];
 			}
 
 		};
+
+		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -299,23 +313,45 @@ public class AdminSubPanel extends JPanel {
 		add(scroll);
 
 		setVisible(true);
-		
-		
-		
-		table.getColumnModel().getColumn(0).setPreferredWidth(16) ;
-		
-		
-		
-		
-		
-		
-		
-		
 
+		table.getColumnModel().getColumn(0).setPreferredWidth(16);
+
+		//clocked menu
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("hh:mm a");
+		JPopupMenu clockStatusMenu = new JPopupMenu();
+		JMenuItem m1=new JMenuItem();
+		JMenuItem m2=new JMenuItem("Clock-out (" + dtf.format(LocalTime.now())+ ")");
+		JMenuItem m3=new JMenuItem("Cancel");
+		m1.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				data[table.getSelectedRow() ][4]="out";
+			}
+			
+			
+			
+		});
+		m2.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println(ConsoleColors.BLUE + "Value at: " + table.getSelectedRow() + "," + table.getSelectedColumn() + " is " + table.getValueAt(table.getSelectedRow(), table.getSelectedColumn()).toString() + ConsoleColors.RESET);
+				data[table.getSelectedRow() ][4]="out";
+			}
+			
+			
+			
+		});
+		
+		
+		
+		
+		
 		// Table Listener
-		
 
-		
 		this.table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -328,13 +364,42 @@ public class AdminSubPanel extends JPanel {
 					switch (cellData) {
 					case "X": {
 
+						
+						
 						delete(id);
 					}
 
 						break;
-					case "": {
+					case "in": {
+						m1.setText("Clock Out (" + dtf.format(LocalTime.now()) + ")");
+						clockStatusMenu.removeAll();
+						clockStatusMenu.add(new JLabel("Change Clocked Status"));
+						clockStatusMenu.add(m2);
+						clockStatusMenu.add(m3);
+						clockStatusMenu.setVisible(true);
+clockStatusMenu.show(getParent(), e.getX(), e.getY());
+						EmployeeService.dbUpdateEmployeeStatus(Integer.parseInt(table.getValueAt(table.getSelectedRow(), table.getSelectedColumn()).toString()), "out");
+						AttendanceService.clockOut(Integer.parseInt(table.getValueAt(table.getSelectedRow(), table.getSelectedColumn()).toString()), LocalDateTime.now());
+						
+						
+						
+						
 
 					}
+
+						break;
+
+					case "out": {
+
+					}
+					m1.setText("Clock In (" + dtf.format(LocalTime.now()) + ")");
+					clockStatusMenu.removeAll();
+					clockStatusMenu.add(new JLabel("Change Clocked Status"));
+					clockStatusMenu.add(m1);
+					clockStatusMenu.add(m3);
+					clockStatusMenu.setVisible(true);
+					clockStatusMenu.show(getParent(), e.getX(), e.getY());
+					
 						break;
 
 					}
@@ -370,7 +435,6 @@ public class AdminSubPanel extends JPanel {
 		// parentPanel.relistEmployees();
 
 	}
-
 
 	public boolean exportList(float totalHours2, String parsedTotal) {
 
