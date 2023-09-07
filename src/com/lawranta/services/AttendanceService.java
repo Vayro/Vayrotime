@@ -68,11 +68,7 @@ public class AttendanceService {
 		
 	}
 
-	public static void clockOut(int recordID, LocalDateTime localDateTime) {
-		// TODO Auto-generated method stub
-		AttendanceDAO.clockOut(recordID, localDateTime);
-	}
-	
+
 	
 
 }

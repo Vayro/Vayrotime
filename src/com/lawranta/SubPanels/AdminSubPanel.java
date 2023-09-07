@@ -11,6 +11,7 @@ import java.awt.event.MouseListener;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -327,7 +328,7 @@ public class AdminSubPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				data[table.getSelectedRow() ][4]="out";
+				data[table.getSelectedRow() ][4]="in";
 			}
 			
 			
@@ -340,6 +341,30 @@ public class AdminSubPanel extends JPanel {
 				// TODO Auto-generated method stub
 				System.out.println(ConsoleColors.BLUE + "Value at: " + table.getSelectedRow() + "," + table.getSelectedColumn() + " is " + table.getValueAt(table.getSelectedRow(), table.getSelectedColumn()).toString() + ConsoleColors.RESET);
 				data[table.getSelectedRow() ][4]="out";
+				
+				int id = Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString());
+				String passedStart=data[table.getSelectedRow()][4].toString();
+				
+				int i =table.getSelectedRow();
+				EmployeeModel em = new EmployeeModel();
+				em.setAll(data[i][2].toString(), data[i][1].toString(), data[i][3].toString(), "out", data[i][5].toString());
+				em.setID(Integer.parseInt(data[i][0].toString()));
+				
+				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+				String endTime=LocalDateTime.now().format(dtf);
+				
+				try {
+					AttendanceService.clockOut(em,passedStart, endTime);
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				EmployeeService.dbUpdateEmployeeStatus(id, "out");
+		
+				
+				
+				
 			}
 			
 			
@@ -378,9 +403,8 @@ public class AdminSubPanel extends JPanel {
 						clockStatusMenu.add(m3);
 						clockStatusMenu.setVisible(true);
 clockStatusMenu.show(getParent(), e.getX(), e.getY());
-						EmployeeService.dbUpdateEmployeeStatus(Integer.parseInt(table.getValueAt(table.getSelectedRow(), table.getSelectedColumn()).toString()), "out");
-						AttendanceService.clockOut(Integer.parseInt(table.getValueAt(table.getSelectedRow(), table.getSelectedColumn()).toString()), LocalDateTime.now());
-						
+
+				
 						
 						
 						

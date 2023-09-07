@@ -234,8 +234,8 @@ public class EmployeeDAO {
 			String sql =  "UPDATE Employees SET clockedStatus = '"
 					+ status +
 					"'  "
-	                + "WHERE ID = '"
-					+ primaryKey + "'";
+	                + "WHERE ID = "
+					+ primaryKey ;
 			
 			try (Connection conn = connect();
 	                PreparedStatement pstmt = conn.prepareStatement(sql)) {
