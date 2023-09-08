@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.lang.model.element.Element;
@@ -313,6 +314,73 @@ public class AdminSubPanel extends JPanel {
 
 		add(scroll);
 
+		JButton saveButton = Global.imageButton(Global.saveImgPath, Global.savePressedImgPath, "Save");
+		add(saveButton);
+		saveButton.addActionListener(new ActionListener() {
+			boolean pinSanitized=true;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				//create employeeList
+				ArrayList<EmployeeModel> elist=new ArrayList<EmployeeModel>(); 
+				
+				
+				
+				for (int i = 0; i < data.length; i++) {
+					
+					if(EmployeeService.checkDuplicatePin(data[i][5] .toString(),Integer.parseInt(data[i][0].toString()) )) {
+						pinSanitized=false;
+						
+					}
+					System.out.println("data size is " + data.length);
+					EmployeeModel em=new EmployeeModel();
+					
+					em.setId(Integer.parseInt(data[i][0].toString()) );
+					
+					
+					em.setAll(
+							data[i][2].toString(),
+							data[i][1].toString(),
+							
+							data[i][3].toString(),
+							data[i][4].toString() ,
+							data[i][5] .toString()		
+							);
+					elist.add(em);
+				
+					int y = i + 1;
+
+					System.out.println("saved " + y + " lines");
+
+				}
+				
+				if(pinSanitized) {
+				try {
+					
+					EmployeeService.saveAll(elist);
+					Global.showSuccess("Sucesffully persisted employee records to database!");
+					
+				}catch(Exception e1) {
+					System.out.println(e1);
+					Global.showError(e1.getMessage());
+					
+				}
+				
+				
+				
+				
+				
+				
+			}
+			}
+			
+			
+			
+			
+			
+		}); 
+		
 		setVisible(true);
 
 		table.getColumnModel().getColumn(0).setPreferredWidth(16);
@@ -328,6 +396,21 @@ public class AdminSubPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				
+				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+				String startTime=LocalDateTime.now().format(dtf);
+				DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+				String startDate=LocalDateTime.now().format(date);
+
+				
+				int i =table.getSelectedRow();
+				EmployeeModel em = new EmployeeModel();
+				em.setAll(data[i][2].toString(), data[i][1].toString(), data[i][3].toString(), "out", data[i][5].toString());
+				em.setID(Integer.parseInt(data[i][0].toString()));
+				
+				
+				AttendanceService.clockIn(em, startTime, startDate);
+				
 				data[table.getSelectedRow() ][4]="in";
 			}
 			

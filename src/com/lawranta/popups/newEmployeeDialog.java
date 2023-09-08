@@ -142,7 +142,9 @@ public class newEmployeeDialog extends JDialog {
 			if (b == false) {
 				break;
 			} else {
-
+				
+				
+				if(!EmployeeService.checkDuplicatePin(table.getValueAt(0, pinCode).toString(), 0)) {
 				EmployeeModel x = new EmployeeModel();
 				x.setAll(table.getValueAt(0, firstName).toString(), table.getValueAt(0, lastName).toString(),
 						table.getValueAt(0, workGroup).toString(), "out", table.getValueAt(0, pinCode).toString()
@@ -160,7 +162,7 @@ public class newEmployeeDialog extends JDialog {
 				
 				
 				dispose();
-			}
+			}}
 		}
 			break;
 

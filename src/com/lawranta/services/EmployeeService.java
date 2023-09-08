@@ -1,6 +1,9 @@
 package com.lawranta.services;
 
+import java.util.ArrayList;
+
 import com.lawranta.DatabaseModels.EmployeeModel;
+import com.lawranta.Globals.Global;
 import com.lawranta.sqllite.EmployeeDAO;
 
 public class EmployeeService {
@@ -64,7 +67,35 @@ public class EmployeeService {
 	}
 	 
 
+	public static void saveAll(ArrayList<EmployeeModel> elist) {
+		
+		System.out.println("elist size is " + elist.size());
+		for (int i = 0; i < elist.size(); i++) {
+			System.out.println("Attempting to persist number " + i);
+			EmployeeDAO.updateAllInfoByModel(elist.get(i));
+			
+			
+		}
+		
+	}
 	
+	
+	
+	public static boolean checkDuplicatePin(String pin, int PrimaryKey) {
+		
+		if(EmployeeDAO.checkDuplicatePin(pin, PrimaryKey))
+		{
+			Global.showError("Pin already in use");
+			return true;
+		}else
+		{
+			return false;
+		}
+		
+		
+		
+		
+	}
 	
 
 }
