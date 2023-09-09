@@ -123,7 +123,7 @@ public class EmployeeDAO {
 				newLine.setID(rs.getInt("id"));
 				newLine.setLastName(rs.getString("lastName"));
 				newLine.setFirstName(rs.getString("firstName"));
-				newLine.setWorkGroup(rs.getString("workClass"));
+				newLine.setWorkGroup(rs.getString("workClassID"));
 				newLine.setClockedStatus(rs.getString("clockedStatus"));
 				newLine.setPincode(rs.getString("pinCode"));
 				employeeList.add(newLine);
@@ -143,7 +143,7 @@ public class EmployeeDAO {
 	public static void addNewEmployee(EmployeeModel x) {
 		System.out.println("adding employee");
 
-		String sql = "INSERT INTO EMPLOYEES (lastName, firstName, workClass, clockedStatus, pinCode)\n" + "VALUES ("
+		String sql = "INSERT INTO EMPLOYEES (lastName, firstName, workClassID, clockedStatus, pinCode)\n" + "VALUES ("
 				+ "'" + x.getLastName() + "'" + "," + "'" + x.getFirstName() + "'" + "," + "'" + x.getWorkGroup() + "'"
 				+ "," + "'" + x.getClockedStatus() + "'" + "," + "'" + x.getPincode() + "' );";
 
@@ -226,7 +226,7 @@ public class EmployeeDAO {
 		// TODO Auto-generated method stub
 		System.out.println("made it to DAO... " + e.getFirstName() + ", " + e.getFirstName() + ", " + e.getWorkGroup()
 				+ ", " + e.getPincode() + ", " + e.getClockedStatus() + ", " + e.getID() + ", ");
-		String sql = "UPDATE Employees SET firstName=?, lastName=?,workClass=?,pinCode=?, clockedStatus = ? WHERE ID=? ";
+		String sql = "UPDATE Employees SET firstName=?, lastName=?,workClassID=?,pinCode=?, clockedStatus = ? WHERE ID=? ";
 		try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
 			// set the corresponding param

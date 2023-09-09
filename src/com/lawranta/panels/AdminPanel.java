@@ -15,6 +15,7 @@ import com.lawranta.containersObjects.attendanceContainer;
 import com.lawranta.frames.*;
 import com.lawranta.popups.DateChooserDialog;
 import com.lawranta.popups.TimeLogPopupMenu;
+import com.lawranta.popups.WorkGroupDialog;
 import com.lawranta.popups.adminNewPinDialog;
 import com.lawranta.popups.newEmployeeDialog;
 import com.lawranta.services.AttendanceService;
@@ -181,6 +182,16 @@ public class AdminPanel extends JPanel {
 												buttonContainer.add(btnExportAll);
 												btnExportAll.setAlignmentX(Component.CENTER_ALIGNMENT);
 												btnExportAll.setBounds(0, 0, 550, 800);
+												
+												JButton btnWorkGroups = new JButton("Workgroups");
+												btnWorkGroups.addActionListener(new ActionListener() {
+													public void actionPerformed(ActionEvent e) {
+														JDialog workGroups=new WorkGroupDialog();
+														workGroups.setVisible(true);
+														
+													}
+												});
+												buttonContainer.add(btnWorkGroups);
 												btnExportAll.addActionListener(new ActionListener() {
 													public void actionPerformed(ActionEvent e) {
 
