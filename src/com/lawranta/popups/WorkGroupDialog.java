@@ -1,6 +1,8 @@
 package com.lawranta.popups;
 
 import java.awt.BorderLayout;
+import java.awt.Dialog;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,23 +22,38 @@ import com.lawranta.DatabaseModels.AttendanceModel;
 import com.lawranta.services.AttendanceService;
 import com.lawranta.services.WorkGroupService;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
+import java.awt.Color;
+import javax.swing.JTextField;
+import javax.swing.border.EtchedBorder;
+import java.awt.Component;
+import javax.swing.SwingConstants;
+import java.awt.ComponentOrientation;
 
 public class WorkGroupDialog extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
-
+	private JTextField txtTest;
+	JTable table;
+	Object[][] data;
+	String[] headers= { "ID", "Class Name", "Location" };
+	JScrollPane scroll ;
+	
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		
-		
+
 		try {
 			WorkGroupDialog dialog = new WorkGroupDialog();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			//dialog.setVisible(true);
+			dialog.setVisible(true);
+			// dialog.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -46,23 +63,35 @@ public class WorkGroupDialog extends JDialog {
 	 * Create the dialog.
 	 */
 	public WorkGroupDialog() {
-		setBounds(100, 100, 450, 300);
-		setLocationRelativeTo(null);
-		setLayout(new BorderLayout());
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		boolean sort = false;
+		//super(SwingUtilities.getWindowAncestor(owner), "Custom Dialog", Dialog.ModalityType.APPLICATION_MODAL);
+       // this.adminPanel = adminPanel;
+       // this.frame = frame;
+		setTitle("Add New Employee");
+		setPreferredSize(new Dimension(500, 125));
+		setMinimumSize(new Dimension(500, 500));
+		// setBounds(100, 100, 450, 150);
 		setModal(true);
-		contentPanel.setVisible(true);
-		
-		//scroll
+
+		getContentPane().setLayout(new BorderLayout());
+		contentPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Manage Workgroups", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		setMinimumSize(new Dimension(100, 200));
+		contentPanel.setLayout(new GridLayout(1, 1, 0, 0));
+		boolean sort = true;
+		setLocationRelativeTo(null);
+		getContentPane().add(contentPanel, BorderLayout.NORTH);
 		{
-			ArrayList<WorkGroupModel> groupList = WorkGroupService.pullGroups();
-			JScrollPane scroll = new JScrollPane();
-			scroll.setViewportBorder(new TitledBorder(null, "Workgroups", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			String[] headers = { "ID", "Class Name", "Location" };
-			Object[][] data = new Object[groupList.size()][3];
+
+
 			
-			scroll.setVisible(true);
+			
+			
+			
+			
+			ArrayList<WorkGroupModel> groupList = WorkGroupService.pullGroups();
+			scroll = new JScrollPane();
+			//scroll.setViewportBorder(new TitledBorder(null, "Workgroups", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			
+			data = new Object[groupList.size()][3];
 			
 			
 			for (int i = 0; i < groupList.size(); i++) {
@@ -96,7 +125,7 @@ public class WorkGroupDialog extends JDialog {
 			
 	
 			
-			JTable table = new JTable(sorted, headers) {
+			table = new JTable(sorted, headers) {
 				/**
 				 * 
 				 */
@@ -108,29 +137,95 @@ public class WorkGroupDialog extends JDialog {
 					return canEdit[columnIndex];
 				}
 			};
+			table.setPreferredScrollableViewportSize(new Dimension(450, 200));
 			
 			
 			
 			JTableHeader header = table.getTableHeader();
-			setLayout(new BorderLayout(0, 0));
 			table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 			scroll.setViewportView(table);
+
 			
-			setVisible(true);
 			
 			
 			table.getColumnModel().getColumn(0).setPreferredWidth(16);
 		      DefaultTableCellRenderer   cellRenderer = new DefaultTableCellRenderer();
 		      cellRenderer.setHorizontalAlignment(JLabel.CENTER);
 		      table.getColumnModel().getColumn(0).setCellRenderer(cellRenderer);
-		      contentPanel.setLayout(new GridLayout(1, 1, 0, 0));
+	
 
+		      
+		      
 			
+		      
 			
+		      scroll.setVisible(true);
 		      contentPanel.add(scroll);
 
+		      
+	
+		    	  
+		    	  
+		    	  
+		    	  
+					JPanel addPane = new JPanel();
+					addPane.setLayout(new FlowLayout(FlowLayout.CENTER));
+	getContentPane().add(addPane, BorderLayout.CENTER);{  
+		    	  
+		  	JButton addButton= new JButton("Add New Group");
+			addButton.setActionCommand("add");
+			addPane.add(addButton);
+			addButton.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					
+					
+					
+					Object[][] newLineData=new Object[data.length+1][3];
+					
+				 for(int i=0;i<data.length;i++) {
+					 
+
+					 for(int y=0;y<3;y++) {
+						 
+						 newLineData[i][y]=data[i][y];
+						 
+					 }
+					 
+					 
+					 
+				 }
+					
+					
+					data=newLineData;
+					
+					
+					relistWorkgroups();
+					
+					
+							
+					
+					
+				
+				}
+				
+				
+				
+				
+			});
+		      
 			
+
+			
+			
+	}
 		}
+		setResizable(true);
+		//scroll
+		
+
 		
 		
 		
@@ -142,14 +237,14 @@ public class WorkGroupDialog extends JDialog {
 		
 		
 		
-		
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
+	
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
+	
 			{
-				JButton okButton = new JButton("OK");
+				JButton okButton = new JButton("Save");
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
@@ -161,5 +256,36 @@ public class WorkGroupDialog extends JDialog {
 			}
 		}
 	}
+	
+	
+	
+	
+	void relistWorkgroups(){
+		
+		table = new JTable(data, headers)
+		{
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 7087360881226226551L;
+
+			boolean[] canEdit = new boolean[] { false, true, true};
+			 
+			public boolean isCellEditable(int rowIndex, int columnIndex) {
+				return canEdit[columnIndex];
+			}
+		};
+		//scroll.removeAll();
+		table.setPreferredScrollableViewportSize(new Dimension(450, 200));
+		table.getColumnModel().getColumn(0).setPreferredWidth(16);
+	      DefaultTableCellRenderer   cellRenderer = new DefaultTableCellRenderer();
+	      cellRenderer.setHorizontalAlignment(JLabel.CENTER);
+	      table.getColumnModel().getColumn(0).setCellRenderer(cellRenderer);
+		scroll.setViewportView(table);
+		
+		
+	}
+	
+	
 
 }
