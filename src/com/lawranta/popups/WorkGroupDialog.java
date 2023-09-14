@@ -247,6 +247,18 @@ public class WorkGroupDialog extends JDialog {
 				JButton okButton = new JButton("Save");
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
+				okButton.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						WorkGroupService.updateGroups(data);
+						dispose();
+					}
+					
+					
+					
+				});
 				getRootPane().setDefaultButton(okButton);
 			}
 			{

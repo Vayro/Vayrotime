@@ -62,4 +62,85 @@ public class WorkGroupDAO {
 
 	}
 
+	public static void updateGroups(Object[][] data) {
+		// TODO Auto-generated method stub
+		System.out.println("saving groups to DB");
+		
+		
+		ArrayList<WorkGroupModel> updateList = new ArrayList<>();
+		ArrayList<WorkGroupModel> insertList = new ArrayList<>();
+		
+		for(int i = 0; i < data.length; i++)
+		{
+			if(data[i][1]!=null) {
+				
+				
+				WorkGroupModel wgm= new WorkGroupModel();
+				wgm.setId(Integer.parseInt((String) data[i][1]));
+				wgm.setGroupName((String) data[i][2]);
+				wgm.setLocation((String) data[i][3]);
+				
+				updateList.add(wgm);
+				
+			}else
+			{
+				
+				WorkGroupModel wgm= new WorkGroupModel();
+			//	wgm.setId(Integer.parseInt((String) data[i][1]));
+				wgm.setGroupName((String) data[i][2]);
+				wgm.setLocation((String) data[i][3]);
+				
+				
+				
+				insertList.add(wgm);
+				
+			}
+			
+			
+		//update list first
+			
+			
+			
+			String sql = "UPDATE Workgroup SET workClass = ?, location = ? WHERE ID = ?  ";
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	}
+
 }
