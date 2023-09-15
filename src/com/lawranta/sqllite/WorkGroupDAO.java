@@ -65,82 +65,81 @@ public class WorkGroupDAO {
 	public static void updateGroups(Object[][] data) {
 		// TODO Auto-generated method stub
 		System.out.println("saving groups to DB");
-		
-		
+
 		ArrayList<WorkGroupModel> updateList = new ArrayList<>();
 		ArrayList<WorkGroupModel> insertList = new ArrayList<>();
-		
-		for(int i = 0; i < data.length; i++)
-		{
-			if(data[i][1]!=null) {
-				
-				
-				WorkGroupModel wgm= new WorkGroupModel();
-				wgm.setId(Integer.parseInt((String) data[i][1]));
-				wgm.setGroupName((String) data[i][2]);
-				wgm.setLocation((String) data[i][3]);
-				
+
+		for (int i = 0; i < data.length; i++) {
+			if (data[i][0] != null) {
+				System.out.println("update ID:"+ (Integer) data[i][0]);
+				WorkGroupModel wgm = new WorkGroupModel();
+				wgm.setId((Integer) data[i][0]);
+				wgm.setGroupName(data[i][1].toString());
+				wgm.setLocation(data[i][2].toString());
+
 				updateList.add(wgm);
-				
-			}else
-			{
-				
-				WorkGroupModel wgm= new WorkGroupModel();
-			//	wgm.setId(Integer.parseInt((String) data[i][1]));
-				wgm.setGroupName((String) data[i][2]);
-				wgm.setLocation((String) data[i][3]);
-				
-				
-				
+
+			} else {
+
+				WorkGroupModel wgm = new WorkGroupModel();
+				// wgm.setId(Integer.parseInt((String) data[i][1]));
+				wgm.setGroupName(data[i][1].toString());
+				wgm.setLocation( data[i][2].toString());
+
 				insertList.add(wgm);
+
+			}
+		}
+
+		// update list first
+
+		String sql = "UPDATE Workgroup SET workClass = ?, location = ? WHERE id = ?  ";
+
+		Connection conn = connect();
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+
+			for (int i = 0; i < updateList.size(); i++) {
+
+				int id = updateList.get(i).getId();
+				pstmt.setString(1, updateList.get(i).getGroupName());
+				pstmt.setString(2, updateList.get(i).getLocation());
+		
+				pstmt.setInt(3, updateList.get(i).getId());
+				System.out.println(pstmt);
+				System.out.println("updating ID:"+ id);
+				System.out.println(pstmt.executeUpdate());
 				
 			}
-			
-			
-		//update list first
-			
-			
-			
-			String sql = "UPDATE Workgroup SET workClass = ?, location = ? WHERE ID = ?  ";
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
+		
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+
+		if (insertList.size() > 0) {
+
+			try {
+				PreparedStatement pstmt = conn
+						.prepareStatement("INSERT INTO Workgroup (workClass, location) VALUES (?,?)  ");
+
+				for (int i = 0; i < insertList.size(); i++) {
+
+					pstmt.setString(1, insertList.get(i).getGroupName());
+					pstmt.setString(2, insertList.get(i).getLocation());
+
+					pstmt.executeUpdate();
+					
+				}
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+
+		}
+
 	}
 
 }

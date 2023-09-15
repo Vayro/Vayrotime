@@ -19,14 +19,8 @@ public class WorkGroupService {
 
 	public static void updateGroups(Object[][] data) {
 		// TODO Auto-generated method stub
-		
-		try {
+		System.out.println("Made it to SERVICE");
 		WorkGroupDAO.updateGroups(data);
-		}
-		catch(SQLException e){
-			System.out.println(e);
-			
-		}
 	}
 
 }

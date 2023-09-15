@@ -152,7 +152,7 @@ public class WorkGroupDialog extends JDialog {
 		      DefaultTableCellRenderer   cellRenderer = new DefaultTableCellRenderer();
 		      cellRenderer.setHorizontalAlignment(JLabel.CENTER);
 		      table.getColumnModel().getColumn(0).setCellRenderer(cellRenderer);
-	
+		  	table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 
 		      
 		      
@@ -252,6 +252,7 @@ public class WorkGroupDialog extends JDialog {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
+						//table.getCellEditor().stopCellEditing();
 						WorkGroupService.updateGroups(data);
 						dispose();
 					}
