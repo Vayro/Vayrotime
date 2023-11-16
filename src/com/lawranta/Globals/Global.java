@@ -23,7 +23,9 @@ import com.lawranta.popups.SuccessDialog;
 import com.lawranta.services.EmployeeService;
 
 public class Global {
-
+	public static final double VERSION = 1.0;
+	public static final String type = "lite";
+	
 	// Fonts
 	public static Font headerFont = new Font("TimesRoman", Font.PLAIN, 64);
 	public static Font header2Font = new Font("TimesRoman", Font.PLAIN, 32);
@@ -32,16 +34,20 @@ public class Global {
 	public static Font analogFont16f = SetGlobalFont.loadFontFromFile(analogFontPath, 16f);
 	public static Font analogFont12f = SetGlobalFont.loadFontFromFile(analogFontPath, 12f);
 	public static Font timesFont12 = new Font("TimesRoman", Font.PLAIN, 12);
-
-	// Paths
-	public final static String cfgPath = "src\\null.cfg";
-	public static String dbPath = "database/records.db";
-
+	
 	// date and time
-	static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	static LocalDateTime now = LocalDateTime.now();
+		static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		static LocalDateTime now = LocalDateTime.now();
 
-	public static String today = dtf.format(now);
+		public static String today = dtf.format(now);
+		
+	// Paths
+	public final static String cfgPath = "./null.cfg";
+	public static String dbPath = "./records.db";
+
+	// sound sources
+	public static String inSndPath = "src\\sounds\\open.wav";
+	public static String outSndPath = "src\\sounds\\close.wav";
 
 	// image sources
 

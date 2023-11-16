@@ -259,7 +259,7 @@ public class DateChooserDialog extends JDialog {
 		LocalDate validFromDate = null;
 		LocalDate validToDate = null;
 		
-		if(!fd.isBlank() && !td.isBlank() ){		
+		if(!fd.isEmpty() && !td.isEmpty() ){		
 			
 		
 			

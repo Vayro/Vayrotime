@@ -1,31 +1,28 @@
 package com.lawranta.SubPanels;
 
 import java.awt.Color;
-import java.awt.Container;
-import java.awt.Window;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.FileOutputStream;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.lang.model.element.Element;
+
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -33,9 +30,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableModel;
@@ -45,18 +40,16 @@ import com.lawranta.DatabaseModels.EmployeeModel;
 import com.lawranta.Globals.ConsoleColors;
 import com.lawranta.Globals.Global;
 import com.lawranta.Globals.SetGlobalFont;
-import com.lawranta.containersObjects.attendanceContainer;
-import com.lawranta.containersObjects.employeeContainer;
+
 import com.lawranta.frames.PanelContainerFrame;
 import com.lawranta.modifiers.*;
 import com.lawranta.panels.AdminPanel;
-import com.lawranta.panels.PinPanel;
+
 import com.lawranta.popups.*;
 import com.lawranta.services.AttendanceService;
 import com.lawranta.services.EmployeeService;
 import com.lawranta.sqllite.EmployeeDAO;
 
-import java.awt.FlowLayout;
 import java.io.File;
 
 public class AdminSubPanel extends JPanel {
@@ -317,147 +310,123 @@ public class AdminSubPanel extends JPanel {
 		JButton saveButton = Global.imageButton(Global.saveImgPath, Global.savePressedImgPath, "Save");
 		add(saveButton);
 		saveButton.addActionListener(new ActionListener() {
-			boolean pinSanitized=true;
+			boolean pinSanitized = true;
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				//create employeeList
-				ArrayList<EmployeeModel> elist=new ArrayList<EmployeeModel>(); 
-				
-				
-				
+				// create employeeList
+				ArrayList<EmployeeModel> elist = new ArrayList<EmployeeModel>();
+
 				for (int i = 0; i < data.length; i++) {
-					
-					if(EmployeeService.checkDuplicatePin(data[i][5] .toString(),Integer.parseInt(data[i][0].toString()) )) {
-						pinSanitized=false;
-						
+
+					if (EmployeeService.checkDuplicatePin(data[i][5].toString(),
+							Integer.parseInt(data[i][0].toString()))) {
+						pinSanitized = false;
+
 					}
 					System.out.println("data size is " + data.length);
-					EmployeeModel em=new EmployeeModel();
-					
-					em.setId(Integer.parseInt(data[i][0].toString()) );
-					
-					
-					em.setAll(
-							data[i][2].toString(),
-							data[i][1].toString(),
-							
-							data[i][3].toString(),
-							data[i][4].toString() ,
-							data[i][5] .toString()		
-							);
+					EmployeeModel em = new EmployeeModel();
+
+					em.setId(Integer.parseInt(data[i][0].toString()));
+
+					em.setAll(data[i][2].toString(), data[i][1].toString(),
+
+							data[i][3].toString(), data[i][4].toString(), data[i][5].toString());
 					elist.add(em);
-				
+
 					int y = i + 1;
 
 					System.out.println("saved " + y + " lines");
 
 				}
-				
-				if(pinSanitized) {
-				try {
-					
-					EmployeeService.saveAll(elist);
-					Global.showSuccess("Sucesffully persisted employee records to database!");
-					
-				}catch(Exception e1) {
-					System.out.println(e1);
-					Global.showError(e1.getMessage());
-					
+
+				if (pinSanitized) {
+					try {
+
+						EmployeeService.saveAll(elist);
+						Global.showSuccess("Sucesffully persisted employee records to database!");
+
+					} catch (Exception e1) {
+						System.out.println(e1);
+						Global.showError(e1.getMessage());
+
+					}
+
 				}
-				
-				
-				
-				
-				
-				
 			}
-			}
-			
-			
-			
-			
-			
-		}); 
-		
+
+		});
+
 		setVisible(true);
 
 		table.getColumnModel().getColumn(0).setPreferredWidth(16);
 
-		//clocked menu
+		// clocked menu
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("hh:mm a");
 		JPopupMenu clockStatusMenu = new JPopupMenu();
-		JMenuItem m1=new JMenuItem();
-		JMenuItem m2=new JMenuItem("Clock-out (" + dtf.format(LocalTime.now())+ ")");
-		JMenuItem m3=new JMenuItem("Cancel");
+		JMenuItem m1 = new JMenuItem();
+		JMenuItem m2 = new JMenuItem("Clock-out (" + dtf.format(LocalTime.now()) + ")");
+		JMenuItem m3 = new JMenuItem("Cancel");
 		m1.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				
-				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-				String startTime=LocalDateTime.now().format(dtf);
-				DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-				String startDate=LocalDateTime.now().format(date);
 
-				
-				int i =table.getSelectedRow();
+				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+				String startTime = LocalDateTime.now().format(dtf);
+				DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+				String startDate = LocalDateTime.now().format(date);
+
+				int i = table.getSelectedRow();
 				EmployeeModel em = new EmployeeModel();
-				em.setAll(data[i][2].toString(), data[i][1].toString(), data[i][3].toString(), "out", data[i][5].toString());
+				em.setAll(data[i][2].toString(), data[i][1].toString(), data[i][3].toString(), "out",
+						data[i][5].toString());
 				em.setID(Integer.parseInt(data[i][0].toString()));
-				
-				
+
 				AttendanceService.clockIn(em, startTime, startDate);
-				
-				data[table.getSelectedRow() ][4]="in";
+
+				data[table.getSelectedRow()][4] = "in";
 			}
-			
-			
-			
+
 		});
 		m2.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				System.out.println(ConsoleColors.BLUE + "Value at: " + table.getSelectedRow() + "," + table.getSelectedColumn() + " is " + table.getValueAt(table.getSelectedRow(), table.getSelectedColumn()).toString() + ConsoleColors.RESET);
-				data[table.getSelectedRow() ][4]="out";
-				
+				System.out.println(ConsoleColors.BLUE + "Value at: " + table.getSelectedRow() + ","
+						+ table.getSelectedColumn() + " is "
+						+ table.getValueAt(table.getSelectedRow(), table.getSelectedColumn()).toString()
+						+ ConsoleColors.RESET);
+				data[table.getSelectedRow()][4] = "out";
+
 				int id = Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString());
-				String passedStart=data[table.getSelectedRow()][4].toString();
-				
-				int i =table.getSelectedRow();
+				String passedStart = data[table.getSelectedRow()][4].toString();
+
+				int i = table.getSelectedRow();
 				EmployeeModel em = new EmployeeModel();
-				em.setAll(data[i][2].toString(), data[i][1].toString(), data[i][3].toString(), "out", data[i][5].toString());
+				em.setAll(data[i][2].toString(), data[i][1].toString(), data[i][3].toString(), "out",
+						data[i][5].toString());
 				em.setID(Integer.parseInt(data[i][0].toString()));
-				
+
 				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-				String endTime=LocalDateTime.now().format(dtf);
-				
+				String endTime = LocalDateTime.now().format(dtf);
+
 				try {
-					AttendanceService.clockOut(em,passedStart, endTime);
+					AttendanceService.clockOut(em, passedStart, endTime);
 				} catch (ParseException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+
 				EmployeeService.dbUpdateEmployeeStatus(id, "out");
-		
-				
-				
-				
+
 			}
-			
-			
-			
+
 		});
-		
-		
-		
-		
-		
+
 		// Table Listener
 
 		this.table.addMouseListener(new MouseAdapter() {
@@ -472,8 +441,6 @@ public class AdminSubPanel extends JPanel {
 					switch (cellData) {
 					case "X": {
 
-						
-						
 						delete(id);
 					}
 
@@ -485,12 +452,7 @@ public class AdminSubPanel extends JPanel {
 						clockStatusMenu.add(m2);
 						clockStatusMenu.add(m3);
 						clockStatusMenu.setVisible(true);
-clockStatusMenu.show(getParent(), e.getX(), e.getY());
-
-				
-						
-						
-						
+						clockStatusMenu.show(getParent(), e.getX(), e.getY());
 
 					}
 
@@ -499,14 +461,14 @@ clockStatusMenu.show(getParent(), e.getX(), e.getY());
 					case "out": {
 
 					}
-					m1.setText("Clock In (" + dtf.format(LocalTime.now()) + ")");
-					clockStatusMenu.removeAll();
-					clockStatusMenu.add(new JLabel("Change Clocked Status"));
-					clockStatusMenu.add(m1);
-					clockStatusMenu.add(m3);
-					clockStatusMenu.setVisible(true);
-					clockStatusMenu.show(getParent(), e.getX(), e.getY());
-					
+						m1.setText("Clock In (" + dtf.format(LocalTime.now()) + ")");
+						clockStatusMenu.removeAll();
+						clockStatusMenu.add(new JLabel("Change Clocked Status"));
+						clockStatusMenu.add(m1);
+						clockStatusMenu.add(m3);
+						clockStatusMenu.setVisible(true);
+						clockStatusMenu.show(getParent(), e.getX(), e.getY());
+
 						break;
 
 					}

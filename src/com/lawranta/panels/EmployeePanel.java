@@ -28,6 +28,7 @@ import com.lawranta.DatabaseModels.EmployeeModel;
 import com.lawranta.Globals.Global;
 import com.lawranta.SubPanels.currentSessionPanel;
 import com.lawranta.frames.PanelContainerFrame;
+import com.lawranta.players.SoundPlayer;
 import com.lawranta.services.AttendanceService;
 import com.lawranta.services.EmployeeService;
 import com.lawranta.sqllite.AttendanceDAO;
@@ -246,6 +247,7 @@ public class EmployeePanel extends JPanel {
 		em.setStatus("in");
 		EmployeeService.setStatus(em, "in");
 		AttendanceService.clockIn(em,dtf.format(now) + " " + currentTime(), dtf.format(now));
+		SoundPlayer.playSound(Global.inSndPath);
 
 	}
 
@@ -256,6 +258,7 @@ public class EmployeePanel extends JPanel {
 		em.setStatus("out");
 		EmployeeService.dbUpdateEmployeeStatus(em, "out");
 		AttendanceService.clockOut(em, dtf.format(now),dtf.format(now) + " " + currentTime());
+		SoundPlayer.playSound(Global.outSndPath);
 
 	}
 

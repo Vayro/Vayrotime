@@ -1,25 +1,17 @@
 package com.lawranta.sqllite;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
-import com.lawranta.Globals.*;
-import com.lawranta.containersObjects.attendanceContainer;
 import com.lawranta.services.daytimeDifferance;
 import com.lawranta.DatabaseModels.AttendanceModel;
 
@@ -31,12 +23,9 @@ public class AttendanceDAO {
 	 * "	endTime text NOT NULL,\n" + "	subTotal text NOT NULL,\n"
 	 */
 
-
-
-
 	public AttendanceDAO() {
 		// TODO Auto-generated constructor stub
-		//nothing
+		// nothing
 	}
 
 	// connect db
@@ -51,8 +40,9 @@ public class AttendanceDAO {
 
 	public static void clockIn(AttendanceModel am, String time) {
 
-		String sql = "INSERT INTO Attendance (date, employeeID, lastName, startTime)\n" + "VALUES (" + "'" + am.getDate() + "'"
-				+ "," + am.getEmployeeID() + "," + "'" + am.getName() + "'" + "," + "'" + time + "' );";
+		String sql = "INSERT INTO Attendance (date, employeeID, lastName, startTime)\n" + "VALUES (" + "'"
+				+ am.getDate() + "'" + "," + am.getEmployeeID() + "," + "'" + am.getName() + "'" + "," + "'" + time
+				+ "' );";
 		String sql2 = "SELECT last_insert_rowid() AS LAST FROM Attendance";
 		am.setStartTime(time);
 
@@ -123,15 +113,13 @@ public class AttendanceDAO {
 //calculate subTotal
 			System.out.println(am.getStartTime() + "-" + am.getEndTime());
 
-			/*SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
-			Date x1 = format.parse(am.getStartTime());
-			Date x2 = format.parse(am.getEndTime());*/
-			
-			
-			
-			
+			/*
+			 * SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss"); Date x1 =
+			 * format.parse(am.getStartTime()); Date x2 = format.parse(am.getEndTime());
+			 */
+
 //convert milliseconds
-			String converted =  daytimeDifferance.calculate(am.getStartTime(),am.getEndTime());
+			String converted = daytimeDifferance.calculate(am.getStartTime(), am.getEndTime());
 
 //update sub total
 
@@ -147,79 +135,51 @@ public class AttendanceDAO {
 			System.out.println(e.getMessage());
 		}
 
-		
 	}
 
-	
 	public static AttendanceModel setModelwithID(int ID) {
-		
-		
-		System.out.println("Select * FROM Attendance WHERE id = " + ID );
+
+		System.out.println("Select * FROM Attendance WHERE id = " + ID);
 		String sql = "SELECT * FROM Attendance WHERE id =?";
 
 		AttendanceModel aM = new AttendanceModel();
-		
-		
+
 		try {
 			Connection conn = connect();
 			Statement stmt;
-			 PreparedStatement ps = conn.prepareStatement(sql);
+			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, ID);
-			
-			ResultSet rs =	ps.executeQuery();
+
+			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
-				
-				aM.setPrimaryKey(rs.getInt("id"));;
+
+				aM.setPrimaryKey(rs.getInt("id"));
+				;
 				aM.setDate(rs.getString("date"));
 				aM.setStartTime(rs.getString("startTime"));
 				aM.setEndTime(rs.getString("endTime"));
 				aM.setSubTotal(rs.getString("subTotal"));
 				aM.setEmployeeID(rs.getInt("employeeID"));
 				aM.setName(rs.getString("lastName"));
-			
+
 				// System.out.println("looped");
 			}
-			
-			
-			
-			
-			
-			
-			
-			
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 
-		e.printStackTrace();
+			e.printStackTrace();
 		}
 
-		
-		
-		
-		
-		
-		
-		
-		
 		System.out.println(aM.toString());
-		
+
 		return aM;
-	
-		
+
 	}
-	
-	
-	
-	
-	
-	
-	
+
 	public static ArrayList<AttendanceModel> pullTimeData(int employeeID, String firstDate, String secondDate) {
 
-
-		
 		String sql = new String();
 
 		if (employeeID != 0 && firstDate == null && secondDate == null) {
@@ -229,20 +189,16 @@ public class AttendanceDAO {
 			System.out.println("Getting all employee logs");
 			sql = "SELECT * FROM Attendance";
 		} else if (employeeID == 0 && firstDate != null && secondDate != null) {
-			
-			
-			
-			System.out.println("Getting all employee logs between " + firstDate  + " and " + secondDate);
-			sql = "SELECT * FROM Attendance WHERE date BETWEEN '" + firstDate  + "' AND '" + secondDate + "'";
-		}else if (employeeID != 0 && firstDate != null && secondDate != null) {
-			
-			System.out.println("Getting employee logs for employee id: " + employeeID +" between " + firstDate  + " and " + secondDate);
-			sql = "SELECT * FROM Attendance WHERE employeeID= " + employeeID + " AND date BETWEEN '" + firstDate  + "' AND '" + secondDate + "'";
+
+			System.out.println("Getting all employee logs between " + firstDate + " and " + secondDate);
+			sql = "SELECT * FROM Attendance WHERE date BETWEEN '" + firstDate + "' AND '" + secondDate + "'";
+		} else if (employeeID != 0 && firstDate != null && secondDate != null) {
+
+			System.out.println("Getting employee logs for employee id: " + employeeID + " between " + firstDate
+					+ " and " + secondDate);
+			sql = "SELECT * FROM Attendance WHERE employeeID= " + employeeID + " AND date BETWEEN '" + firstDate
+					+ "' AND '" + secondDate + "'";
 		}
-		
-		
-		
-		
 
 		ArrayList<AttendanceModel> timeInfoList = new ArrayList<>();
 		System.out.println("Trying to pull attendance data");
@@ -255,7 +211,8 @@ public class AttendanceDAO {
 			// loop through the result set
 			while (rs.next()) {
 				AttendanceModel newLine = new AttendanceModel();
-				newLine.setPrimaryKey(rs.getInt("id"));;
+				newLine.setPrimaryKey(rs.getInt("id"));
+				;
 				newLine.setDate(rs.getString("date"));
 				newLine.setStartTime(rs.getString("startTime"));
 				newLine.setEndTime(rs.getString("endTime"));
@@ -287,7 +244,7 @@ public class AttendanceDAO {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 
-		e.printStackTrace();
+			e.printStackTrace();
 		}
 
 	}
@@ -295,7 +252,6 @@ public class AttendanceDAO {
 	public static void updateRecord(AttendanceModel am) {
 		// TODO Auto-generated method stub
 		String sql = "UPDATE Attendance SET startTime = ?, endTime= ?, subTotal=? WHERE id =?";
-		
 
 		// Select SQL Statement
 
@@ -304,77 +260,47 @@ public class AttendanceDAO {
 		try {
 			pstmt = conn.prepareStatement(sql);
 
-		
 			pstmt.setString(1, am.getStartTime());
 			pstmt.setString(2, am.getEndTime());
 			pstmt.setString(3, am.getSubTotal());
 			pstmt.setInt(4, am.getPrimaryKey());
 			pstmt.executeUpdate();
-		//	System.out.println("updated:  " + pstmt.toString());
+			// System.out.println("updated: " + pstmt.toString());
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-			
 
-		
 	}
 
-	public static void clockOut(int recordID,String startTime, LocalDateTime localDateTimeEnd) {
+	public static void clockOut(int recordID, String startTime, LocalDateTime localDateTimeEnd) {
 		// TODO Auto-generated method stub
-			// TODO Auto-generated method stub
-			String sql = "UPDATE Attendance SET endTime= ?, subTotal=? WHERE id =?";
-			
-			
-			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-			String endTime=localDateTimeEnd.format(dtf);
-			String subtotal=daytimeDifferance.calculate(startTime,endTime);
-			
-			
-			
-			
-			
+		// TODO Auto-generated method stub
+		String sql = "UPDATE Attendance SET endTime= ?, subTotal=? WHERE id =?";
 
-			// Select SQL Statement
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		String endTime = localDateTimeEnd.format(dtf);
+		String subtotal = daytimeDifferance.calculate(startTime, endTime);
 
-			Connection conn = connect();
-			PreparedStatement pstmt;
-			try {
-				pstmt = conn.prepareStatement(sql);
+		// Select SQL Statement
 
-			
-				pstmt.setString(1, endTime);
-				pstmt.setString(2, subtotal);
-				pstmt.setInt(3, recordID);
-				pstmt.executeUpdate();
-			//	System.out.println("updated:  " + pstmt.toString());
+		Connection conn = connect();
+		PreparedStatement pstmt;
+		try {
+			pstmt = conn.prepareStatement(sql);
 
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-				
+			pstmt.setString(1, endTime);
+			pstmt.setString(2, subtotal);
+			pstmt.setInt(3, recordID);
+			pstmt.executeUpdate();
+			// System.out.println("updated: " + pstmt.toString());
 
-			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 }
