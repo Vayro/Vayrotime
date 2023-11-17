@@ -38,5 +38,10 @@
 /PinPanel.class
 /connectDB.class
 /bin/
+/.gitignore
 /com/
+/data/
+/extensions/
+/fonts/
+/images/
 /sounds/

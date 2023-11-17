@@ -473,24 +473,7 @@ add(btnAdmin);
 
 	}
 	
-	 public void DisplayImage() 
-	    {
-		Image i = null;
-		try {
-			i = ImageIO.read(new File("src\\images\\timeline.png"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		i=i.getScaledInstance(480, 106, Image.SCALE_DEFAULT);
-		
-		 JLabel picLabel = new JLabel(new ImageIcon(i));
-		 picLabel.setAlignmentY(Component.BOTTOM_ALIGNMENT);
-		 picLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 	
-		 add(picLabel);
-	    }
 	 private void setIconImage(JButton btn) {
 			btn.setIcon(new ImageIcon(AdminPinPanel.class.getResource("/images/button1.png")));
 			btn.setPressedIcon(new ImageIcon(AdminPinPanel.class.getResource("/images/button1.png")));

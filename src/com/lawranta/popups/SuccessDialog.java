@@ -19,6 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import com.lawranta.Globals.Global;
+import com.lawranta.initializers.MainClass;
 
 import javax.swing.JLabel;
 import java.awt.Dimension;
@@ -78,7 +79,7 @@ public class SuccessDialog extends JDialog {
 				
 				Image i = null;
 				try {
-					i = ImageIO.read(new File(Global.succImgPath));
+					i = ImageIO.read( (MainClass.class.getResource(Global.succImgPath)));
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					System.out.println(e);

@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageInputStream;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -22,6 +23,8 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import com.lawranta.Globals.Global;
+import com.lawranta.initializers.MainClass;
+import com.lawranta.panels.AdminPinPanel;
 
 import javax.swing.JLabel;
 import java.awt.Dimension;
@@ -77,7 +80,7 @@ public class ErrorDialog extends JDialog {
 			
 			Image i = null;
 			try {
-				i = ImageIO.read(new File(Global.errorImgPath));
+				i = ImageIO.read( (MainClass.class.getResource(Global.errorImgPath)));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				System.out.println(e);

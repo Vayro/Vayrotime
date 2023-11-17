@@ -345,7 +345,7 @@ public class AdminSubPanel extends JPanel {
 					try {
 
 						EmployeeService.saveAll(elist);
-						Global.showSuccess("Sucesffully persisted employee records to database!");
+						Global.showSuccess("Sucessfully persisted employee records to database!");
 
 					} catch (Exception e1) {
 						System.out.println(e1);

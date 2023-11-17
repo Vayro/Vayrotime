@@ -11,12 +11,14 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import com.lawranta.initializers.MainClass;
 import com.lawranta.panels.AdminPinPanel;
 import com.lawranta.popups.ErrorDialog;
 import com.lawranta.popups.SuccessDialog;
@@ -26,13 +28,23 @@ public class Global {
 	public static final double VERSION = 1.0;
 	public static final String type = "lite";
 	
+	public final static File pathFile = new File(MainClass.class.getProtectionDomain().getCodeSource().getLocation().getPath());	
+	static String path = pathFile.getAbsolutePath();
 	// Fonts
 	public static Font headerFont = new Font("TimesRoman", Font.PLAIN, 64);
 	public static Font header2Font = new Font("TimesRoman", Font.PLAIN, 32);
-	private static String analogFontPath = "src\\fonts\\Analog.ttf";
-	public static Font analogFont32f = SetGlobalFont.loadFontFromFile(analogFontPath, 32f);
-	public static Font analogFont16f = SetGlobalFont.loadFontFromFile(analogFontPath, 16f);
-	public static Font analogFont12f = SetGlobalFont.loadFontFromFile(analogFontPath, 12f);
+	private static String analogFontPath = pathFile.getAbsolutePath() + "/fonts/Analog.ttf";
+	static File fontFile=new File(analogFontPath);
+/*	public static Font analogFont32f = SetGlobalFont.loadFontFromFile( (MainClass.class.getResource(Global.errorImgPath)), 32f);
+	public static Font analogFont16f = SetGlobalFont.loadFontFromFile(fontFile.getAbsolutePath(), 16f);
+	public static Font analogFont12f = SetGlobalFont.loadFontFromFile(fontFile.getAbsolutePath(), 12f);*/
+	
+	
+	public static Font analogFont32f = new Font("TimesRoman", Font.PLAIN, 32);
+	public static Font analogFont16f = new Font("TimesRoman", Font.PLAIN, 16);
+	public static Font analogFont12f = new Font("TimesRoman", Font.PLAIN, 12);
+	
+	
 	public static Font timesFont12 = new Font("TimesRoman", Font.PLAIN, 12);
 	
 	// date and time
@@ -42,19 +54,22 @@ public class Global {
 		public static String today = dtf.format(now);
 		
 	// Paths
+		
+
 	public final static String cfgPath = "./null.cfg";
 	public static String dbPath = "./records.db";
+	public static File dbFile = new File(dbPath);
 
 	// sound sources
-	public static String inSndPath = "src\\sounds\\open.wav";
-	public static String outSndPath = "src\\sounds\\close.wav";
+	public static String inSndPath = path + "/sounds/open.wav";
+	public static String outSndPath = path + "/sounds/close.wav";
 
 	// image sources
 
-	public static String errorImgPath = "src\\images\\error.png";
-	public static String succImgPath = "src\\images\\gear.png";
-	public static String saveImgPath = "src\\images\\save_1046452.64_pressed.png";
-	public static String savePressedImgPath = "src\\images\\save_1046452.64.png";
+	public static String errorImgPath = "/images/error.png";
+	public static String succImgPath =  "/images/gear.png";
+	public static String saveImgPath = "/images/save_1046452.64_pressed.png";
+	public static String savePressedImgPath = "/images/save_1046452.64.png";
 
 	// properties
 	public static String adminPin;
@@ -93,8 +108,8 @@ public class Global {
 	public static JButton imageButton(String f, String f_pressed, String text) {
 
 		JButton btn = new JButton(text);
-		btn.setIcon(new ImageIcon((f)));
-		btn.setPressedIcon(new ImageIcon((f_pressed)));
+		btn.setIcon(new ImageIcon(AdminPinPanel.class.getResource(f)));
+		btn.setPressedIcon(new ImageIcon(AdminPinPanel.class.getResource(f_pressed)));
 		btn.setBackground(new Color(0, 0, 0));
 		btn.setForeground(Color.RED);
 		btn.setFont(Global.analogFont32f);
