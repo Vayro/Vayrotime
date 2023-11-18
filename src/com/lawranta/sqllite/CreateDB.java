@@ -15,8 +15,8 @@ public class CreateDB {
 
 	//	String filePathString = Global.dbPath;
 		System.out.println("Checking if database exists");
-		File f = Global.dbFile;
-		if (f.exists() && !f.isDirectory()) {
+
+		if (Global.dbFile.exists() && !Global.dbFile.isDirectory()) {
 			// do something
 			System.out.println("database exists");
 
@@ -57,7 +57,7 @@ public class CreateDB {
 
 	public static void createNewTable() {
 		// SQLite connection string
-		String url = "jdbc:sqlite:database/records.db";
+		String url = "jdbc:sqlite:" + Global.dbFile.getAbsolutePath();
 
 		// SQL statement for creating a new table
 		String sql = "CREATE TABLE IF NOT EXISTS Employees (\n" + "	id integer PRIMARY KEY,\n"

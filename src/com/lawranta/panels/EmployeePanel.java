@@ -247,7 +247,7 @@ public class EmployeePanel extends JPanel {
 		em.setStatus("in");
 		EmployeeService.setStatus(em, "in");
 		AttendanceService.clockIn(em,dtf.format(now) + " " + currentTime(), dtf.format(now));
-		SoundPlayer.playSound(Global.inSndPath);
+		//SoundPlayer.playSound(Global.inSndPath);
 
 	}
 
@@ -258,7 +258,7 @@ public class EmployeePanel extends JPanel {
 		em.setStatus("out");
 		EmployeeService.dbUpdateEmployeeStatus(em, "out");
 		AttendanceService.clockOut(em, dtf.format(now),dtf.format(now) + " " + currentTime());
-		SoundPlayer.playSound(Global.outSndPath);
+		//SoundPlayer.playSound(Global.outSndPath);
 
 	}
 

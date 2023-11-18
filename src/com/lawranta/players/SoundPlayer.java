@@ -9,6 +9,9 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
+import com.lawranta.Globals.Global;
+import com.lawranta.initializers.MainClass;
+
 
 public class SoundPlayer {
 	private final static int BUFFER_SIZE = 64000;
@@ -21,17 +24,19 @@ public class SoundPlayer {
 		 String strFilename = path;
 
 	        try {
+	        	
 	            soundFile = new File(strFilename);
 	        } catch (Exception e) {
 	            e.printStackTrace();
-	            System.exit(1);
+	           // System.exit(1);
 	        }
 
 	        try {
-	            audioStream = AudioSystem.getAudioInputStream(soundFile);
+	        	
+	            audioStream = AudioSystem.getAudioInputStream(MainClass.class.getResourceAsStream(strFilename));
 	        } catch (Exception e){
 	            e.printStackTrace();
-	            System.exit(1);
+	           // System.exit(1);
 	        }
 
 	        audioFormat = audioStream.getFormat();
@@ -42,10 +47,10 @@ public class SoundPlayer {
 	            sourceLine.open(audioFormat);
 	        } catch (LineUnavailableException e) {
 	            e.printStackTrace();
-	            System.exit(1);
+	           // System.exit(1);
 	        } catch (Exception e) {
 	            e.printStackTrace();
-	            System.exit(1);
+	          //  System.exit(1);
 	        }
 
 	        sourceLine.start();

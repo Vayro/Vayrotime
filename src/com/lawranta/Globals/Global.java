@@ -8,9 +8,11 @@ import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import javax.imageio.IIOException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -27,47 +29,59 @@ import com.lawranta.services.EmployeeService;
 public class Global {
 	public static final double VERSION = 1.0;
 	public static final String type = "lite";
-	
-	public final static File pathFile = new File(MainClass.class.getProtectionDomain().getCodeSource().getLocation().getPath());	
+
+	public final static File pathFile = new File(
+			MainClass.class.getProtectionDomain().getCodeSource().getLocation().getPath());
 	static String path = pathFile.getAbsolutePath();
 	// Fonts
 	public static Font headerFont = new Font("TimesRoman", Font.PLAIN, 64);
 	public static Font header2Font = new Font("TimesRoman", Font.PLAIN, 32);
-	private static String analogFontPath = pathFile.getAbsolutePath() + "/fonts/Analog.ttf";
-	static File fontFile=new File(analogFontPath);
-/*	public static Font analogFont32f = SetGlobalFont.loadFontFromFile( (MainClass.class.getResource(Global.errorImgPath)), 32f);
-	public static Font analogFont16f = SetGlobalFont.loadFontFromFile(fontFile.getAbsolutePath(), 16f);
-	public static Font analogFont12f = SetGlobalFont.loadFontFromFile(fontFile.getAbsolutePath(), 12f);*/
+	public static String analogFontPath = "/fonts/Analog.ttf";
+
 	
-	
-	public static Font analogFont32f = new Font("TimesRoman", Font.PLAIN, 32);
-	public static Font analogFont16f = new Font("TimesRoman", Font.PLAIN, 16);
-	public static Font analogFont12f = new Font("TimesRoman", Font.PLAIN, 12);
-	
-	
+	public static Font defaultFont = new Font("TimesRoman", Font.PLAIN, 32);
+	public static Font analogFont= new Font("TimesRoman", Font.PLAIN, 32);
+	public static Font analogFont32f= new Font("TimesRoman", Font.PLAIN, 32);
+	public static Font analogFont16f= new Font("TimesRoman", Font.PLAIN, 16);
+	public static Font analogFont12f= new Font("TimesRoman", Font.PLAIN, 12);
+
+	/*
+	 * public static Font analogFont32f = SetGlobalFont.loadFontFromFile(
+	 * (MainClass.class.getResource(fontFile.getAbsolutePath()).toString()), 32f);
+	 * public static Font analogFont16f =
+	 * SetGlobalFont.loadFontFromFile((MainClass.class.getResource(fontFile.
+	 * getAbsolutePath()).toString()), 16f); public static Font analogFont12f =
+	 * SetGlobalFont.loadFontFromFile((MainClass.class.getResource(fontFile.
+	 * getAbsolutePath()).toString()), 12f);
+	 * 
+	 * 
+	 * /*public static Font analogFont32f = new Font("TimesRoman", Font.PLAIN, 32);
+	 * public static Font analogFont16f = new Font("TimesRoman", Font.PLAIN, 16);
+	 * public static Font analogFont12f = new Font("TimesRoman", Font.PLAIN, 12);
+	 */
+
 	public static Font timesFont12 = new Font("TimesRoman", Font.PLAIN, 12);
-	
+
 	// date and time
-		static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		static LocalDateTime now = LocalDateTime.now();
+	static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	static LocalDateTime now = LocalDateTime.now();
 
-		public static String today = dtf.format(now);
-		
+	public static String today = dtf.format(now);
+
 	// Paths
-		
 
-	public final static String cfgPath = "./null.cfg";
-	public static String dbPath = "./records.db";
+	public final static String cfgPath = "null.cfg";
+	public static String dbPath = "records.db";
 	public static File dbFile = new File(dbPath);
 
 	// sound sources
-	public static String inSndPath = path + "/sounds/open.wav";
-	public static String outSndPath = path + "/sounds/close.wav";
+	public static String inSndPath = "/sounds/open.wav";
+	public static String outSndPath = "/sounds/close.wav";
 
 	// image sources
 
 	public static String errorImgPath = "/images/error.png";
-	public static String succImgPath =  "/images/gear.png";
+	public static String succImgPath = "/images/gear.png";
 	public static String saveImgPath = "/images/save_1046452.64_pressed.png";
 	public static String savePressedImgPath = "/images/save_1046452.64.png";
 
@@ -105,24 +119,7 @@ public class Global {
 
 	}
 
-	public static JButton imageButton(String f, String f_pressed, String text) {
 
-		JButton btn = new JButton(text);
-		btn.setIcon(new ImageIcon(AdminPinPanel.class.getResource(f)));
-		btn.setPressedIcon(new ImageIcon(AdminPinPanel.class.getResource(f_pressed)));
-		btn.setBackground(new Color(0, 0, 0));
-		btn.setForeground(Color.RED);
-		btn.setFont(Global.analogFont32f);
-		btn.setForeground(Color.RED);
-		btn.setOpaque(false);
-		btn.setContentAreaFilled(false);
-		btn.setBorderPainted(false);
-		btn.setHorizontalTextPosition(SwingConstants.CENTER);
-		btn.setMinimumSize(new Dimension(16, 16));
-		btn.setPreferredSize(new Dimension(64, 64));
-		btn.setMaximumSize(new Dimension(64, 64));
-		return btn;
-	}
 
 	public static boolean sanitizePin(String str, int Primarykey) {
 
@@ -147,9 +144,8 @@ public class Global {
 				return false;
 			}
 		}
-			showError("pin must be 6 digits");
-			return false;
-		}
-	
+		showError("pin must be 6 digits");
+		return false;
+	}
 
 }

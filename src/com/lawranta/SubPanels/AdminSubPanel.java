@@ -1,7 +1,8 @@
 package com.lawranta.SubPanels;
 
 import java.awt.Color;
-
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -42,9 +43,10 @@ import com.lawranta.Globals.Global;
 import com.lawranta.Globals.SetGlobalFont;
 
 import com.lawranta.frames.PanelContainerFrame;
+import com.lawranta.initializers.MainClass;
 import com.lawranta.modifiers.*;
 import com.lawranta.panels.AdminPanel;
-
+import com.lawranta.panels.ImageButton;
 import com.lawranta.popups.*;
 import com.lawranta.services.AttendanceService;
 import com.lawranta.services.EmployeeService;
@@ -306,8 +308,17 @@ public class AdminSubPanel extends JPanel {
 		scroll.setViewportView(this.table);
 
 		add(scroll);
-
-		JButton saveButton = Global.imageButton(Global.saveImgPath, Global.savePressedImgPath, "Save");
+		Font font=Global.defaultFont;
+		try {
+			font = Font.createFont(Font.TRUETYPE_FONT,  MainClass.class.getResourceAsStream(Global.analogFontPath));
+		} catch (FontFormatException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		font = font.deriveFont(32.0f);
+		
+		
+		JButton saveButton = new ImageButton(font, Global.saveImgPath, Global.savePressedImgPath, "Save");
 		add(saveButton);
 		saveButton.addActionListener(new ActionListener() {
 			boolean pinSanitized = true;
